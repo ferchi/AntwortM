@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "251080804363",
+    "project_id": "antwort-872bd",
+    "storage_bucket": "antwort-872bd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:251080804363:android:3da215261ebdda770e5f0e",
+        "android_client_info": {
+          "package_name": "edu.itq.antwort"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "251080804363-qs2voi5sh6uh02a8gd51pq1mpk8b91av.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCExYfpksEq_dNtxvaZ1M6DYvDUaiyljJg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "251080804363-qs2voi5sh6uh02a8gd51pq1mpk8b91av.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
