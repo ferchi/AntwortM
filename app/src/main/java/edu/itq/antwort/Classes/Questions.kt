@@ -1,10 +1,8 @@
 package edu.itq.antwort.Classes
 
-import android.os.Build
-
 import kotlin.collections.ArrayList
 
-data class Questions constructor(
+data class Questions(
 
     val author: String = "",
     val name: String = "",

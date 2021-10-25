@@ -64,7 +64,9 @@ class QuestionScreenActivity : AppCompatActivity() {
             if(binding.edtTitle.text.toString().isNotEmpty() && binding.edtDescription.text.toString().isNotEmpty()){
 
                 val id: String = db.collection("Questions").document().id
-                val timestamp = com.google.firebase.firestore.FieldValue.serverTimestamp()
+                val timestamp: com.google.firebase.Timestamp = com.google.firebase.Timestamp.now()
+                val likes: ArrayList<String> = ArrayList()
+                val dislikes: ArrayList<String> = ArrayList()
 
                 db.collection("Questions").document(id).set(
 
@@ -73,6 +75,8 @@ class QuestionScreenActivity : AppCompatActivity() {
                         "id" to id,
                         "name" to name,
                         "date" to timestamp,
+                        "likes" to likes,
+                        "dislikes" to dislikes,
                         "author" to email,
                         "title" to binding.edtTitle.text.toString(),
                         "description" to binding.edtDescription.text.toString()

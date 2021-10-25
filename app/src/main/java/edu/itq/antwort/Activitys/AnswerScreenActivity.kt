@@ -42,8 +42,8 @@ class AnswerScreenActivity : AppCompatActivity() {
 
         db.collection("Users").document(email?:"").get().addOnSuccessListener {
 
-            setup(it.get("name") as String?:"", email?:"", author?:"")
-            postAnswer(it.get("name") as String?:"", email?:"", question?:"", author?:"")
+            setup(it.get("name") as String)
+            postAnswer(it.get("name") as String, it.get("rol") as String, email?:"", question?:"", author?:"")
 
         }//obtenemos el nombre del usuario
 
@@ -63,7 +63,7 @@ class AnswerScreenActivity : AppCompatActivity() {
 
             else{
 
-                response.errorBody()?.let { Log.e(TAG, it.string()) }
+                response.errorBody()?.let { Log.e(TAG, it.toString()) }
 
             }//else
 
@@ -100,7 +100,7 @@ class AnswerScreenActivity : AppCompatActivity() {
 
     }//show Notification
 
-    private fun setup(name:String, email: String, author: String){
+    private fun setup(name:String){
 
         binding.txtAnswerAS.requestFocus()
         binding.txtNameAS.text = name
@@ -114,7 +114,7 @@ class AnswerScreenActivity : AppCompatActivity() {
 
     }//setup
 
-    private fun postAnswer(name: String , email: String, question: String, author: String){
+    private fun postAnswer(name: String, rol: String , email: String, question: String, author: String){
 
         hideKeyboard()
 
@@ -123,7 +123,9 @@ class AnswerScreenActivity : AppCompatActivity() {
             if(binding.txtAnswerAS.text.isNotEmpty()){
 
                 val id: String = db.collection("Answers").document().id
-                val timestamp = com.google.firebase.firestore.FieldValue.serverTimestamp()
+                val timestamp: com.google.firebase.Timestamp = com.google.firebase.Timestamp.now()
+                val likes: ArrayList<String> = ArrayList()
+                val dislikes: ArrayList<String> = ArrayList()
 
                 db.collection("Answers").document(id).set(
 
@@ -133,6 +135,9 @@ class AnswerScreenActivity : AppCompatActivity() {
                         "nameAuthor" to name,
                         "date" to timestamp,
                         "author" to email,
+                        "likes" to likes,
+                        "dislikes" to dislikes,
+                        "verified" to (rol == "facilitador"),
                         "content" to binding.txtAnswerAS.text.toString(),
                         "question" to question
 
@@ -144,8 +149,8 @@ class AnswerScreenActivity : AppCompatActivity() {
 
                     db.collection("Questions").document(question).get().addOnSuccessListener {
 
-                        createNotification("$name ha respondido tu pregunta:", it.get("title") as String?:"", email, question, author)
-                        showNotification("$name ha respondido tu pregunta:", it.get("title") as String?:"",question,  author)
+                        createNotification("$name ha respondido tu pregunta:", it.get("title") as String, email, question, author)
+                        showNotification("$name ha respondido tu pregunta:", it.get("title") as String,question,  author)
 
                     }//addOnSuccessListener
 

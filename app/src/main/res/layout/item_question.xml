@@ -50,9 +50,10 @@
 
             <TextView
                 android:id="@+id/txtTitleText"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginEnd="32dp"
                 android:layout_toRightOf="@+id/imgAuthorAI"
                 android:text="Title"
                 android:textColor="@color/black"
@@ -67,13 +68,12 @@
 
             <TextView
                 android:id="@+id/txtItemDescription"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/txtTitleText"
                 android:layout_marginStart="8dp"
-                android:layout_marginEnd="16dp"
-                android:inputType="textMultiLine"
-                android:layout_toRightOf="@+id/imgAuthorAI"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="16dp"
+
                 android:text="Description"
                 android:textColor="@color/black"
                 android:textSize="18sp"
@@ -86,10 +86,11 @@
 
             <TextView
                 android:id="@+id/txtAuthor"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/txtItemDescription"
                 android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_toRightOf="@+id/imgAuthorAI"
                 android:text="Author"
                 android:textColor="@color/black"
@@ -114,7 +115,7 @@
             app:layout_constraintTop_toBottomOf="@+id/cvSI">
 
             <TextView
-                android:id="@+id/likesIQ"
+                android:id="@+id/likesIA"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -139,7 +140,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/answersIQ"
                 app:layout_constraintHorizontal_bias=".5"
-                app:layout_constraintStart_toEndOf="@+id/likesIQ"
+                app:layout_constraintStart_toEndOf="@+id/likesIA"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView

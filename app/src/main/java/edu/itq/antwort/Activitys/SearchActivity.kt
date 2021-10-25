@@ -37,7 +37,17 @@ class SearchActivity : AppCompatActivity() {
 
                 val searchText = binding.includeToolbarSearch.edtSearchTBS.text.toString().trim()
 
-                searchQuestions(searchText)
+                if(searchText.length > 2){
+
+                    searchQuestions(searchText)
+
+                }//comenzamos la busqueda a partir de tres letras
+
+                else{
+
+                    searchQuestions("")
+
+                }//eliminamos las busquedas si tiene menos de 3 letras
 
             }//onTextChanged
 
@@ -81,7 +91,7 @@ class SearchActivity : AppCompatActivity() {
 
         if(search.isNotEmpty()){
 
-            db.collection("Questions").addSnapshotListener { value, error ->
+            db.collection("Questions").addSnapshotListener { value, _ ->
 
                 val questions = value!!.toObjects(Questions::class.java)
                 val questionsAux: ArrayList<Questions> = ArrayList()
