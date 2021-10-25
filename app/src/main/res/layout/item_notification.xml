@@ -32,12 +32,13 @@
 
         <TextView
             android:id="@+id/txtContentNI"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
             android:autoSizeTextType="uniform"
             android:text="Content"
             android:textSize="18sp"
+            android:singleLine="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
