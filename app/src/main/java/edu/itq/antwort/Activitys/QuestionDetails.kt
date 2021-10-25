@@ -17,6 +17,8 @@ import edu.itq.antwort.R
 import edu.itq.antwort.databinding.ActivityQuestionViewBinding
 import android.content.Intent
 import android.util.Log
+import android.view.View
+import com.google.firebase.firestore.Query
 import com.google.gson.Gson
 import edu.itq.antwort.Classes.*
 import edu.itq.antwort.databinding.ItemAnswerViewBinding
@@ -24,6 +26,8 @@ import edu.itq.antwort.databinding.ItemQuestionViewBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.collections.ArrayList
 
 class QuestionDetailViewHolder(val questionViewBinding: ItemQuestionViewBinding) : RecyclerView.ViewHolder(questionViewBinding.root)
 class AnswerDetailViewHolder(val answerViewBinding: ItemAnswerViewBinding) : RecyclerView.ViewHolder(answerViewBinding.root)
@@ -106,154 +110,10 @@ class QuestionDetails : AppCompatActivity() {
 
                 }//si se presiona la foto de perfil te lleva al perfil del usuario
 
-                //--------------------------------------------- Programación de likes --------------------------------------------- //
+                //--------------------------------------------- Programación de las reacciones --------------------------------------------- //
 
-                if(model.likes.isNotEmpty()){
-
-                    holder.questionViewBinding.txtLikeQD.text = model.likes.size.toString()
-                    if(model.likes.contains(user) && !model.dislikes.contains(user)) {
-
-                        holder.questionViewBinding.txtLikeQD.compoundDrawables[0].setTint(Color.parseColor("#FB771E"))
-                        holder.questionViewBinding.txtLikeQD.setTextColor(Color .parseColor("#FB771E"))
-
-                    }//if le di like a esta publicación
-
-                    else {
-
-                        holder.questionViewBinding.txtLikeQD.compoundDrawables[0].setTint(-1979711488)
-                        holder.questionViewBinding.txtLikeQD.setTextColor(-1979711488)
-
-                    }//el usuario no le dio like a su post
-
-                }//los likes no estan vacios
-
-                else{
-
-                    holder.questionViewBinding.txtLikeQD.text = "Útil"
-                    holder.questionViewBinding.txtLikeQD.compoundDrawables[0].setTint(-1979711488)
-                    holder.questionViewBinding.txtLikeQD.setTextColor(-1979711488)
-
-                }//no tiene likes
-
-                holder.questionViewBinding.txtLikeQD.setOnClickListener {
-
-                    if(model.likes.contains(user)){
-
-                        model.likes.remove(user)
-
-                    }//si mi correo esta en la lista de likes
-
-                    else{
-
-                        if(model.dislikes.contains(user)){
-
-                            model.dislikes.remove(user)
-
-                        }// si estoy es la lista de dislikes eliminamos mi correo
-
-                        if(user != model.author){
-
-                            createNotification("Han reaccionado a tu pregunta:", model.title, user, model.id, model.author)
-                            showNotification("Han reaccionado a tu pregunta:", model.title, model.id, model.author)
-
-                        }//creamos notificacion solo si no estoy dandome like a mi mismo
-
-                        model.likes.add(user)
-
-                    }// mi correo no esta en la lista de likes
-
-                    db.collection("Questions").document(model.id).set(
-
-                        hashMapOf(
-
-                            "id" to model.id,
-                            "name" to model.name,
-                            "date" to model.date,
-                            "author" to model.author,
-                            "title" to model.title,
-                            "description" to model.description,
-                            "likes" to model.likes,
-
-                            )//hashMapOf con los nuevos datos
-
-                    )//actualizamos el numero de likes
-
-                }//setOnClickListener txtLikeQD
-
-                //--------------------------------------------- Programación de dislikes --------------------------------------------- //
-
-                if(model.dislikes.isNotEmpty()){
-
-                    holder.questionViewBinding.txtDislikeQD.text = model.dislikes.size.toString()
-                    if(model.dislikes.contains(user) && !model.likes.contains(user)) {
-
-                        holder.questionViewBinding.txtDislikeQD.compoundDrawables[0].setTint(Color.parseColor("#FB771E"))
-                        holder.questionViewBinding.txtDislikeQD.setTextColor(Color.parseColor("#FB771E"))
-
-                    }//if le di like a esta publicación
-
-                    else {
-
-                        holder.questionViewBinding.txtDislikeQD.compoundDrawables[0].setTint(-1979711488)
-                        holder.questionViewBinding.txtDislikeQD.setTextColor(-1979711488)
-
-                    }//el usuario no le dio like a su post
-
-                }//los likes no estan vacios
-
-                else{
-
-                    holder.questionViewBinding.txtDislikeQD.text = "No útil"
-                    holder.questionViewBinding.txtDislikeQD.compoundDrawables[0].setTint(-1979711488)
-                    holder.questionViewBinding.txtDislikeQD.setTextColor(-1979711488)
-
-                }//no tiene likes
-
-                holder.questionViewBinding.txtDislikeQD.setOnClickListener {
-
-                    if(model.dislikes.contains(user)){
-
-                        model.dislikes.remove(user)
-
-                    }//si mi correo esta en la lista de likes
-
-                    else{
-
-                        if(model.likes.contains(user)){
-
-                            model.likes.remove(user)
-
-                        }//eliminiamos el correo de la lista de likes
-
-                        if(user != model.author){
-
-                            createNotification("Han reaccionado a tu pregunta:", model.title, user, model.id, model.author)
-                            showNotification("Han reaccionado a tu pregunta:", model.title, model.id, model.author)
-
-                        }//creamos notificacion solo si no estoy dandome like a mi mismo
-
-                        model.dislikes.add(user)
-
-                    }// mi correo no esta en la lista de likes
-
-                    db.collection("Questions").document(model.id).set(
-
-                        hashMapOf(
-
-                            "id" to model.id,
-                            "name" to model.name,
-                            "author" to model.author,
-                            "date" to model.date,
-                            "title" to model.title,
-                            "description" to model.description,
-                            "likes" to model.likes,
-                            "dislikes" to model.dislikes
-
-                        )//hashMapOf con los nuevos datos
-
-                    )//actualizamos el numero de likes
-
-                }//setOnClickListener txtLikeQD
+                reactions(null, model, model.likes, model.dislikes, holder.questionViewBinding.txtLikeQD, "Útil", user, model.author, model.id, model.id, "Han reaccionado a tu pregunta", "Questions", "title")
+                reactions(null, model, model.dislikes, model.likes, holder.questionViewBinding.txtDislikeQD, "No útil", user, model.author, model.id, model.id, "Han reaccionado a tu pregunta", "Questions", "title")
 
                 //--------------------------------------------- Programación del boton responder --------------------------------------------- //
 
@@ -282,7 +142,7 @@ class QuestionDetails : AppCompatActivity() {
 
     private fun showAnswers(id: String, user: String){
 
-        val queryAnswers = db.collection("Answers").whereEqualTo("question", id)
+        val queryAnswers = db.collection("Answers").whereEqualTo("question", id).orderBy("date", Query.Direction.DESCENDING)
         val answerOptions = FirestoreRecyclerOptions.Builder<Answers>().setQuery(queryAnswers, Answers::class.java).setLifecycleOwner(this).build()
 
         val answerAdapter = object: FirestoreRecyclerAdapter<Answers, AnswerDetailViewHolder>(answerOptions){
@@ -296,6 +156,12 @@ class QuestionDetails : AppCompatActivity() {
             @SuppressLint("SetTextI18n")
             override fun onBindViewHolder(holder: AnswerDetailViewHolder, position: Int, model: Answers) {
 
+                if(model.verified){
+
+                    holder.answerViewBinding.imgVerifiedUser.visibility = View.VISIBLE
+
+                }//la respuesta fue hecha por un usuario verificado
+
                 holder.answerViewBinding.imgUserAV.setOnClickListener {
 
                     val intent = Intent(this@QuestionDetails, ProfileActivity::class.java).apply {
@@ -308,172 +174,17 @@ class QuestionDetails : AppCompatActivity() {
 
                 }//si se presiona la foto de perfil te lleva al perfil del usuario
 
-                // --------------------------------------------- Programación de likes --------------------------------------------- //
+                //Llamamos las funciones necesarias para likes y dislikes
 
-                if(model.likes.isNotEmpty()){
+                reactions(model,null, model.likes, model.dislikes, holder.answerViewBinding.likesIA, "Útil", user, model.author, model.id, model.question, "Han reaccionado a tu respuesta", "Answers", "content")
+                reactions(model,null, model.dislikes, model.likes, holder.answerViewBinding.dislikeIA, "No útil", user, model.author, model.id, model.question, "Han reaccionado a tu respuesta", "Answers", "content")
 
-                    holder.answerViewBinding.likesIQ.text = model.likes.size.toString()
-
-                    if(model.likes.contains(user) && !model.dislikes.contains(user)) {
-
-                        holder.answerViewBinding.likesIQ.compoundDrawables[0].setTint(Color.parseColor("#FB771E"))
-                        holder.answerViewBinding.likesIQ.setTextColor(Color.parseColor("#FB771E"))
-
-                    }//if le di like a esta publicación
-
-                    else {
-
-                        holder.answerViewBinding.likesIQ.compoundDrawables[0].setTint(-1979711488)
-                        holder.answerViewBinding.likesIQ.setTextColor(-1979711488)
-
-                    }//el usuario no le dio like a su post
-
-                }//los likes no estan vacios
-
-                else{
-
-                    holder.answerViewBinding.likesIQ.text = "Útil"
-                    holder.answerViewBinding.likesIQ.compoundDrawables[0].setTint(-1979711488)
-                    holder.answerViewBinding.likesIQ.setTextColor(-1979711488)
-
-                }//no tiene likes
-
-                holder.answerViewBinding.likesIQ.setOnClickListener {
-
-                    if(model.likes.contains(user)){
-
-                        model.likes.remove(user)
-
-                    }//si mi correo esta en la lista de likes
-
-                    else{
-
-                        if(model.dislikes.contains(user)){
-
-                            model.dislikes.remove(user)
-
-                        }// si estoy es la lista de dislikes eliminamos mi correo
-
-                        if(user != model.author){
-
-                            db.collection("Answers").document(model.id).get().addOnSuccessListener {
-
-                                createNotification("Han reaccionado a tu respuesta:", it.get("content") as String, user, model.question, model.author)
-                                showNotification("Han reaccionado a tu respuesta:", it.get("content") as String, model.question, model.author)
-
-                            }//obtenemos el contenido de la respuesta
-
-                        }//creamos notificacion solo si no estoy dandome like a mi mismo
-
-                        model.likes.add(user)
-
-                    }// mi correo no esta en la lista de likes
-
-                    db.collection("Answers").document(model.id).set(
-
-                        hashMapOf(
-
-                            "id" to model.id,
-                            "date" to model.date,
-                            "author" to model.author,
-                            "content" to model.content,
-                            "likes" to model.likes,
-                            "question" to model.question,
-                            "dislikes" to model.dislikes
-
-                        )//hashMapOf con los nuevos datos
-
-                    )//actualizamos el numero de likes
-
-                }//setOnClickListener txtLikeQD
-
-                // --------------------------------------------- Programación de dislikes --------------------------------------------- //
-
-                if(model.dislikes.isNotEmpty()){
-
-                    holder.answerViewBinding.dislikeIQ.text = model.dislikes.size.toString()
-                    if(model.dislikes.contains(user) && !model.likes.contains(user)) {
-
-                        holder.answerViewBinding.dislikeIQ.compoundDrawables[0].setTint(Color.parseColor("#FB771E"))
-                        holder.answerViewBinding.dislikeIQ.setTextColor(Color.parseColor("#FB771E"))
-
-                    }//if le di like a esta publicación
-
-                    else {
-
-                        holder.answerViewBinding.dislikeIQ.compoundDrawables[0].setTint(-1979711488)
-                        holder.answerViewBinding.dislikeIQ.setTextColor(-1979711488)
-
-                    }//el usuario no le dio like a su post
-
-                }//los likes no estan vacios
-
-                else{
-
-                    holder.answerViewBinding.dislikeIQ.text = "No útil"
-                    holder.answerViewBinding.dislikeIQ.compoundDrawables[0].setTint(-1979711488)
-                    holder.answerViewBinding.dislikeIQ.setTextColor(-1979711488)
-
-                }//no tiene likes
-
-                holder.answerViewBinding.dislikeIQ.setOnClickListener {
-
-                    if(model.dislikes.contains(user)){
-
-                        model.dislikes.remove(user)
-
-                    }//si mi correo esta en la lista de likes
-
-                    else{
-
-                        if(model.likes.contains(user)){
-
-                            model.likes.remove(user)
-
-                        }//eliminiamos el correo de la lista de likes
-
-                        if(user != model.author){
-
-                            db.collection("Answers").document(model.id).get().addOnSuccessListener {
-
-                                createNotification("Han reaccionado a tu respuesta:", it.get("content") as String, user, model.question, model.author)
-                                showNotification("Han reaccionado a tu respuesta:", it.get("content") as String, model.question, model.author)
-
-                            }//obtenemos el contenido de la respuesta
-
-                        }//creamos notificacion solo si no estoy dandome like a mi mismo
-
-                        model.dislikes.add(user)
-
-                    }// mi correo no esta en la lista de likes
-
-                    db.collection("Answers").document(model.id).set(
-
-                        hashMapOf(
-
-                            "id" to model.id,
-                            "author" to model.author,
-                            "date" to model.date,
-                            "content" to model.content,
-                            "likes" to model.likes,
-                            "question" to model.question,
-                            "dislikes" to model.dislikes
-
-                        )//hashMapOf con los nuevos datos
-
-                    )//actualizamos el numero de likes
-
-                }//setOnClickListener txtLikeQD
-
-                //--------------------------------------------- Mostrar los datos obtenidos --------------------------------------------- //
+                //Mostramos los datos obtenidos
 
                 val txtNameAV : TextView = holder.itemView.findViewById(R.id.txtNameAV)
                 val txtAnswersAV : TextView = holder.itemView.findViewById(R.id.txtAnswersAV)
 
-                db.collection("Users").document(model.author).get().addOnSuccessListener {
-                    txtNameAV.text = it.get("name") as String?
-                }//obtener nombre del usuario que publicó
-
+                txtNameAV.text = model.nameAuthor
                 txtAnswersAV.text = model.content
 
             }//onBindViewHolder
@@ -485,7 +196,7 @@ class QuestionDetails : AppCompatActivity() {
 
     }//showAnswers
 
-    private fun sendNotifiaction(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
+    private fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
 
         try {
 
@@ -526,7 +237,7 @@ class QuestionDetails : AppCompatActivity() {
 
                 ).also {
 
-                    sendNotifiaction(it)
+                    sendNotification(it)
 
                 }//also
 
@@ -557,5 +268,139 @@ class QuestionDetails : AppCompatActivity() {
 
     }//createNotification
 
-}//class
+    private fun updateAnswers(model: Answers){
 
+        db.collection("Answers").document(model.id).set(
+
+            hashMapOf(
+
+                "id" to model.id,
+                "nameAuthor" to model.nameAuthor,
+                "author" to model.author,
+                "date" to model.date,
+                "verified" to model.verified,
+                "content" to model.content,
+                "question" to model.question,
+                "likes" to model.likes,
+                "dislikes" to model.dislikes
+
+            )//hashMapOf con los nuevos datos
+
+        )//actualizamos el numero de likes
+
+    }//update answers
+
+    private fun updateQuestions(model: Questions){
+
+        db.collection("Questions").document(model.id).set(
+
+            hashMapOf(
+
+                "id" to model.id,
+                "name" to model.name,
+                "author" to model.author,
+                "date" to model.date,
+                "title" to model.title,
+                "description" to model.description,
+                "likes" to model.likes,
+                "dislikes" to model.dislikes
+
+            )//hashMapOf con los nuevos datos
+
+        )//actualizamos el numero de likes
+
+    }//update questions
+
+    private fun reactions(modelAnswers: Answers?, modelQuestions: Questions?, mainArray: ArrayList<String>, secondArray: ArrayList<String>, txtReaction: TextView, text: String, user: String, author: String, id: String, question: String, title: String, collection: String, content: String){
+
+        if(mainArray.isNotEmpty()){
+
+            txtReaction.text = mainArray.size.toString()
+
+            if(mainArray.contains(user) && !secondArray.contains(user)){
+
+                reactionColor(txtReaction, true)
+
+            }//Estoy en la lista de likes y no en la de dislikes
+
+            else{
+
+                reactionColor(txtReaction, false)
+
+            }//no le he dado like al post
+
+        }//los likes no estan vacios
+
+        else{
+
+            txtReaction.text = text
+            reactionColor(txtReaction, false)
+
+        }//no tiene likes
+
+        txtReaction.setOnClickListener {
+
+            if(mainArray.contains(user)){
+
+                mainArray.remove(user)
+
+            }//si mi correo esta en la lista
+
+            else{
+
+                if(secondArray.contains(user)){
+
+                    secondArray.remove(user)
+
+                }// si estoy es la segunda lista eliminamos mi correo
+
+                if(user != author){
+
+                    db.collection(collection).document(id).get().addOnSuccessListener {
+
+                        createNotification(title, it.get(content) as String, user, question, author)
+                        showNotification(title, it.get(content) as String, question, author)
+
+                    }//obtenemos el contenido de la respuesta
+
+                }//creamos notificacion solo si no estoy dandome like a mi mismo
+
+                mainArray.add(user)
+
+            }//mi correo no esta en la lista
+
+            if(modelAnswers != null){
+
+                updateAnswers(modelAnswers)
+
+            }//el modelo de respuestas no es nulo
+
+            if(modelQuestions != null){
+
+                updateQuestions(modelQuestions)
+
+            }//el modelo de preguntas no es nulo
+
+        }//se le dio click al boton
+
+    }//reactions
+
+    private fun reactionColor(txtReaction: TextView, like: Boolean){
+
+        if(like){
+
+            txtReaction.compoundDrawables[0].setTint(Color.parseColor("#FB771E"))
+            txtReaction.setTextColor(Color.parseColor("#FB771E"))
+
+        }// se le dio like
+
+        else{
+
+            txtReaction.compoundDrawables[0].setTint(-1979711488)
+            txtReaction.setTextColor(-1979711488)
+
+        }//else se le dio dislike
+
+    }//reaction color
+
+}//class

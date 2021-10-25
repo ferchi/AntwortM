@@ -108,159 +108,8 @@ class HomeFragment : Fragment() {
 
                 }//setOnClickListener
 
-                //--------------------------------------------- Programación de los likes --------------------------------------------- //
-
-                if(model.likes.isNotEmpty()){
-
-                    holder.questionBinding.likesIQ.text = model.likes.size.toString()
-
-                    if(model.likes.contains(getEmail()) && !model.dislikes.contains(getEmail())) {
-
-                        holder.questionBinding.likesIQ.compoundDrawables[0].setTint(Color.parseColor("#FB771E"))
-                        holder.questionBinding.likesIQ.setTextColor(Color.parseColor("#FB771E"))
-
-                    }//el usuario le dio like a su post
-
-                    else {
-
-                        holder.questionBinding.likesIQ.compoundDrawables[0].setTint(-1979711488)
-                        holder.questionBinding.likesIQ.setTextColor(-1979711488)
-
-                    }//el usuario no le dio like al post
-
-                }//tiene likes
-
-                else{
-
-                    holder.questionBinding.likesIQ.text = "Útil"
-                    holder.questionBinding.likesIQ.compoundDrawables[0].setTint(-1979711488)
-                    holder.questionBinding.likesIQ.setTextColor(-1979711488)
-
-                }//no tiene likes
-
-                holder.questionBinding.likesIQ.setOnClickListener {
-
-                    if(model.likes.contains(getEmail())){
-
-                        model.likes.remove(getEmail().toString())
-
-                    }//si mi correo esta en la lista de likes
-
-                    else{
-
-                        if(model.dislikes.contains(getEmail())){
-
-                            model.dislikes.remove(getEmail().toString())
-
-                        }// si estoy es la lista de dislikes eliminamos mi correo
-
-                        if(getEmail() != model.author){
-
-                            createNotification("Han reaccionado a tu pregunta:", model.title, model.id, model.author)
-                            showNotification("Han reaccionado a tu pregunta:", model.title, model.id, model.author)
-
-                        }//creamos notificacion solo si no estoy dandome like a mi mismo
-
-                        model.likes.add(getEmail().toString())
-
-                    }// mi correo no esta en la lista de likes
-
-                    db.collection("Questions").document(model.id).set(
-
-                        hashMapOf(
-
-                            "id" to model.id,
-                            "author" to model.author,
-                            "name" to model.name,
-                            "date" to model.date,
-                            "title" to model.title,
-                            "description" to model.description,
-                            "likes" to model.likes,
-                            "dislikes" to model.dislikes
-
-                            )//hashMapOf con los nuevos datos
-
-                    )//actualizamos el numero de likes
-
-                }//setOnClickListener
-
-                //--------------------------------------------- Programación de los dislikes --------------------------------------------- //
-
-                if(model.dislikes.isNotEmpty()){
-
-                    holder.questionBinding.dislikesIQ.text = model.dislikes.size.toString()
-
-                    if(model.dislikes.contains(getEmail()) && !model.likes.contains(getEmail())) {
-
-                        holder.questionBinding.dislikesIQ.compoundDrawables[0].setTint(Color.parseColor("#FB771E"))
-                        holder.questionBinding.dislikesIQ.setTextColor(Color.parseColor("#FB771E"))
-
-                    }//el usuario le dio like a su post
-
-                    else {
-
-                        holder.questionBinding.dislikesIQ.compoundDrawables[0].setTint(-1979711488)
-                        holder.questionBinding.dislikesIQ.setTextColor(-1979711488)
-
-                    }//el usuario no le dio like al post
-
-                }//tiene likes
-
-                else{
-
-                    holder.questionBinding.dislikesIQ.text = "No útil"
-                    holder.questionBinding.dislikesIQ.compoundDrawables[0].setTint(-1979711488)
-                    holder.questionBinding.dislikesIQ.setTextColor(-1979711488)
-
-                }//no tiene likes
-
-                holder.questionBinding.dislikesIQ.setOnClickListener {
-
-                    if(model.dislikes.contains(getEmail())){
-
-                        model.dislikes.remove(getEmail().toString())
-
-                    }//si mi correo esta en la lista de dislikes
-
-                    else{
-
-                        if(model.likes.contains(getEmail())){
-
-                            model.likes.remove(getEmail().toString())
-
-                        }//eliminiamos el correo de la lista de likes
-
-                        //Crear la notificación
-
-                        if(getEmail() != model.author){
-
-                            createNotification("Han reaccionado a tu pregunta: ", model.title, model.id, model.author)
-                            showNotification("Han reaccionado a tu pregunta", model.title, model.id, model.author)
-
-                        }//creamos notificacion solo si no estoy dandome like a mi mismo
-
-                        model.dislikes.add(getEmail().toString())
-
-                    }// mi correo no esta en la lista de likes
-
-                    db.collection("Questions").document(model.id).set(
-
-                        hashMapOf(
-
-                            "id" to model.id,
-                            "author" to model.author,
-                            "name" to model.name,
-                            "date" to model.date,
-                            "title" to model.title,
-                            "description" to model.description,
-                            "likes" to model.likes,
-                            "dislikes" to model.dislikes
-
-                            )//hashMapOf con los nuevos datos
-
-                    )//actualizamos el numero de likes
-
-                }//setOnClickListener
+                reactions(model, model.likes, model.dislikes, holder.questionBinding.likesIA, "Útil", model.author, model.title, model.id)
+                reactions(model, model.dislikes, model.likes, holder.questionBinding.dislikesIQ, "No útil", model.author, model.title, model.id)
 
                 //--------------------------------------------- Programación del boton responder --------------------------------------------- //
 
@@ -296,6 +145,107 @@ class HomeFragment : Fragment() {
 
     }//show questions
 
+    private fun updateQuestion(model: Questions){
+
+        db.collection("Questions").document(model.id).set(
+
+            hashMapOf(
+
+                "id" to model.id,
+                "author" to model.author,
+                "name" to model.name,
+                "date" to model.date,
+                "title" to model.title,
+                "description" to model.description,
+                "likes" to model.likes,
+                "dislikes" to model.dislikes
+
+            )//hashMapOf con los nuevos datos
+
+        )//actualizamos el numero de likes
+
+    }//update question
+
+    private fun reactions(model: Questions, mainArray: ArrayList<String>, secondArray: ArrayList<String>, txtReaction: TextView,  text: String, author: String, title: String, id:String){
+
+        if(mainArray.isNotEmpty()){
+
+            txtReaction.text = mainArray.size.toString()
+
+            if(mainArray.contains(getEmail()) && !secondArray.contains(getEmail())){
+
+                reactionColor(txtReaction, true)
+
+            }//Estoy en la lista de likes y no en la de dislikes
+
+            else{
+
+                reactionColor(txtReaction, false)
+
+            }//no le he dado like al post
+
+        }//los likes no estan vacios
+
+        else{
+
+            txtReaction.text = text
+            reactionColor(txtReaction, false)
+
+        }//no tiene likes
+
+        txtReaction.setOnClickListener {
+
+            if(mainArray.contains(getEmail())){
+
+                mainArray.remove(getEmail().toString())
+
+            }//si mi correo esta en la lista de dislikes
+
+            else{
+
+                if(secondArray.contains(getEmail())){
+
+                    secondArray.remove(getEmail().toString())
+
+                }//eliminiamos el correo de la lista de likes
+
+                //Crear la notificación
+
+                if(getEmail() != author){
+
+                    createNotification(title, id, author)
+                    showNotification(title, id, author)
+
+                }//creamos notificacion solo si no estoy dandome like a mi mismo
+
+                mainArray.add(getEmail().toString())
+
+            }// mi correo no esta en la lista de likes
+
+            updateQuestion(model)
+
+        }//setOnClickListener
+
+    }//reactions
+
+    private fun reactionColor(txtReaction: TextView, like: Boolean){
+
+        if(like){
+
+            txtReaction.compoundDrawables[0].setTint(Color.parseColor("#FB771E"))
+            txtReaction.setTextColor(Color.parseColor("#FB771E"))
+
+        }// se le dio like
+
+        else{
+
+            txtReaction.compoundDrawables[0].setTint(-1979711488)
+            txtReaction.setTextColor(-1979711488)
+
+        }//else se le dio dislike
+
+    }//reaction color
+
     private fun getEmail() : String?{
 
         val prefs : SharedPreferences =  requireActivity().getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
@@ -329,17 +279,17 @@ class HomeFragment : Fragment() {
 
     }//sendNotifiaction
 
-    private fun showNotification(title: String, message: String, question: String, email:String){
+    private fun showNotification(message: String, question: String, email:String){
 
         db.collection("Users").document(email).get().addOnSuccessListener {
 
             val recipientToken = it.get("token") as String?
 
-            if(title.isNotEmpty() && message.isNotEmpty()){
+            if(message.isNotEmpty()){
 
                 PushNotification(
 
-                    NotificationData(title, message, question, email),
+                    NotificationData("Han reaccionado a tu pregunta:", message, question, email),
                     recipientToken?:""
 
                 ).also {
@@ -354,7 +304,7 @@ class HomeFragment : Fragment() {
 
     }//show Notification
 
-    private fun createNotification(title: String, content: String, question: String, author: String) {
+    private fun createNotification(content: String, question: String, author: String) {
 
         val id: String = db.collection("Notifications").document().id
 
@@ -363,7 +313,7 @@ class HomeFragment : Fragment() {
             hashMapOf(
 
                 "id" to id,
-                "title" to title,
+                "title" to "Han reaccionado a tu pregunta:",
                 "author" to getEmail(),
                 "content" to content,
                 "question" to question,

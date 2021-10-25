@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:251080804363:android:3da215261ebdda770e5f0e",
+        "mobilesdk_app_id": "1:251080804363:android:9c5900e0cb24f8870e5f0e",
         "android_client_info": {
-          "package_name": "edu.itq.antwort"
+          "package_name": "com.edu.antwort"
         }
       },
       "oauth_client": [
