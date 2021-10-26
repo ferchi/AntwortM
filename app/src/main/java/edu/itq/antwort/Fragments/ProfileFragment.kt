@@ -11,13 +11,32 @@ import edu.itq.antwort.Activitys.Login
 import edu.itq.antwort.R
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
+import android.graphics.ColorFilter
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import edu.itq.antwort.Adapters.ViewPagerAdapter
 import edu.itq.antwort.databinding.FragmentProfileBinding
+import androidx.core.graphics.drawable.DrawableCompat
 
-class ProfileFragment : Fragment() {
+import android.graphics.drawable.Drawable
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import edu.itq.antwort.Adapters.QuestionAdapter
+import edu.itq.antwort.Classes.Questions
+import edu.itq.antwort.Classes.Users
+import edu.itq.antwort.Utils
+
+
+class ProfileFragment() : Fragment() {
 
     private lateinit var binding: FragmentProfileBinding
-    //val appContext : Context = requireContext().applicationContext
+    private lateinit var db : FirebaseFirestore
+    private lateinit var current : String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,6 +52,21 @@ class ProfileFragment : Fragment() {
 
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentProfileBinding.bind(view)
+        current = Utils.getEmail(requireActivity()).toString()
+
+        setUpTabs()
+        db = FirebaseFirestore.getInstance()
+
+        val current = Utils.getEmail(requireActivity())
+
+        val query = db.collection("Users").whereEqualTo("email", current)
+
+        query.addSnapshotListener{   value, error ->
+            binding.tvProfileUsername.text = value!!.documents[0].get("name").toString()
+        }
+
+        getRol()
+
 /*
         binding.btnLogOut.setOnClickListener {
 
@@ -52,5 +86,36 @@ class ProfileFragment : Fragment() {
         toast.show()
 
     }//función show alert
+
+
+    private fun setUpTabs() {
+
+        //Utilizar el childFragmentManager para evitar errores dentro del tab layout
+        val adapter = ViewPagerAdapter(childFragmentManager)
+
+        adapter.addFragment(NewsFragment(), "Recientes")
+        adapter.addFragment(ConsultFragment(), "Consultas")
+        adapter.addFragment(AnswersFragment(), "Respuestas")
+
+        binding.viewPager.adapter = adapter
+        binding.tabs.setupWithViewPager(binding.viewPager)
+
+        binding.tabs.getTabAt(0)!!.setIcon(R.drawable.ic_new_24)
+        binding.tabs.getTabAt(1)!!.setIcon(R.drawable.ic_hearing_24)
+        binding.tabs.getTabAt(2)!!.setIcon(R.drawable.ic_question_24)
+
+    }
+
+    private fun getRol(){
+        val queryRol = db.collection("Users").document(current)
+        queryRol.get().addOnCompleteListener(
+            OnCompleteListener<DocumentSnapshot>() {
+                val rol = it.result!!.toObject(Users::class.java)!!.rol
+                if(rol == "facilitador"){
+                    binding.ivProfileVerification.visibility = View.VISIBLE
+                }
+            }
+        )
+    }
 
 }//class
