@@ -1,35 +1,20 @@
 package edu.itq.antwort.Fragments
 
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.firebase.auth.FirebaseAuth
-import edu.itq.antwort.Activitys.Login
 import edu.itq.antwort.R
-import android.content.Intent
-import android.content.SharedPreferences
-import android.graphics.Color
-import android.graphics.ColorFilter
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import edu.itq.antwort.Adapters.ViewPagerAdapter
 import edu.itq.antwort.databinding.FragmentProfileBinding
-import androidx.core.graphics.drawable.DrawableCompat
 
-import android.graphics.drawable.Drawable
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
-import edu.itq.antwort.Adapters.QuestionAdapter
-import edu.itq.antwort.Classes.Questions
 import edu.itq.antwort.Classes.Users
-import edu.itq.antwort.Utils
+import edu.itq.antwort.Methods
 
 
 class ProfileFragment() : Fragment() {
@@ -52,18 +37,10 @@ class ProfileFragment() : Fragment() {
 
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentProfileBinding.bind(view)
-        current = Utils.getEmail(requireActivity()).toString()
+        current = Methods.getEmail(requireActivity()).toString()
 
         setUpTabs()
         db = FirebaseFirestore.getInstance()
-
-        val current = Utils.getEmail(requireActivity())
-
-        val query = db.collection("Users").whereEqualTo("email", current)
-
-        query.addSnapshotListener{   value, error ->
-            binding.tvProfileUsername.text = value!!.documents[0].get("name").toString()
-        }
 
         getRol()
 
@@ -79,6 +56,11 @@ class ProfileFragment() : Fragment() {
         }//setOnClickListener
 */
     }//onViewCreated
+
+    override fun onStart() {
+        super.onStart()
+        updateInfo()
+    }
 
     private fun showAlert( message:String){
 
@@ -116,6 +98,17 @@ class ProfileFragment() : Fragment() {
                 }
             }
         )
+    }
+
+    private fun updateInfo(){
+        val query = db.collection("Users").whereEqualTo("email", current)
+
+        query.addSnapshotListener{   value, error ->
+            val userInfo = value!!.documents[0]
+            binding.tvProfileUsername.text = userInfo.get("name").toString()
+            binding.tvProfileCountAnswer.text = userInfo.get("answers").toString()
+            binding.tvProfileCountQuestion.text = userInfo.get("questions").toString()
+        }
     }
 
 }//class

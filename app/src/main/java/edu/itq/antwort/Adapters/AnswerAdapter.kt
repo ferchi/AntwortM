@@ -9,28 +9,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
-import de.hdodenhof.circleimageview.CircleImageView
-import edu.itq.antwort.Activitys.AnswerScreenActivity
 import edu.itq.antwort.Activitys.ProfileActivity
 import edu.itq.antwort.Activitys.QuestionDetails
 import edu.itq.antwort.Classes.*
 import edu.itq.antwort.Fragments.TAG
 import edu.itq.antwort.R
-import edu.itq.antwort.Utils
+import edu.itq.antwort.Methods
 import edu.itq.antwort.databinding.ItemAnswerViewBinding
-import edu.itq.antwort.databinding.ItemQuestionBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.internal.Util
-import java.text.SimpleDateFormat
 
 class AnswerAdapter (private val fragment: Fragment, private val dataset: List<Answers>):
     RecyclerView.Adapter<AnswerAdapter.ViewHolder>() {
@@ -47,7 +39,7 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: List<A
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        val user = Utils.getEmail(fragment.requireActivity())
+        val user = Methods.getEmail(fragment.requireActivity())
 
         val answer = dataset[position]
 
@@ -71,6 +63,17 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: List<A
 
         holder.binding.txtNameAV.text = answer.nameAuthor
         holder.binding.txtAnswersAV.text = answer.content
+        holder.binding.cardItemAnswer.setOnClickListener {
+
+            val homeIntent = Intent(fragment.requireContext(), QuestionDetails::class.java).apply {
+
+                putExtra("id", answer.question)
+
+            }//homeIntent
+
+            fragment.startActivity(homeIntent)
+
+        }
     }
 
     private fun reactions(modelAnswers: Answers?, modelQuestions: Questions?, mainArray: ArrayList<String>, secondArray: ArrayList<String>, txtReaction: TextView, text: String, user: String, author: String, id: String, question: String, title: String, collection: String, content: String, position: Int){

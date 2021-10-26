@@ -10,11 +10,14 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.installations.Utils
 import com.google.gson.Gson
 import edu.itq.antwort.Classes.NotificationData
 import edu.itq.antwort.Classes.PushNotification
 import edu.itq.antwort.Classes.RetrofitInstance
+import edu.itq.antwort.Methods
 import edu.itq.antwort.databinding.ActivityAnswerScreenBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -144,6 +147,8 @@ class AnswerScreenActivity : AppCompatActivity() {
                     )//hashMap
 
                 )//set
+
+                db.collection("Users").document(Methods.getEmail(this)!!).update("answers", FieldValue.increment(1))
 
                 if(author != email){
 

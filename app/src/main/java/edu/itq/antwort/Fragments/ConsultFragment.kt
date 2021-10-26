@@ -6,11 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter
-import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -18,8 +15,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import edu.itq.antwort.Adapters.QuestionAdapter
 import edu.itq.antwort.Classes.Questions
 import edu.itq.antwort.R
-import edu.itq.antwort.Utils
-import edu.itq.antwort.databinding.FragmentAnswersBinding
+import edu.itq.antwort.Methods
 import edu.itq.antwort.databinding.FragmentConsultBinding
 
 class ConsultFragment : Fragment() {
@@ -43,11 +39,24 @@ class ConsultFragment : Fragment() {
         db = FirebaseFirestore.getInstance()
         rev = binding.rvConsult
 
-        val current = Utils.getEmail(requireActivity())
+        getData()
+    }
+
+
+    override fun onStart() {
+        super.onStart()
+        Log.d("vida", "Si entra start")
+
+        getData()
+    }
+
+    private fun getData(){
+        val current = Methods.getEmail(requireActivity())
 
         val query = db.collection("Questions").orderBy("date", Query.Direction.DESCENDING).whereEqualTo("author", current)
 
         query.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot>() {
+            questions.clear()
             questions.addAll(it.result!!.toObjects(Questions::class.java))
             rev.apply {
                 setHasFixedSize(true)
@@ -56,5 +65,6 @@ class ConsultFragment : Fragment() {
             }
         })
     }
+
 
 }

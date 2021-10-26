@@ -86,8 +86,10 @@ class Signup : AppCompatActivity() {
 
                                             "email" to binding.txtEmailSignup.text.toString(),
                                             "name" to binding.txtNameSignup.text.toString(),
-                                            "rol" to "",
-                                            "token" to recipientToken
+                                            "rol" to "estudiante",
+                                            "token" to recipientToken,
+                                            "answers" to 0,
+                                            "questions" to 0
 
                                         )//hashMap
 
