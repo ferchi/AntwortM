@@ -26,4 +26,7 @@
         <item name="color">@color/white</item>
     </style>
 
+    <style name="CustomTabstyle" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">10sp</item>
+    </style>
 </resources>
