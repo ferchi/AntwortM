@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import edu.itq.antwort.Methods
 import edu.itq.antwort.databinding.ActivityNewQuestionBinding
 
 class QuestionScreenActivity : AppCompatActivity() {
@@ -84,6 +86,7 @@ class QuestionScreenActivity : AppCompatActivity() {
                     )//hashMap
 
                 )//set
+                db.collection("Users").document(Methods.getEmail(this)!!).update("questions", FieldValue.increment(1))
 
                 hideKeyboard()
                 onBackPressed()

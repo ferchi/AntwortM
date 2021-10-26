@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.fragment.app.FragmentActivity
 
-object Utils {
+object Methods {
 
     fun getEmail(context:FragmentActivity) : String?{
 

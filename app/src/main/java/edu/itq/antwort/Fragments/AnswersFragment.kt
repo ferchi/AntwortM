@@ -8,19 +8,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import edu.itq.antwort.Adapters.AnswerAdapter
-import edu.itq.antwort.Adapters.QuestionAdapter
 import edu.itq.antwort.Classes.Answers
-import edu.itq.antwort.Classes.Questions
-import edu.itq.antwort.Classes.Users
 import edu.itq.antwort.R
-import edu.itq.antwort.Utils
+import edu.itq.antwort.Methods
 import edu.itq.antwort.databinding.FragmentAnswersBinding
-import edu.itq.antwort.databinding.FragmentHomeBinding
 
 class AnswersFragment() : Fragment() {
     private lateinit var binding: FragmentAnswersBinding
@@ -43,12 +38,13 @@ class AnswersFragment() : Fragment() {
         binding = FragmentAnswersBinding.bind(view)
         db = FirebaseFirestore.getInstance()
         rev = binding.rvAnswers
-        current = Utils.getEmail(requireActivity()).toString()
+        current = Methods.getEmail(requireActivity()).toString()
 
 
         val query = db.collection("Answers").orderBy("date", Query.Direction.DESCENDING).whereEqualTo("author", current)
 
         query.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot>() {
+            answers.clear()
             answers.addAll(it.result!!.toObjects(Answers::class.java))
             rev.apply {
                 setHasFixedSize(true)
@@ -57,9 +53,4 @@ class AnswersFragment() : Fragment() {
             }
         })
     }
-
-
-
-
-
 }
