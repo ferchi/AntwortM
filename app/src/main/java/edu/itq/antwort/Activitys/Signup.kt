@@ -68,7 +68,7 @@ class Signup : AppCompatActivity() {
 
             if(binding.txtNameSignup.text.isNotEmpty() && binding.txtEmailSignup.text.isNotEmpty() && binding.txtPasswordSignup.text.isNotEmpty() && binding.txtConfirmPasswordSignup.text.isNotEmpty() ){
 
-                if(validateText(binding.txtPasswordSignup.text.toString(), "^(?=.*[A-Z])(?=.*\\d)(?=.*[@\$!%*#?&])[A-Za-z\\d@\$!%*#?&]{8,}\$")){
+                if(binding.txtPasswordSignup.text.length > 7){
 
                     if(binding.txtPasswordSignup.text.toString() == binding.txtConfirmPasswordSignup.text.toString()){
 
@@ -119,7 +119,7 @@ class Signup : AppCompatActivity() {
 
                 else{
 
-                    showAlert("La contraseña debe tener minimo 8 caracteres, una letra mayúscula y un caracter especial")
+                    showAlert("La contraseña debe tener minimo 8 caracteres")
 
                 }//else requerimientos de la contraseña
 
