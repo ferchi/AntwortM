@@ -1,18 +1,13 @@
-package edu.itq.antwort.Activitys
+package edu.itq.antwort.Activities
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.ResultReceiver
 import android.util.Log
-import android.view.View
-import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import android.widget.Toast
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.installations.Utils
 import com.google.gson.Gson
 import edu.itq.antwort.Classes.NotificationData
 import edu.itq.antwort.Classes.PushNotification

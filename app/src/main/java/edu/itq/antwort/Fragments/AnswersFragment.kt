@@ -39,8 +39,16 @@ class AnswersFragment() : Fragment() {
         db = FirebaseFirestore.getInstance()
         rev = binding.rvAnswers
         current = Methods.getEmail(requireActivity()).toString()
+        loadData()
+    }
 
+    override fun onStart() {
+        super.onStart()
 
+        loadData()
+    }
+
+    private fun loadData(){
         val query = db.collection("Answers").orderBy("date", Query.Direction.DESCENDING).whereEqualTo("author", current)
 
         query.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot>() {

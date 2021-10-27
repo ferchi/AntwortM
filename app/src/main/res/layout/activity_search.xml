@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activitys.SearchActivity">
+    tools:context=".Activities.SearchActivity">
 
     <include
         android:id="@+id/include_toolbar_search"

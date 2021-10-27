@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.FirebaseFirestore
-import edu.itq.antwort.Activitys.QuestionDetails
+import edu.itq.antwort.Activities.QuestionDetails
 import edu.itq.antwort.Classes.Notifications
 import edu.itq.antwort.R
 import edu.itq.antwort.databinding.FragmentNotificationBinding

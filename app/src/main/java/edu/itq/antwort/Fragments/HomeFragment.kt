@@ -17,10 +17,10 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.gson.Gson
-import edu.itq.antwort.Activitys.AnswerScreenActivity
-import edu.itq.antwort.Activitys.ProfileActivity
-import edu.itq.antwort.Activitys.QuestionDetails
-import edu.itq.antwort.Activitys.SearchActivity
+import edu.itq.antwort.Activities.AnswerScreenActivity
+import edu.itq.antwort.Activities.ProfileActivity
+import edu.itq.antwort.Activities.QuestionDetails
+import edu.itq.antwort.Activities.SearchActivity
 import edu.itq.antwort.Classes.NotificationData
 import edu.itq.antwort.Classes.PushNotification
 import edu.itq.antwort.Classes.Questions

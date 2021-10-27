@@ -1,4 +1,4 @@
-package edu.itq.antwort.Activitys
+package edu.itq.antwort.Activities
 
 import android.content.Context
 import android.os.Bundle

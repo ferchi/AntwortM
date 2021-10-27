@@ -19,34 +19,37 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
-            android:name=".Activitys.ProfileActivity"
+            android:name=".Activities.EditProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".Activitys.AnswerScreenActivity"
+            android:name=".Activities.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.AnswerScreenActivity"
             android:exported="true" />
         <activity
-            android:name=".Activitys.QuestionDetails"
+            android:name=".Activities.QuestionDetails"
             android:exported="true" />
         <activity
-            android:name=".Activitys.SearchActivity"
+            android:name=".Activities.SearchActivity"
             android:exported="true" />
         <activity
-            android:name=".Activitys.QuestionScreenActivity"
+            android:name=".Activities.QuestionScreenActivity"
             android:exported="true" />
         <activity
-            android:name=".Activitys.HomeActivity"
+            android:name=".Activities.HomeActivity"
             android:exported="true" />
         <activity
-            android:name=".Activitys.ForgotPassword"
+            android:name=".Activities.ForgotPassword"
             android:exported="true" />
         <activity
-            android:name=".Activitys.Signup"
+            android:name=".Activities.Signup"
             android:exported="true" />
         <activity
-            android:name=".Activitys.Login"
+            android:name=".Activities.Login"
             android:exported="true" />
         <activity
-            android:name=".Activitys.SplashScreen"
+            android:name=".Activities.SplashScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

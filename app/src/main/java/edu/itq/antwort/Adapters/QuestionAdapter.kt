@@ -6,20 +6,15 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
-import de.hdodenhof.circleimageview.CircleImageView
-import edu.itq.antwort.Activitys.AnswerScreenActivity
-import edu.itq.antwort.Activitys.ProfileActivity
-import edu.itq.antwort.Activitys.QuestionDetails
+import edu.itq.antwort.Activities.AnswerScreenActivity
+import edu.itq.antwort.Activities.ProfileActivity
+import edu.itq.antwort.Activities.QuestionDetails
 import edu.itq.antwort.Classes.NotificationData
 import edu.itq.antwort.Classes.PushNotification
 import edu.itq.antwort.Classes.Questions
@@ -30,7 +25,6 @@ import edu.itq.antwort.databinding.ItemQuestionBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 
 class QuestionAdapter (private val fragment: Fragment, private val dataset: List<Questions>):
     RecyclerView.Adapter<QuestionAdapter.ViewHolder>() {
