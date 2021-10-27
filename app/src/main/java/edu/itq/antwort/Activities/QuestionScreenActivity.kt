@@ -1,4 +1,4 @@
-package edu.itq.antwort.Activitys
+package edu.itq.antwort.Activities
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
@@ -23,8 +23,8 @@ class QuestionScreenActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        val bundle=intent.extras
-        val email=bundle?.getString("email")
+        val bundle = intent.extras
+        val email = bundle?.getString("email")
 
         supportActionBar?.hide()
 

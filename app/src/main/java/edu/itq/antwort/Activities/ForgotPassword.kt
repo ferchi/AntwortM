@@ -1,4 +1,4 @@
-package edu.itq.antwort.Activitys
+package edu.itq.antwort.Activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

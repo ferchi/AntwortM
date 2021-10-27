@@ -13,8 +13,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
-import edu.itq.antwort.Activitys.ProfileActivity
-import edu.itq.antwort.Activitys.QuestionDetails
+import edu.itq.antwort.Activities.ProfileActivity
+import edu.itq.antwort.Activities.QuestionDetails
 import edu.itq.antwort.Classes.*
 import edu.itq.antwort.Fragments.TAG
 import edu.itq.antwort.R
@@ -169,12 +169,6 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: List<A
 
     }//reaction color
 
-    private fun getEmail() : String?{
-
-        val prefs : SharedPreferences =  fragment.requireActivity().getSharedPreferences(fragment.getString(R.string.prefs_file), Context.MODE_PRIVATE)
-        return prefs.getString("email", null)
-
-    }//getMail
 
     private fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
 

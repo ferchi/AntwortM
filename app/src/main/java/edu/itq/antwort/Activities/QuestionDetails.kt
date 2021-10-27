@@ -1,4 +1,4 @@
-package edu.itq.antwort.Activitys
+package edu.itq.antwort.Activities
 
 import android.annotation.SuppressLint
 import android.content.Context

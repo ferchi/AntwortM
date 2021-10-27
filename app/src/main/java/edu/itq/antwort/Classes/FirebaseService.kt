@@ -14,7 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import edu.itq.antwort.Activitys.QuestionDetails
+import edu.itq.antwort.Activities.QuestionDetails
 import edu.itq.antwort.R
 import kotlin.random.Random
 

@@ -1,5 +1,6 @@
 package edu.itq.antwort.Fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,9 +11,9 @@ import android.widget.Toast
 import edu.itq.antwort.Adapters.ViewPagerAdapter
 import edu.itq.antwort.databinding.FragmentProfileBinding
 
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.squareup.picasso.Picasso
+import edu.itq.antwort.Activities.EditProfileActivity
 import edu.itq.antwort.Classes.Users
 import edu.itq.antwort.Methods
 
@@ -43,7 +44,17 @@ class ProfileFragment() : Fragment() {
         db = FirebaseFirestore.getInstance()
 
         getRol()
+        loadImg()
 
+        binding.btnProfileEdit.setOnClickListener {
+            val editIntent = Intent(context, EditProfileActivity::class.java).apply {
+
+                putExtra("current", current)
+
+            }//homeIntent
+
+            startActivity(editIntent)
+        }
 /*
         binding.btnLogOut.setOnClickListener {
 
@@ -86,18 +97,17 @@ class ProfileFragment() : Fragment() {
         binding.tabs.getTabAt(1)!!.setIcon(R.drawable.ic_hearing_24)
         binding.tabs.getTabAt(2)!!.setIcon(R.drawable.ic_question_24)
 
+
     }
 
     private fun getRol(){
         val queryRol = db.collection("Users").document(current)
-        queryRol.get().addOnCompleteListener(
-            OnCompleteListener<DocumentSnapshot>() {
-                val rol = it.result!!.toObject(Users::class.java)!!.rol
-                if(rol == "facilitador"){
-                    binding.ivProfileVerification.visibility = View.VISIBLE
-                }
+        queryRol.get().addOnCompleteListener {
+            val rol = it.result!!.toObject(Users::class.java)!!.rol
+            if (rol == "facilitador") {
+                binding.ivProfileVerification.visibility = View.VISIBLE
             }
-        )
+        }
     }
 
     private fun updateInfo(){
@@ -108,6 +118,21 @@ class ProfileFragment() : Fragment() {
             binding.tvProfileUsername.text = userInfo.get("name").toString()
             binding.tvProfileCountAnswer.text = userInfo.get("answers").toString()
             binding.tvProfileCountQuestion.text = userInfo.get("questions").toString()
+        }
+    }
+
+    private fun loadImg() {
+
+        db.collection("Users").document(Methods.getEmail(requireActivity()).toString()).addSnapshotListener{
+            result, error ->
+            val urlImg = result!!.get("imgProfile").toString()
+
+            try {
+                Picasso.get().load(urlImg).into(binding.civProfileImageProfile)
+
+            } catch (e: Exception) {
+                Picasso.get().load(R.drawable.ic_user_profile).into(binding.civProfileImageProfile)
+            }
         }
     }
 
