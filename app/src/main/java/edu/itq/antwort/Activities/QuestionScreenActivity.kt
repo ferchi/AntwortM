@@ -7,7 +7,10 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 import edu.itq.antwort.Methods
+import edu.itq.antwort.R
 import edu.itq.antwort.databinding.ActivityNewQuestionBinding
 
 class QuestionScreenActivity : AppCompatActivity() {
@@ -29,7 +32,7 @@ class QuestionScreenActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         // setup
-        setup()
+        setup(email!!)
 
         db.collection("Users").document(email?:"").get().addOnSuccessListener {
 
@@ -46,9 +49,11 @@ class QuestionScreenActivity : AppCompatActivity() {
 
     }//hideKeyboard
 
-    private fun setup() {
+    private fun setup(email: String) {
 
         binding.edtTitle.requestFocus()
+
+        loadImg(binding.imgQuestionProfile, email)
 
         binding.imgQuestionBack.setOnClickListener{
 
@@ -58,6 +63,21 @@ class QuestionScreenActivity : AppCompatActivity() {
         }//regresar a la pantalla anterior
 
     }//fun
+
+    private fun loadImg(image : CircleImageView, author: String) {
+
+        db.collection("Users").document(author).addSnapshotListener{
+                result, error ->
+            val urlImg = result!!.get("imgProfile").toString()
+
+            try {
+                Picasso.get().load(urlImg).into(image)
+
+            } catch (e: Exception) {
+                Picasso.get().load(R.drawable.ic_user_profile).into(image)
+            }
+        }
+    }//load image
 
     private fun postQuestion(email: String?, name : String){
 

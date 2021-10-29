@@ -11,11 +11,14 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
+import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 import edu.itq.antwort.Activities.ProfileActivity
 import edu.itq.antwort.Activities.QuestionDetails
 import edu.itq.antwort.Classes.*
 import edu.itq.antwort.Fragments.TAG
 import edu.itq.antwort.Methods
+import edu.itq.antwort.R
 import edu.itq.antwort.databinding.ItemAnswerViewBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -60,8 +63,11 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: List<A
         reactions(answer,null, answer.likes, answer.dislikes, holder.binding.likesIA, "Útil", user!!, answer.author, answer.id, answer.question, "Han reaccionado a tu respuesta", "Answers", "content", position)
         reactions(answer,null, answer.dislikes, answer.likes, holder.binding.dislikeIA, "No útil", user, answer.author, answer.id, answer.question, "Han reaccionado a tu respuesta", "Answers", "content", position)
 
+
         holder.binding.txtNameAV.text = answer.nameAuthor
         holder.binding.txtAnswersAV.text = answer.content
+        loadImg(holder.binding.imgUserAV, answer.author)
+
         holder.binding.cardItemAnswer.setOnClickListener {
 
             val homeIntent = Intent(fragment.requireContext(), QuestionDetails::class.java).apply {
@@ -74,6 +80,21 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: List<A
 
         }
     }
+
+    private fun loadImg(image : CircleImageView, author: String) {
+
+        db.collection("Users").document(author).addSnapshotListener{
+                result, error ->
+            val urlImg = result!!.get("imgProfile").toString()
+
+            try {
+                Picasso.get().load(urlImg).into(image)
+
+            } catch (e: Exception) {
+                Picasso.get().load(R.drawable.ic_user_profile).into(image)
+            }
+        }
+    }//load image
 
     private fun reactions(modelAnswers: Answers?, modelQuestions: Questions?, mainArray: ArrayList<String>, secondArray: ArrayList<String>, txtReaction: TextView, text: String, user: String, author: String, id: String, question: String, title: String, collection: String, content: String, position: Int){
 

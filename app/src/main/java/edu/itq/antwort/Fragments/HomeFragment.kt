@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.TextView
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
@@ -17,6 +18,8 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.gson.Gson
+import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 import edu.itq.antwort.Activities.AnswerScreenActivity
 import edu.itq.antwort.Activities.ProfileActivity
 import edu.itq.antwort.Activities.QuestionDetails
@@ -25,6 +28,7 @@ import edu.itq.antwort.Classes.NotificationData
 import edu.itq.antwort.Classes.PushNotification
 import edu.itq.antwort.Classes.Questions
 import edu.itq.antwort.Classes.RetrofitInstance
+import edu.itq.antwort.Methods
 import edu.itq.antwort.R
 import edu.itq.antwort.databinding.FragmentHomeBinding
 import edu.itq.antwort.databinding.ItemQuestionBinding
@@ -133,7 +137,9 @@ class HomeFragment : Fragment() {
                 val txtTitleText : TextView = holder.itemView.findViewById(R.id.txtTitleText)
                 val txtItemDescription : TextView = holder.itemView.findViewById(R.id.txtItemDescription)
                 val txtAuthor : TextView = holder.itemView.findViewById(R.id.txtAuthor)
+                val imgAuthorAI : CircleImageView = holder.itemView.findViewById(R.id.imgAuthorAI)
 
+                loadImg(imgAuthorAI, model.author)
                 txtTitleText.text = model.title
                 txtItemDescription.text = model.description
                 txtAuthor.text = model.name
@@ -146,6 +152,21 @@ class HomeFragment : Fragment() {
         binding.rvHome.layoutManager = LinearLayoutManager(context)
 
     }//show questions
+
+    private fun loadImg(image : CircleImageView, author: String) {
+
+        db.collection("Users").document(author).addSnapshotListener{
+                result, error ->
+            val urlImg = result!!.get("imgProfile").toString()
+
+            try {
+                Picasso.get().load(urlImg).into(image)
+
+            } catch (e: Exception) {
+                Picasso.get().load(R.drawable.ic_user_profile).into(image)
+            }
+        }
+    }
 
     private fun updateQuestion(model: Questions){
 

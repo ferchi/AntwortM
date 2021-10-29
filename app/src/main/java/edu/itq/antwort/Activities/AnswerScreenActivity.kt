@@ -9,10 +9,13 @@ import android.widget.Toast
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
+import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 import edu.itq.antwort.Classes.NotificationData
 import edu.itq.antwort.Classes.PushNotification
 import edu.itq.antwort.Classes.RetrofitInstance
 import edu.itq.antwort.Methods
+import edu.itq.antwort.R
 import edu.itq.antwort.databinding.ActivityAnswerScreenBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,6 +41,8 @@ class AnswerScreenActivity : AppCompatActivity() {
         val question = bundle?.getString("question")
         val author = bundle?.getString("author")
 
+        loadImg(binding.imgUserAS, email!!)
+
         db.collection("Users").document(email?:"").get().addOnSuccessListener {
 
             setup(it.get("name") as String)
@@ -46,6 +51,21 @@ class AnswerScreenActivity : AppCompatActivity() {
         }//obtenemos el nombre del usuario
 
     }//onCreate
+
+    private fun loadImg(image : CircleImageView, author: String) {
+
+        db.collection("Users").document(author).addSnapshotListener{
+                result, error ->
+            val urlImg = result!!.get("imgProfile").toString()
+
+            try {
+                Picasso.get().load(urlImg).into(image)
+
+            } catch (e: Exception) {
+                Picasso.get().load(R.drawable.ic_user_profile).into(image)
+            }
+        }
+    }//load image
 
     private fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
 
