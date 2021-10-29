@@ -9,10 +9,13 @@ import android.widget.Toast
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
+import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 import edu.itq.antwort.Classes.NotificationData
 import edu.itq.antwort.Classes.PushNotification
 import edu.itq.antwort.Classes.RetrofitInstance
 import edu.itq.antwort.Methods
+import edu.itq.antwort.R
 import edu.itq.antwort.databinding.ActivityAnswerScreenBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,10 +35,13 @@ class AnswerScreenActivity : AppCompatActivity() {
         binding = ActivityAnswerScreenBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
         val bundle = intent.extras
         val email = bundle?.getString("email")
         val question = bundle?.getString("question")
         val author = bundle?.getString("author")
+
+        loadImg(binding.imgUserAS, email!!)
 
 
         db.collection("Users").document(email?:"").get().addOnSuccessListener {
@@ -47,6 +53,20 @@ class AnswerScreenActivity : AppCompatActivity() {
 
     }//onCreate
 
+    private fun loadImg(image : CircleImageView, author: String) {
+
+        db.collection("Users").document(author).addSnapshotListener{
+                result, error ->
+            val urlImg = result!!.get("imgProfile").toString()
+
+            try {
+                Picasso.get().load(urlImg).into(image)
+
+            } catch (e: Exception) {
+                Picasso.get().load(R.drawable.ic_user_profile).into(image)
+            }
+        }
+    }//load image
     private fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
 
         try {
@@ -144,6 +164,8 @@ class AnswerScreenActivity : AppCompatActivity() {
                 )//set
 
                 db.collection("Users").document(Methods.getEmail(this)!!).update("answers", FieldValue.increment(1))
+                db.collection("Questions").document(question).update("answers", FieldValue.increment(1))
+
 
                 if(author != email){
 
@@ -171,7 +193,6 @@ class AnswerScreenActivity : AppCompatActivity() {
         }//setOnClickListener btnPostAnswer
 
     }//postAnswer
-
 
     private fun hideKeyboard(){
 

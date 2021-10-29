@@ -51,11 +51,46 @@ class Login : AppCompatActivity() {
 
         if(email != null){
 
+            db.collection("Users").document(email).get().addOnSuccessListener {
+
+                val updated = it.get("updated") as Boolean
+                val verified = it.get("rol") as String == "facilitador"
+
+                println("-----------------------------------------------------------------------")
+                println(verified)
+                println("-----------------------------------------------------------------------")
+                if(!updated && verified){
+
+                    updateAnswersVerified(email, true)
+                    db.collection("Users").document(email).update("updated", true)
+
+                }//actualizamos las respuestas anteriores dadas por el usuario
+
+            }//obtenemos el campo updated
+
             showHome(email)
 
         }//email
 
     }//session
+
+
+    private fun updateAnswersVerified(email:String, verified: Boolean){
+
+        db.collection("Answers").whereEqualTo("author", email).get().addOnSuccessListener {
+
+            it.documents.forEach { i->
+
+                val id = i.get("id") as String
+
+                db.collection("Answers").document(id).update("verified", verified)
+
+            }//for each
+
+        }//obtenemos el id de las perguntas hechas por el usuario
+
+    }//verified
+
 
     private fun setup(){
 

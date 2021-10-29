@@ -51,19 +51,20 @@ class ConsultFragment : Fragment() {
     }
 
     private fun getData(){
+
         val current = Methods.getEmail(requireActivity())
 
         val query = db.collection("Questions").orderBy("date", Query.Direction.DESCENDING).whereEqualTo("author", current)
 
-        query.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot>() {
+        query.get().addOnCompleteListener {
             questions.clear()
             questions.addAll(it.result!!.toObjects(Questions::class.java))
             rev.apply {
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(context)
-                adapter = QuestionAdapter(this@ConsultFragment,questions)
+                adapter = QuestionAdapter(this@ConsultFragment, questions)
             }
-        })
+        }
     }
 
 

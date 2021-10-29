@@ -69,6 +69,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:19.0.2'
     implementation 'com.google.firebase:firebase-storage-ktx'
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
+    implementation 'com.google.firebase:firebase-storage-ktx'
 
     //Corregir error de firestore en android 11
     implementation "io.grpc:grpc-okhttp:1.32.2"

@@ -7,7 +7,10 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 import edu.itq.antwort.Methods
+import edu.itq.antwort.R
 import edu.itq.antwort.databinding.ActivityNewQuestionBinding
 
 class QuestionScreenActivity : AppCompatActivity() {
@@ -23,13 +26,13 @@ class QuestionScreenActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        val bundle = intent.extras
-        val email = bundle?.getString("email")
+        val bundle=intent.extras
+        val email=bundle?.getString("email")
 
         supportActionBar?.hide()
 
         // setup
-        setup()
+        setup(email!!)
 
         db.collection("Users").document(email?:"").get().addOnSuccessListener {
 
@@ -46,10 +49,10 @@ class QuestionScreenActivity : AppCompatActivity() {
 
     }//hideKeyboard
 
-    private fun setup() {
 
+    private fun setup(email: String) {
         binding.edtTitle.requestFocus()
-
+        loadImg(binding.imgQuestionProfile, email)
         binding.imgQuestionBack.setOnClickListener{
 
             hideKeyboard()
@@ -58,6 +61,21 @@ class QuestionScreenActivity : AppCompatActivity() {
         }//regresar a la pantalla anterior
 
     }//fun
+
+    private fun loadImg(image : CircleImageView, author: String) {
+
+        db.collection("Users").document(author).addSnapshotListener{
+                result, error ->
+            val urlImg = result!!.get("imgProfile").toString()
+
+            try {
+                Picasso.get().load(urlImg).into(image)
+
+            } catch (e: Exception) {
+                Picasso.get().load(R.drawable.ic_user_profile).into(image)
+            }
+        }
+    }//load image
 
     private fun postQuestion(email: String?, name : String){
 
@@ -79,6 +97,7 @@ class QuestionScreenActivity : AppCompatActivity() {
                         "date" to timestamp,
                         "likes" to likes,
                         "dislikes" to dislikes,
+                        "answers" to 0,
                         "author" to email,
                         "title" to binding.edtTitle.text.toString(),
                         "description" to binding.edtDescription.text.toString()
@@ -86,6 +105,7 @@ class QuestionScreenActivity : AppCompatActivity() {
                     )//hashMap
 
                 )//set
+                
                 db.collection("Users").document(Methods.getEmail(this)!!).update("questions", FieldValue.increment(1))
 
                 hideKeyboard()
@@ -115,6 +135,4 @@ class QuestionScreenActivity : AppCompatActivity() {
         }//setOnClickListener
 
     }//postQuestion
-
 }//class
-
