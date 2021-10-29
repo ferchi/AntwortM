@@ -42,7 +42,6 @@ class ProfileFragment() : Fragment() {
 
         getRol()
         loadImg()
-
         binding.btnProfileEdit.setOnClickListener {
             val editIntent = Intent(context, EditProfileActivity::class.java).apply {
 
@@ -76,6 +75,7 @@ class ProfileFragment() : Fragment() {
         binding.tabs.getTabAt(1)!!.setIcon(R.drawable.ic_hearing_24)
         binding.tabs.getTabAt(2)!!.setIcon(R.drawable.ic_question_24)
 
+
     }
 
     private fun getRol(){
@@ -104,6 +104,7 @@ class ProfileFragment() : Fragment() {
 
         db.collection("Users").document(Methods.getEmail(requireActivity()).toString()).addSnapshotListener{
                 result, error ->
+
             val urlImg = result!!.get("imgProfile").toString()
 
             try {

@@ -74,6 +74,7 @@ class Login : AppCompatActivity() {
 
     }//session
 
+
     private fun updateAnswersVerified(email:String, verified: Boolean){
 
         db.collection("Answers").whereEqualTo("author", email).get().addOnSuccessListener {
@@ -89,6 +90,7 @@ class Login : AppCompatActivity() {
         }//obtenemos el id de las perguntas hechas por el usuario
 
     }//verified
+
 
     private fun setup(){
 
