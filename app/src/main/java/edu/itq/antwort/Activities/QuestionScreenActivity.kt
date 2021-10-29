@@ -1,4 +1,4 @@
-package edu.itq.antwort.Activitys
+package edu.itq.antwort.Activities
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
@@ -79,6 +79,7 @@ class QuestionScreenActivity : AppCompatActivity() {
                         "date" to timestamp,
                         "likes" to likes,
                         "dislikes" to dislikes,
+                        "answers" to 0,
                         "author" to email,
                         "title" to binding.edtTitle.text.toString(),
                         "description" to binding.edtDescription.text.toString()
@@ -86,6 +87,7 @@ class QuestionScreenActivity : AppCompatActivity() {
                     )//hashMap
 
                 )//set
+
                 db.collection("Users").document(Methods.getEmail(this)!!).update("questions", FieldValue.increment(1))
 
                 hideKeyboard()
@@ -117,4 +119,3 @@ class QuestionScreenActivity : AppCompatActivity() {
     }//postQuestion
 
 }//class
-

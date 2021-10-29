@@ -17,10 +17,10 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.gson.Gson
-import edu.itq.antwort.Activitys.AnswerScreenActivity
-import edu.itq.antwort.Activitys.ProfileActivity
-import edu.itq.antwort.Activitys.QuestionDetails
-import edu.itq.antwort.Activitys.SearchActivity
+import edu.itq.antwort.Activities.AnswerScreenActivity
+import edu.itq.antwort.Activities.ProfileActivity
+import edu.itq.antwort.Activities.QuestionDetails
+import edu.itq.antwort.Activities.SearchActivity
 import edu.itq.antwort.Classes.NotificationData
 import edu.itq.antwort.Classes.PushNotification
 import edu.itq.antwort.Classes.Questions
@@ -34,7 +34,7 @@ import kotlinx.coroutines.launch
 
 class QuestionsViewHolder(val questionBinding: ItemQuestionBinding) : RecyclerView.ViewHolder(questionBinding.root)
 
-val TAG = "HomeFragment"
+const val TAG = "HomeFragment"
 
 class HomeFragment : Fragment() {
 
@@ -62,7 +62,6 @@ class HomeFragment : Fragment() {
             startActivity(Intent(context, SearchActivity::class.java))
 
         }//setOnClickListener
-
         showQuestions()
 
     }//onViewCreated
@@ -108,10 +107,13 @@ class HomeFragment : Fragment() {
 
                 }//setOnClickListener
 
-                reactions(model, model.likes, model.dislikes, holder.questionBinding.likesIA, "Útil", model.author, model.title, model.id)
-                reactions(model, model.dislikes, model.likes, holder.questionBinding.dislikesIQ, "No útil", model.author, model.title, model.id)
+                reactions(model, model.likes, model.dislikes, holder.questionBinding.likesIA, model.author, model.title, model.id)
+                reactions(model, model.dislikes, model.likes, holder.questionBinding.dislikesIQ, model.author, model.title, model.id)
 
                 //--------------------------------------------- Programación del boton responder --------------------------------------------- //
+
+                if(model.answers >0)
+                    holder.questionBinding.answersIQ.text = model.answers.toString()
 
                 holder.questionBinding.answersIQ.setOnClickListener {
 
@@ -166,7 +168,7 @@ class HomeFragment : Fragment() {
 
     }//update question
 
-    private fun reactions(model: Questions, mainArray: ArrayList<String>, secondArray: ArrayList<String>, txtReaction: TextView,  text: String, author: String, title: String, id:String){
+    private fun reactions(model: Questions, mainArray: ArrayList<String>, secondArray: ArrayList<String>, txtReaction: TextView, author: String, title: String, id:String){
 
         if(mainArray.isNotEmpty()){
 
@@ -188,7 +190,7 @@ class HomeFragment : Fragment() {
 
         else{
 
-            txtReaction.text = text
+            txtReaction.text = ""
             reactionColor(txtReaction, false)
 
         }//no tiene likes

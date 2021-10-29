@@ -1,4 +1,4 @@
-package edu.itq.antwort.Activitys
+package edu.itq.antwort.Activities
 
 import android.content.Context
 import android.os.Bundle
@@ -100,7 +100,7 @@ class SearchActivity : AppCompatActivity() {
 
                     question.id = value.documents[index].id
 
-                    val modelQuestion = Questions(question.author, question.name, question.description, question.title, question.id, question.date, question.likes, question.dislikes)
+                    val modelQuestion = Questions(question.author, question.name, question.description, question.title, question.id, question.answers, question.date, question.likes, question.dislikes)
 
                     if(modelQuestion.title.lowercase().contains(search.lowercase())
                         || modelQuestion.description.lowercase().contains(search.lowercase())){

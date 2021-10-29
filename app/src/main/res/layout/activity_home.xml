@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".Activitys.HomeActivity">
+    tools:context=".Activities.HomeActivity">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnNewQuestion"
@@ -37,9 +37,13 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/BottomNavBar"
         android:layout_width="match_parent"
+        android:outlineAmbientShadowColor="@color/gray"
+        android:outlineSpotShadowColor="@color/gray"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
         android:elevation="2dp"
+        app:itemIconTint="@color/gray"
+        app:itemTextColor="@color/gray"
         android:background="@drawable/bottomnav_bg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

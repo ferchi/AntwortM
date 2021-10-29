@@ -1,4 +1,4 @@
-package edu.itq.antwort.Activitys
+package edu.itq.antwort.Activities
 
 import android.content.Context
 import android.content.Intent
@@ -44,6 +44,7 @@ class HomeActivity : AppCompatActivity() {
 
         val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
         prefs.putString("email", email)
+
         prefs.apply()
 
     }//fun onCreate

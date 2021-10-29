@@ -122,7 +122,6 @@
                 android:layout_marginBottom="8dp"
                 android:drawableLeft="@drawable/ic_baseline_thumb_up_24"
                 android:drawablePadding="10dp"
-                android:text="Útil"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0"
@@ -136,29 +135,25 @@
                 android:layout_marginBottom="8dp"
                 android:drawableLeft="@drawable/ic_baseline_thumb_down_24"
                 android:drawablePadding="10dp"
-                android:text="No útil"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/answersIQ"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias=".5"
-                app:layout_constraintStart_toEndOf="@+id/likesIA"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/answersIQ"
-                android:layout_width="134dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
                 android:drawableLeft="@drawable/ic_baseline_comment_24"
                 android:drawablePadding="10dp"
-                android:text="Responder"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

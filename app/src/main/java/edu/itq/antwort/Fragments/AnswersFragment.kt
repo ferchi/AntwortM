@@ -23,7 +23,6 @@ class AnswersFragment() : Fragment() {
     private lateinit var rev: RecyclerView
     private var answers : MutableList<Answers> = mutableListOf()
     private lateinit var current : String
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,16 +30,22 @@ class AnswersFragment() : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_answers, container, false)
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding = FragmentAnswersBinding.bind(view)
         db = FirebaseFirestore.getInstance()
         rev = binding.rvAnswers
         current = Methods.getEmail(requireActivity()).toString()
+        loadData()
+    }
 
+    override fun onStart() {
+        super.onStart()
 
+        loadData()
+    }
+
+    private fun loadData(){
         val query = db.collection("Answers").orderBy("date", Query.Direction.DESCENDING).whereEqualTo("author", current)
 
         query.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot>() {

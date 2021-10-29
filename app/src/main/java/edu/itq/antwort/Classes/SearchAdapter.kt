@@ -11,15 +11,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
-import edu.itq.antwort.Activitys.QuestionDetails
+import edu.itq.antwort.Activities.QuestionDetails
 import edu.itq.antwort.R
 
 class SearchAdapter(private val activity: AppCompatActivity, private val newList: ArrayList<Questions>) :
     RecyclerView.Adapter<SearchAdapter.SearchAdapterHolder>() {
-
-    val db = FirebaseFirestore.getInstance()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchAdapterHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_question, parent, false)

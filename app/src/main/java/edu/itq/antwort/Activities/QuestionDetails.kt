@@ -1,4 +1,4 @@
-package edu.itq.antwort.Activitys
+package edu.itq.antwort.Activities
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -49,11 +49,13 @@ class QuestionDetails : AppCompatActivity() {
 
         val bundle = intent.extras
         val id = bundle?.getString("id")
+
         val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
         val user = prefs.getString("email", null)
 
         showQuestion(user?:"", id?:"")
         showAnswers(id?:"", user?:"")
+
         setup()
 
     }//onCreate
@@ -112,8 +114,8 @@ class QuestionDetails : AppCompatActivity() {
 
                 //--------------------------------------------- Programación de las reacciones --------------------------------------------- //
 
-                reactions(null, model, model.likes, model.dislikes, holder.questionViewBinding.txtLikeQD, "Útil", user, model.author, model.id, model.id, "Han reaccionado a tu pregunta", "Questions", "title")
-                reactions(null, model, model.dislikes, model.likes, holder.questionViewBinding.txtDislikeQD, "No útil", user, model.author, model.id, model.id, "Han reaccionado a tu pregunta", "Questions", "title")
+                reactions(null, model, model.likes, model.dislikes, holder.questionViewBinding.txtLikeQD, user, model.author, model.id, model.id, "Han reaccionado a tu pregunta", "Questions", "title")
+                reactions(null, model, model.dislikes, model.likes, holder.questionViewBinding.txtDislikeQD, user, model.author, model.id, model.id, "Han reaccionado a tu pregunta", "Questions", "title")
 
                 //--------------------------------------------- Programación del boton responder --------------------------------------------- //
 
@@ -126,7 +128,9 @@ class QuestionDetails : AppCompatActivity() {
                 val txtNameQD : TextView = holder.itemView.findViewById(R.id.txtNameQD)
                 val txtTitleQD : TextView = holder.itemView.findViewById(R.id.txtTitleQD)
                 val txtDescriptionQD : TextView = holder.itemView.findViewById(R.id.txtDescriptionQD)
+                val txtAnswersQD : TextView = holder.itemView.findViewById(R.id.txtAnswersQD)
 
+                txtAnswersQD.text = model.answers.toString()
                 txtNameQD.text = model.name
                 txtTitleQD.text = model.title
                 txtDescriptionQD.text = model.description
@@ -155,12 +159,22 @@ class QuestionDetails : AppCompatActivity() {
 
             @SuppressLint("SetTextI18n")
             override fun onBindViewHolder(holder: AnswerDetailViewHolder, position: Int, model: Answers) {
+/*
+                db.collection("Users").document(model.author).get().addOnSuccessListener {
 
+                    if(it.get("rol") as String? == "facilitador") {
+
+                        holder.answerViewBinding.imgVerifiedUser.visibility = View.VISIBLE
+
+                    }//tiene el rol de facilitador
+
+                }//revisamos si el usuario tiene el rol de facilitador
+                */
                 if(model.verified){
 
                     holder.answerViewBinding.imgVerifiedUser.visibility = View.VISIBLE
 
-                }//la respuesta fue hecha por un usuario verificado
+                }//mostramos el verificado
 
                 holder.answerViewBinding.imgUserAV.setOnClickListener {
 
@@ -176,8 +190,8 @@ class QuestionDetails : AppCompatActivity() {
 
                 //Llamamos las funciones necesarias para likes y dislikes
 
-                reactions(model,null, model.likes, model.dislikes, holder.answerViewBinding.likesIA, "Útil", user, model.author, model.id, model.question, "Han reaccionado a tu respuesta", "Answers", "content")
-                reactions(model,null, model.dislikes, model.likes, holder.answerViewBinding.dislikeIA, "No útil", user, model.author, model.id, model.question, "Han reaccionado a tu respuesta", "Answers", "content")
+                reactions(model,null, model.likes, model.dislikes, holder.answerViewBinding.likesIA, user, model.author, model.id, model.question, "Han reaccionado a tu respuesta", "Answers", "content")
+                reactions(model,null, model.dislikes, model.likes, holder.answerViewBinding.dislikeIA, user, model.author, model.id, model.question, "Han reaccionado a tu respuesta", "Answers", "content")
 
                 //Mostramos los datos obtenidos
 
@@ -311,7 +325,7 @@ class QuestionDetails : AppCompatActivity() {
 
     }//update questions
 
-    private fun reactions(modelAnswers: Answers?, modelQuestions: Questions?, mainArray: ArrayList<String>, secondArray: ArrayList<String>, txtReaction: TextView, text: String, user: String, author: String, id: String, question: String, title: String, collection: String, content: String){
+    private fun reactions(modelAnswers: Answers?, modelQuestions: Questions?, mainArray: ArrayList<String>, secondArray: ArrayList<String>, txtReaction: TextView, user: String, author: String, id: String, question: String, title: String, collection: String, content: String){
 
         if(mainArray.isNotEmpty()){
 
@@ -333,7 +347,7 @@ class QuestionDetails : AppCompatActivity() {
 
         else{
 
-            txtReaction.text = text
+            txtReaction.text = ""
             reactionColor(txtReaction, false)
 
         }//no tiene likes

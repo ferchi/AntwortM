@@ -1,8 +1,6 @@
 package edu.itq.antwort.Adapters
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,11 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
-import edu.itq.antwort.Activitys.ProfileActivity
-import edu.itq.antwort.Activitys.QuestionDetails
+import edu.itq.antwort.Activities.ProfileActivity
+import edu.itq.antwort.Activities.QuestionDetails
 import edu.itq.antwort.Classes.*
 import edu.itq.antwort.Fragments.TAG
-import edu.itq.antwort.R
 import edu.itq.antwort.Methods
 import edu.itq.antwort.databinding.ItemAnswerViewBinding
 import kotlinx.coroutines.CoroutineScope
@@ -44,7 +41,9 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: List<A
         val answer = dataset[position]
 
         if(answer.verified){
+
             holder.binding.imgVerifiedUser.visibility = View.VISIBLE
+
         }
 
         holder.binding.imgUserAV.setOnClickListener {
@@ -169,13 +168,6 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: List<A
 
     }//reaction color
 
-    private fun getEmail() : String?{
-
-        val prefs : SharedPreferences =  fragment.requireActivity().getSharedPreferences(fragment.getString(R.string.prefs_file), Context.MODE_PRIVATE)
-        return prefs.getString("email", null)
-
-    }//getMail
-
     private fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
 
         try {
@@ -257,7 +249,6 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: List<A
                 "nameAuthor" to model.nameAuthor,
                 "author" to model.author,
                 "date" to model.date,
-                "verified" to model.verified,
                 "content" to model.content,
                 "question" to model.question,
                 "likes" to model.likes,

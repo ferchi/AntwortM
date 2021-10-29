@@ -1,4 +1,4 @@
-package edu.itq.antwort.Activitys
+package edu.itq.antwort.Activities
 
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
@@ -88,6 +88,7 @@ class Signup : AppCompatActivity() {
                                             "name" to binding.txtNameSignup.text.toString(),
                                             "rol" to "estudiante",
                                             "token" to recipientToken,
+                                            "updated" to false,
                                             "answers" to 0,
                                             "questions" to 0
 

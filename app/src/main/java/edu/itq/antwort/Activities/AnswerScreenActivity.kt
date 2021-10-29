@@ -1,18 +1,13 @@
-package edu.itq.antwort.Activitys
+package edu.itq.antwort.Activities
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.ResultReceiver
 import android.util.Log
-import android.view.View
-import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import android.widget.Toast
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.installations.Utils
 import com.google.gson.Gson
 import edu.itq.antwort.Classes.NotificationData
 import edu.itq.antwort.Classes.PushNotification
@@ -37,11 +32,11 @@ class AnswerScreenActivity : AppCompatActivity() {
         binding = ActivityAnswerScreenBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
         val bundle = intent.extras
         val email = bundle?.getString("email")
         val question = bundle?.getString("question")
         val author = bundle?.getString("author")
-
 
         db.collection("Users").document(email?:"").get().addOnSuccessListener {
 
@@ -149,6 +144,7 @@ class AnswerScreenActivity : AppCompatActivity() {
                 )//set
 
                 db.collection("Users").document(Methods.getEmail(this)!!).update("answers", FieldValue.increment(1))
+                db.collection("Questions").document(question).update("answers", FieldValue.increment(1))
 
                 if(author != email){
 
@@ -176,7 +172,6 @@ class AnswerScreenActivity : AppCompatActivity() {
         }//setOnClickListener btnPostAnswer
 
     }//postAnswer
-
 
     private fun hideKeyboard(){
 
