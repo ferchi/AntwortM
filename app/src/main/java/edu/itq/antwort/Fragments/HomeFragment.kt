@@ -10,7 +10,6 @@ import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.TextView
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
@@ -18,8 +17,6 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.gson.Gson
-import com.squareup.picasso.Picasso
-import de.hdodenhof.circleimageview.CircleImageView
 import edu.itq.antwort.Activities.AnswerScreenActivity
 import edu.itq.antwort.Activities.ProfileActivity
 import edu.itq.antwort.Activities.QuestionDetails
@@ -28,7 +25,6 @@ import edu.itq.antwort.Classes.NotificationData
 import edu.itq.antwort.Classes.PushNotification
 import edu.itq.antwort.Classes.Questions
 import edu.itq.antwort.Classes.RetrofitInstance
-import edu.itq.antwort.Methods
 import edu.itq.antwort.R
 import edu.itq.antwort.databinding.FragmentHomeBinding
 import edu.itq.antwort.databinding.ItemQuestionBinding
@@ -38,7 +34,7 @@ import kotlinx.coroutines.launch
 
 class QuestionsViewHolder(val questionBinding: ItemQuestionBinding) : RecyclerView.ViewHolder(questionBinding.root)
 
-const val TAG = "HomeFragment"
+val TAG = "HomeFragment"
 
 class HomeFragment : Fragment() {
 
@@ -66,6 +62,7 @@ class HomeFragment : Fragment() {
             startActivity(Intent(context, SearchActivity::class.java))
 
         }//setOnClickListener
+
         showQuestions()
 
     }//onViewCreated
@@ -111,13 +108,10 @@ class HomeFragment : Fragment() {
 
                 }//setOnClickListener
 
-                reactions(model, model.likes, model.dislikes, holder.questionBinding.likesIA, model.author, model.title, model.id)
-                reactions(model, model.dislikes, model.likes, holder.questionBinding.dislikesIQ, model.author, model.title, model.id)
+                reactions(model, model.likes, model.dislikes, holder.questionBinding.likesIA, "Útil", model.author, model.title, model.id)
+                reactions(model, model.dislikes, model.likes, holder.questionBinding.dislikesIQ, "No útil", model.author, model.title, model.id)
 
                 //--------------------------------------------- Programación del boton responder --------------------------------------------- //
-
-                if(model.answers >0)
-                    holder.questionBinding.answersIQ.text = model.answers.toString()
 
                 holder.questionBinding.answersIQ.setOnClickListener {
 
@@ -137,9 +131,7 @@ class HomeFragment : Fragment() {
                 val txtTitleText : TextView = holder.itemView.findViewById(R.id.txtTitleText)
                 val txtItemDescription : TextView = holder.itemView.findViewById(R.id.txtItemDescription)
                 val txtAuthor : TextView = holder.itemView.findViewById(R.id.txtAuthor)
-                val imgAuthorAI : CircleImageView = holder.itemView.findViewById(R.id.imgAuthorAI)
 
-                loadImg(imgAuthorAI, model.author)
                 txtTitleText.text = model.title
                 txtItemDescription.text = model.description
                 txtAuthor.text = model.name
@@ -152,21 +144,6 @@ class HomeFragment : Fragment() {
         binding.rvHome.layoutManager = LinearLayoutManager(context)
 
     }//show questions
-
-    private fun loadImg(image : CircleImageView, author: String) {
-
-        db.collection("Users").document(author).addSnapshotListener{
-                result, error ->
-            val urlImg = result!!.get("imgProfile").toString()
-
-            try {
-                Picasso.get().load(urlImg).into(image)
-
-            } catch (e: Exception) {
-                Picasso.get().load(R.drawable.ic_user_profile).into(image)
-            }
-        }
-    }
 
     private fun updateQuestion(model: Questions){
 
@@ -189,7 +166,7 @@ class HomeFragment : Fragment() {
 
     }//update question
 
-    private fun reactions(model: Questions, mainArray: ArrayList<String>, secondArray: ArrayList<String>, txtReaction: TextView, author: String, title: String, id:String){
+    private fun reactions(model: Questions, mainArray: ArrayList<String>, secondArray: ArrayList<String>, txtReaction: TextView,  text: String, author: String, title: String, id:String){
 
         if(mainArray.isNotEmpty()){
 
@@ -211,7 +188,7 @@ class HomeFragment : Fragment() {
 
         else{
 
-            txtReaction.text = ""
+            txtReaction.text = text
             reactionColor(txtReaction, false)
 
         }//no tiene likes

@@ -9,6 +9,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
+import android.widget.TextView
+import android.view.View
+import android.widget.Toast
+import android.view.Gravity
+import android.view.ViewGroup
+import android.view.LayoutInflater
+
 
 object Methods {
 

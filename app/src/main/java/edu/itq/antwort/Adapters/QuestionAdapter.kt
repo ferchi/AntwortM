@@ -12,8 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
-import com.squareup.picasso.Picasso
-import de.hdodenhof.circleimageview.CircleImageView
 import edu.itq.antwort.Activities.AnswerScreenActivity
 import edu.itq.antwort.Activities.ProfileActivity
 import edu.itq.antwort.Activities.QuestionDetails
@@ -46,11 +44,10 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: List
 
         val question = dataset[position]
 
-        holder.binding.answersIQ.text = question.answers.toString()
+
         holder.binding.txtTitleText.text = question.title
         holder.binding.txtItemDescription.text = question.description
         holder.binding.txtAuthor.text = question.name
-        loadImg(holder.binding.imgAuthorAI, question.author)
 
         reactions(question, question.likes, question.dislikes, holder.binding.likesIA, "Útil", question.author, question.title, question.id, position)
         reactions(question, question.dislikes, question.likes, holder.binding.dislikesIQ, "No útil", question.author, question.title, question.id, position)
@@ -87,21 +84,6 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: List
             fragment.startActivity(homeIntent)
         }
     }
-
-    private fun loadImg(image : CircleImageView, author: String) {
-
-        db.collection("Users").document(author).addSnapshotListener{
-                result, error ->
-            val urlImg = result!!.get("imgProfile").toString()
-
-            try {
-                Picasso.get().load(urlImg).into(image)
-
-            } catch (e: Exception) {
-                Picasso.get().load(R.drawable.ic_user_profile).into(image)
-            }
-        }
-    }//load image
 
     private fun reactions(model: Questions, mainArray: ArrayList<String>, secondArray: ArrayList<String>, txtReaction: TextView, text: String, author: String, title: String, id:String, position: Int){
 

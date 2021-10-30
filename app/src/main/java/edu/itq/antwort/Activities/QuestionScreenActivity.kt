@@ -26,8 +26,8 @@ class QuestionScreenActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        val bundle=intent.extras
-        val email=bundle?.getString("email")
+        val bundle = intent.extras
+        val email = bundle?.getString("email")
 
         supportActionBar?.hide()
 

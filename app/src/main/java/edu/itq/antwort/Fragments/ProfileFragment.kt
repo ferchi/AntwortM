@@ -7,13 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import edu.itq.antwort.R
+import android.widget.Toast
 import edu.itq.antwort.Adapters.ViewPagerAdapter
 import edu.itq.antwort.databinding.FragmentProfileBinding
+
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
 import edu.itq.antwort.Activities.EditProfileActivity
 import edu.itq.antwort.Classes.Users
 import edu.itq.antwort.Methods
+
 
 class ProfileFragment() : Fragment() {
 
@@ -52,13 +55,31 @@ class ProfileFragment() : Fragment() {
 
             startActivity(editIntent)
         }
+/*
+        binding.btnLogOut.setOnClickListener {
 
+            //val prefs : SharedPreferences =  requireActivity().getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
+            //prefs.clear()
+            showAlert("Boton cerrar sesión presionado")
+            FirebaseAuth.getInstance().signOut()
+            startActivity(Intent (context, Login::class.java))
+
+        }//setOnClickListener
+*/
     }//onViewCreated
 
     override fun onStart() {
         super.onStart()
         updateInfo()
     }
+
+    private fun showAlert( message:String){
+
+        val toast = Toast.makeText(context, message, Toast.LENGTH_SHORT)
+        toast.show()
+
+    }//función show alert
+
 
     private fun setUpTabs() {
 
@@ -76,10 +97,10 @@ class ProfileFragment() : Fragment() {
         binding.tabs.getTabAt(1)!!.setIcon(R.drawable.ic_hearing_24)
         binding.tabs.getTabAt(2)!!.setIcon(R.drawable.ic_question_24)
 
+
     }
 
     private fun getRol(){
-
         val queryRol = db.collection("Users").document(current)
         queryRol.get().addOnCompleteListener {
             val rol = it.result!!.toObject(Users::class.java)!!.rol
@@ -103,7 +124,7 @@ class ProfileFragment() : Fragment() {
     private fun loadImg() {
 
         db.collection("Users").document(Methods.getEmail(requireActivity()).toString()).addSnapshotListener{
-                result, error ->
+            result, error ->
             val urlImg = result!!.get("imgProfile").toString()
 
             try {

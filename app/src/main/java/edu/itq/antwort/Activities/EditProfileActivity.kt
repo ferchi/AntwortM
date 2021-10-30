@@ -22,6 +22,7 @@ import edu.itq.antwort.Classes.Users
 import edu.itq.antwort.Methods
 import edu.itq.antwort.R
 import edu.itq.antwort.databinding.ActivityEditProfileBinding
+import okhttp3.internal.Util
 import java.io.ByteArrayOutputStream
 
 class EditProfileActivity : AppCompatActivity() {
@@ -92,7 +93,7 @@ class EditProfileActivity : AppCompatActivity() {
                 RESULT_OK -> {
                     val bitmap: Bitmap =
                         MediaStore.Images.Media.getBitmap(this.contentResolver, data?.data)
-                    binding.civEditPhoto.setImageBitmap(bitmap)
+                        binding.civEditPhoto.setImageBitmap(bitmap)
                     handleUpload(bitmap)
                 }
             }
