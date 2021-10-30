@@ -74,6 +74,9 @@ dependencies {
     //Corregir error de firestore en android 11
     implementation "io.grpc:grpc-okhttp:1.32.2"
 
+    //Libreria para los PopUp
+    implementation "com.github.skydoves:powermenu:2.2.0"
+
 
 
 }

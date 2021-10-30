@@ -28,13 +28,29 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+import androidx.core.content.ContextCompat
+
+import android.graphics.Typeface
+
+import android.view.Gravity
+import android.view.View
+
+import com.skydoves.powermenu.MenuAnimation
+
+import com.skydoves.powermenu.PowerMenuItem
+
+import com.skydoves.powermenu.PowerMenu
+import android.widget.Toast
+import com.skydoves.powermenu.OnMenuItemClickListener
+
+
 class QuestionAdapter (private val fragment: Fragment, private val dataset: List<Questions>):
     RecyclerView.Adapter<QuestionAdapter.ViewHolder>() {
 
     class ViewHolder (val binding: ItemQuestionBinding) : RecyclerView.ViewHolder(binding.root)
 
     private val db = FirebaseFirestore.getInstance()
-    private var positionVar : Int = 0
+    private var popUpMenu = PowerMenu.Builder(fragment.requireContext())
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(ItemQuestionBinding.inflate(LayoutInflater.from(parent.context),parent,false))
@@ -45,6 +61,12 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: List
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         val question = dataset[position]
+
+        holder.binding.questionOptions.setOnClickListener {
+            popUpMenu.build().clearPreference()
+            createPopUp()
+            popUpMenu.build().showAsDropDown(it)
+        }
 
         holder.binding.imgAuthorAI.setOnClickListener {
             val homeIntent = Intent(fragment.requireContext(), ProfileActivity::class.java).apply {
@@ -219,9 +241,7 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: List
     private fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
 
         try {
-
             val response = RetrofitInstance.api.postNotification(notification)
-
             if(response.isSuccessful){
 
                 Log.d(TAG, "Response : ${Gson().toJson(response)}")
@@ -229,15 +249,11 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: List
             }//if isSuccessful
 
             else{
-
                 response.errorBody()?.let { Log.e(TAG, it.toString()) }
-
             }//else
 
         }catch (e: Exception) {
-
             Log.e(TAG, e.toString())
-
         }//try-catch
 
     }//sendNotifiaction
@@ -287,5 +303,33 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: List
         )//creamos la notificacion
 
     }//createNotification
+
+    private fun createPopUp(){
+        val context = fragment.requireContext()
+        popUpMenu = PowerMenu.Builder(fragment.requireContext())
+        popUpMenu
+            .addItem(PowerMenuItem("Editar", false))
+            .addItem(PowerMenuItem("Reportar", false))
+            .addItem(PowerMenuItem("Eliminar", false))
+
+            .setAnimation(MenuAnimation.FADE) // Animation start point (TOP | LEFT).
+            .setMenuRadius(10f) // sets the corner radius.
+            .setMenuShadow(10f) // sets the shadow.
+            .setTextColor(ContextCompat.getColor(context, R.color.black))
+            .setTextGravity(Gravity.CENTER)
+            //.setTextTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD))
+            .setSelectedTextColor(Color.WHITE)
+            .setMenuColor(Color.WHITE)
+            .setSelectedMenuColor(ContextCompat.getColor(context, R.color.orange))
+            .setOnMenuItemClickListener(onMenuItemClickListener)
+            .build()
+    }
+
+    private val onMenuItemClickListener: OnMenuItemClickListener<PowerMenuItem?> =
+        OnMenuItemClickListener<PowerMenuItem?> { position, item ->
+            Toast.makeText(fragment.requireContext(), item.title, Toast.LENGTH_SHORT).show()
+            popUpMenu.setSelected(position)
+            popUpMenu.setAutoDismiss(true)
+        }
 
 }//class home fragment
