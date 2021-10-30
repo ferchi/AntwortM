@@ -17,11 +17,11 @@ import de.hdodenhof.circleimageview.CircleImageView
 import edu.itq.antwort.Activities.AnswerScreenActivity
 import edu.itq.antwort.Activities.ProfileActivity
 import edu.itq.antwort.Activities.QuestionDetails
+import edu.itq.antwort.Activities.TAG
 import edu.itq.antwort.Classes.NotificationData
 import edu.itq.antwort.Classes.PushNotification
 import edu.itq.antwort.Classes.Questions
 import edu.itq.antwort.Classes.RetrofitInstance
-import edu.itq.antwort.Fragments.TAG
 import edu.itq.antwort.R
 import edu.itq.antwort.databinding.ItemQuestionBinding
 import kotlinx.coroutines.CoroutineScope
@@ -46,28 +46,6 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: List
 
         val question = dataset[position]
 
-        holder.binding.answersIQ.text = question.answers.toString()
-        holder.binding.txtTitleText.text = question.title
-        holder.binding.txtItemDescription.text = question.description
-        holder.binding.txtAuthor.text = question.name
-        loadImg(holder.binding.imgAuthorAI, question.author)
-
-        reactions(question, question.likes, question.dislikes, holder.binding.likesIA, "Útil", question.author, question.title, question.id, position)
-        reactions(question, question.dislikes, question.likes, holder.binding.dislikesIQ, "No útil", question.author, question.title, question.id, position)
-
-
-        holder.binding.answersIQ.setOnClickListener {
-            val answerIntent = Intent(fragment.requireContext(), AnswerScreenActivity::class.java).apply {
-
-                putExtra("email", getEmail())
-                putExtra("author", question.author)
-                putExtra("authorName", question.name)
-                putExtra("question", question.id)
-
-            }//answerIntent
-            fragment.startActivity(answerIntent)
-        }
-
         holder.binding.imgAuthorAI.setOnClickListener {
             val homeIntent = Intent(fragment.requireContext(), ProfileActivity::class.java).apply {
 
@@ -86,6 +64,31 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: List
             }//homeIntent
             fragment.startActivity(homeIntent)
         }
+
+        reactions(question, question.likes, question.dislikes, holder.binding.likesIA, "Útil", question.author, question.title, question.id, position)
+        reactions(question, question.dislikes, question.likes, holder.binding.dislikesIQ, "No útil", question.author, question.title, question.id, position)
+
+        if(question.answers >0)
+            holder.binding.answersIQ.text = question.answers.toString()
+
+        holder.binding.answersIQ.setOnClickListener {
+            val answerIntent = Intent(fragment.requireContext(), AnswerScreenActivity::class.java).apply {
+
+                putExtra("email", getEmail())
+                putExtra("author", question.author)
+                putExtra("authorName", question.name)
+                putExtra("question", question.id)
+
+            }//answerIntent
+            fragment.startActivity(answerIntent)
+        }
+
+        holder.binding.txtTitleText.text = question.title
+        holder.binding.txtItemDescription.text = question.description
+        holder.binding.txtAuthor.text = question.name
+        loadImg(holder.binding.imgAuthorAI, question.author)
+
+
     }
 
     private fun loadImg(image : CircleImageView, author: String) {
@@ -285,5 +288,4 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: List
 
     }//createNotification
 
-
-}
+}//class home fragment

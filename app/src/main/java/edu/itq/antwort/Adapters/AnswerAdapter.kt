@@ -15,8 +15,8 @@ import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import edu.itq.antwort.Activities.ProfileActivity
 import edu.itq.antwort.Activities.QuestionDetails
+import edu.itq.antwort.Activities.TAG
 import edu.itq.antwort.Classes.*
-import edu.itq.antwort.Fragments.TAG
 import edu.itq.antwort.Methods
 import edu.itq.antwort.R
 import edu.itq.antwort.databinding.ItemAnswerViewBinding
