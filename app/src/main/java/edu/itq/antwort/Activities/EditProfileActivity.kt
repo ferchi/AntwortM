@@ -93,7 +93,9 @@ class EditProfileActivity : AppCompatActivity() {
                 RESULT_OK -> {
                     val bitmap: Bitmap =
                         MediaStore.Images.Media.getBitmap(this.contentResolver, data?.data)
-                        binding.civEditPhoto.setImageBitmap(bitmap)
+                    
+                    binding.civEditPhoto.setImageBitmap(bitmap)
+
                     handleUpload(bitmap)
                 }
             }

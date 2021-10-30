@@ -26,8 +26,8 @@ class QuestionScreenActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        val bundle = intent.extras
-        val email = bundle?.getString("email")
+        val bundle=intent.extras
+        val email=bundle?.getString("email")
 
         supportActionBar?.hide()
 
@@ -49,12 +49,10 @@ class QuestionScreenActivity : AppCompatActivity() {
 
     }//hideKeyboard
 
+
     private fun setup(email: String) {
-
         binding.edtTitle.requestFocus()
-
         loadImg(binding.imgQuestionProfile, email)
-
         binding.imgQuestionBack.setOnClickListener{
 
             hideKeyboard()
@@ -107,7 +105,7 @@ class QuestionScreenActivity : AppCompatActivity() {
                     )//hashMap
 
                 )//set
-
+                
                 db.collection("Users").document(Methods.getEmail(this)!!).update("questions", FieldValue.increment(1))
 
                 hideKeyboard()
@@ -137,5 +135,4 @@ class QuestionScreenActivity : AppCompatActivity() {
         }//setOnClickListener
 
     }//postQuestion
-
 }//class

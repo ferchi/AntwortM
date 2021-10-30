@@ -135,6 +135,7 @@ class QuestionDetails : AppCompatActivity() {
 
                 loadImg(imgUserQD, model.author)
                 txtAnswersQD.text = model.answers.toString()
+
                 txtNameQD.text = model.name
                 txtTitleQD.text = model.title
                 txtDescriptionQD.text = model.description
@@ -163,6 +164,7 @@ class QuestionDetails : AppCompatActivity() {
 
             @SuppressLint("SetTextI18n")
             override fun onBindViewHolder(holder: AnswerDetailViewHolder, position: Int, model: Answers) {
+
 /*
                 db.collection("Users").document(model.author).get().addOnSuccessListener {
 
@@ -180,6 +182,7 @@ class QuestionDetails : AppCompatActivity() {
 
                 }//mostramos el verificado
 
+
                 holder.answerViewBinding.imgUserAV.setOnClickListener {
 
                     val intent = Intent(this@QuestionDetails, ProfileActivity::class.java).apply {
@@ -196,6 +199,7 @@ class QuestionDetails : AppCompatActivity() {
 
                 reactions(model,null, model.likes, model.dislikes, holder.answerViewBinding.likesIA, user, model.author, model.id, model.question, "Han reaccionado a tu respuesta", "Answers", "content")
                 reactions(model,null, model.dislikes, model.likes, holder.answerViewBinding.dislikeIA, user, model.author, model.id, model.question, "Han reaccionado a tu respuesta", "Answers", "content")
+
 
                 //Mostramos los datos obtenidos
 
@@ -348,6 +352,7 @@ class QuestionDetails : AppCompatActivity() {
 
     private fun reactions(modelAnswers: Answers?, modelQuestions: Questions?, mainArray: ArrayList<String>, secondArray: ArrayList<String>, txtReaction: TextView, user: String, author: String, id: String, question: String, title: String, collection: String, content: String){
 
+
         if(mainArray.isNotEmpty()){
 
             txtReaction.text = mainArray.size.toString()
@@ -369,6 +374,7 @@ class QuestionDetails : AppCompatActivity() {
         else{
 
             txtReaction.text = ""
+
             reactionColor(txtReaction, false)
 
         }//no tiene likes

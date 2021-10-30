@@ -43,6 +43,7 @@ class AnswerScreenActivity : AppCompatActivity() {
 
         loadImg(binding.imgUserAS, email!!)
 
+
         db.collection("Users").document(email?:"").get().addOnSuccessListener {
 
             setup(it.get("name") as String)
@@ -66,7 +67,6 @@ class AnswerScreenActivity : AppCompatActivity() {
             }
         }
     }//load image
-
     private fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
 
         try {
@@ -165,6 +165,7 @@ class AnswerScreenActivity : AppCompatActivity() {
 
                 db.collection("Users").document(Methods.getEmail(this)!!).update("answers", FieldValue.increment(1))
                 db.collection("Questions").document(question).update("answers", FieldValue.increment(1))
+
 
                 if(author != email){
 

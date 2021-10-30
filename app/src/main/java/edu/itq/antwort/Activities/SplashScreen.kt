@@ -11,7 +11,6 @@ import edu.itq.antwort.R
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreen : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -24,7 +23,6 @@ class SplashScreen : AppCompatActivity() {
         analytics.logEvent("InitScreen", bundle)
 
         // Setup
-
         setup()
 
     }//fun onCreate
