@@ -8,10 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.QuerySnapshot
 import edu.itq.antwort.Adapters.QuestionAdapter
 import edu.itq.antwort.Classes.Questions
 import edu.itq.antwort.R
@@ -43,12 +41,6 @@ class ConsultFragment : Fragment() {
     }
 
 
-    override fun onStart() {
-        super.onStart()
-        Log.d("vida", "Si entra start")
-
-        getData()
-    }
 
     private fun getData(){
 
