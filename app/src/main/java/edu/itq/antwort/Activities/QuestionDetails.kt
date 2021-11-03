@@ -134,7 +134,9 @@ class QuestionDetails : AppCompatActivity() {
                 val imgUserQD : CircleImageView = holder.itemView.findViewById(R.id.imgUserQD)
 
                 loadImg(imgUserQD, model.author)
-                txtAnswersQD.text = model.answers.toString()
+
+                if(model.answers >0)
+                    txtAnswersQD.text = model.answers.toString()
 
                 txtNameQD.text = model.name
                 txtTitleQD.text = model.title
@@ -165,17 +167,6 @@ class QuestionDetails : AppCompatActivity() {
             @SuppressLint("SetTextI18n")
             override fun onBindViewHolder(holder: AnswerDetailViewHolder, position: Int, model: Answers) {
 
-/*
-                db.collection("Users").document(model.author).get().addOnSuccessListener {
-
-                    if(it.get("rol") as String? == "facilitador") {
-
-                        holder.answerViewBinding.imgVerifiedUser.visibility = View.VISIBLE
-
-                    }//tiene el rol de facilitador
-
-                }//revisamos si el usuario tiene el rol de facilitador
-                */
                 if(model.verified){
 
                     holder.answerViewBinding.imgVerifiedUser.visibility = View.VISIBLE
@@ -227,7 +218,8 @@ class QuestionDetails : AppCompatActivity() {
             val urlImg = result!!.get("imgProfile").toString()
 
             try {
-                Picasso.get().load(urlImg).into(image)
+                if(urlImg.isNotEmpty())
+                    Picasso.get().load(urlImg).into(image)
 
             } catch (e: Exception) {
                 Picasso.get().load(R.drawable.ic_user_profile).into(image)

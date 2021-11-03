@@ -26,8 +26,8 @@ class QuestionScreenActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        val bundle=intent.extras
-        val email=bundle?.getString("email")
+        val bundle = intent.extras
+        val email = bundle?.getString("email")
 
         supportActionBar?.hide()
 
@@ -69,7 +69,8 @@ class QuestionScreenActivity : AppCompatActivity() {
             val urlImg = result!!.get("imgProfile").toString()
 
             try {
-                Picasso.get().load(urlImg).into(image)
+                if(urlImg.isNotEmpty())
+                    Picasso.get().load(urlImg).into(image)
 
             } catch (e: Exception) {
                 Picasso.get().load(R.drawable.ic_user_profile).into(image)

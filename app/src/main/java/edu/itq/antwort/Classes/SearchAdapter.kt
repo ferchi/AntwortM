@@ -76,7 +76,9 @@ class SearchAdapter(private val activity: AppCompatActivity, private val newList
             val urlImg = result!!.get("imgProfile").toString()
 
             try {
-                Picasso.get().load(urlImg).into(image)
+
+                if(urlImg.isNotEmpty())
+                    Picasso.get().load(urlImg).into(image)
 
             } catch (e: Exception) {
                 Picasso.get().load(R.drawable.ic_user_profile).into(image)

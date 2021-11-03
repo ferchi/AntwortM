@@ -75,7 +75,6 @@ class ProfileFragment() : Fragment() {
         binding.tabs.getTabAt(1)!!.setIcon(R.drawable.ic_hearing_24)
         binding.tabs.getTabAt(2)!!.setIcon(R.drawable.ic_question_24)
 
-
     }
 
     private fun getRol(){
@@ -90,6 +89,7 @@ class ProfileFragment() : Fragment() {
     }
 
     private fun updateInfo(){
+
         val query = db.collection("Users").whereEqualTo("email", current)
 
         query.addSnapshotListener{   value, error ->
@@ -108,7 +108,9 @@ class ProfileFragment() : Fragment() {
             val urlImg = result!!.get("imgProfile").toString()
 
             try {
-                Picasso.get().load(urlImg).into(binding.civProfileImageProfile)
+
+                if(urlImg.isNotEmpty())
+                    Picasso.get().load(urlImg).into(binding.civProfileImageProfile)
 
             } catch (e: Exception) {
                 Picasso.get().load(R.drawable.ic_user_profile).into(binding.civProfileImageProfile)
