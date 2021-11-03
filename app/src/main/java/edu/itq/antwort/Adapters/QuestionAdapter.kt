@@ -27,18 +27,10 @@ import edu.itq.antwort.databinding.ItemQuestionBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
 import androidx.core.content.ContextCompat
-
-import android.graphics.Typeface
-
 import android.view.Gravity
-import android.view.View
-
 import com.skydoves.powermenu.MenuAnimation
-
 import com.skydoves.powermenu.PowerMenuItem
-
 import com.skydoves.powermenu.PowerMenu
 import android.widget.Toast
 import com.skydoves.powermenu.OnMenuItemClickListener
@@ -60,6 +52,7 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: List
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
+        Log.d("Tamaño", dataset.size.toString())
         val question = dataset[position]
 
         holder.binding.questionOptions.setOnClickListener {
