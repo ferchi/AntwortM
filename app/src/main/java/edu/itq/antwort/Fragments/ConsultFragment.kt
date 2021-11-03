@@ -40,8 +40,6 @@ class ConsultFragment : Fragment() {
         getData()
     }
 
-
-
     private fun getData(){
 
         val current = Methods.getEmail(requireActivity())
