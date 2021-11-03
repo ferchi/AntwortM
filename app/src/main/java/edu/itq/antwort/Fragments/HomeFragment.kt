@@ -1,7 +1,7 @@
 package edu.itq.antwort.Fragments
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import edu.itq.antwort.Activities.SearchActivity
 import edu.itq.antwort.Adapters.QuestionAdapter
 import edu.itq.antwort.Classes.Questions
 import edu.itq.antwort.R
@@ -36,9 +37,20 @@ class HomeFragment :Fragment(){
         db = FirebaseFirestore.getInstance()
         rev = binding.rvHome
 
+        search()
         getData()
     }
 
+    private fun search(){
+
+        binding.includeToolbar.imgSearchTB.setOnClickListener {
+
+            val intent = Intent(context, SearchActivity::class.java)
+            startActivity(intent)
+
+        }//setOnClickListener
+
+    }//search
 
     private fun getData(){
         val query = db.collection("Questions").orderBy("date", Query.Direction.DESCENDING)

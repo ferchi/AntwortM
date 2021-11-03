@@ -90,7 +90,8 @@ class Signup : AppCompatActivity() {
                                             "token" to recipientToken,
                                             "updated" to false,
                                             "answers" to 0,
-                                            "questions" to 0
+                                            "questions" to 0,
+                                            "imgProfile" to ""
 
                                         )//hashMap
 
@@ -99,6 +100,12 @@ class Signup : AppCompatActivity() {
                                     login(it.result?.user?.email ?:"", binding.txtPasswordSignup.text.toString())
 
                                 }//if
+
+                                else{
+
+                                    showAlert("El correo ingresado ya tiene una cuenta asociada")
+
+                                }//else
 
                             }//createUserWithEmailAndPassword
 

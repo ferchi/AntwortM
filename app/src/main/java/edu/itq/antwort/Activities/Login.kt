@@ -56,12 +56,9 @@ class Login : AppCompatActivity() {
                 val updated = it.get("updated") as Boolean
                 val verified = it.get("rol") as String == "facilitador"
 
-                println("-----------------------------------------------------------------------")
-                println(verified)
-                println("-----------------------------------------------------------------------")
                 if(!updated && verified){
 
-                    updateAnswersVerified(email, true)
+                    updateAnswersVerified(email)
                     db.collection("Users").document(email).update("updated", true)
 
                 }//actualizamos las respuestas anteriores dadas por el usuario
@@ -74,8 +71,13 @@ class Login : AppCompatActivity() {
 
     }//session
 
+    private fun updateToken(email: String?, token: String){
 
-    private fun updateAnswersVerified(email:String, verified: Boolean){
+        db.collection("Users").document(email?:"").update("token", token)
+
+    }//update token
+
+    private fun updateAnswersVerified(email:String){
 
         db.collection("Answers").whereEqualTo("author", email).get().addOnSuccessListener {
 
@@ -83,14 +85,13 @@ class Login : AppCompatActivity() {
 
                 val id = i.get("id") as String
 
-                db.collection("Answers").document(id).update("verified", verified)
+                db.collection("Answers").document(id).update("verified", true)
 
             }//for each
 
         }//obtenemos el id de las perguntas hechas por el usuario
 
     }//verified
-
 
     private fun setup(){
 
@@ -127,16 +128,11 @@ class Login : AppCompatActivity() {
 
             if(txtEmail.text.isNotEmpty() && txtPassword.text.isNotEmpty()){
 
-                FirebaseAuth.getInstance().signInWithEmailAndPassword(txtEmail.text.toString(), txtPassword.text.toString()).addOnCompleteListener { it ->
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(txtEmail.text.toString(), txtPassword.text.toString()).addOnCompleteListener {
 
                     if(it.isSuccessful){
 
-                        db.collection("Users").document(txtEmail.text.toString()).get().addOnSuccessListener {
-
-                            updateToken(it.get("email") as String?, it.get("name") as String?, token)
-
-                        }//add on success
-
+                        updateToken(txtEmail.text.toString(), token)
                         showHome(it.result?.user?.email ?:"")
 
                     }//registro exitoso
@@ -189,22 +185,5 @@ class Login : AppCompatActivity() {
         toast.show()
 
     }//función show alert
-
-    private fun updateToken(email: String?, name: String?, token: String){
-
-        db.collection("Users").document(email?:"").set(
-
-            hashMapOf(
-
-                "email" to email,
-                "name" to name,
-                "rol" to "",
-                "token" to token
-
-            )//hashMap
-
-        )//set
-
-    }//update token
 
 }//class Login

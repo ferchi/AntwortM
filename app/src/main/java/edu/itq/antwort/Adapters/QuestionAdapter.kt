@@ -90,9 +90,6 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: List
         reactions(question, question.likes, question.dislikes, holder.binding.likesIA, "Útil", question.author, question.title, question.id, position)
         reactions(question, question.dislikes, question.likes, holder.binding.dislikesIQ, "No útil", question.author, question.title, question.id, position)
 
-        if(question.answers >0)
-            holder.binding.answersIQ.text = question.answers.toString()
-
         holder.binding.answersIQ.setOnClickListener {
             val answerIntent = Intent(fragment.requireContext(), AnswerScreenActivity::class.java).apply {
 
@@ -105,11 +102,13 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: List
             fragment.startActivity(answerIntent)
         }
 
+        if(question.answers >0)
+            holder.binding.answersIQ.text = question.answers.toString()
+
         holder.binding.txtTitleText.text = question.title
         holder.binding.txtItemDescription.text = question.description
         holder.binding.txtAuthor.text = question.name
         loadImg(holder.binding.imgAuthorAI, question.author)
-
 
     }
 
@@ -120,7 +119,8 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: List
             val urlImg = result!!.get("imgProfile").toString()
 
             try {
-                Picasso.get().load(urlImg).into(image)
+                if(urlImg.isNotEmpty())
+                    Picasso.get().load(urlImg).into(image)
 
             } catch (e: Exception) {
                 Picasso.get().load(R.drawable.ic_user_profile).into(image)

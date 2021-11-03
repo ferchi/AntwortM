@@ -152,11 +152,10 @@
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/viewPager"
                 android:layout_width="match_parent"
-                android:layout_height="310dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/appBarLayoutTab" />
 
         </RelativeLayout>
-
 
     </androidx.core.widget.NestedScrollView>
 

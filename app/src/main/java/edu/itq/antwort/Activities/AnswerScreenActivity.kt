@@ -43,7 +43,6 @@ class AnswerScreenActivity : AppCompatActivity() {
 
         loadImg(binding.imgUserAS, email!!)
 
-
         db.collection("Users").document(email?:"").get().addOnSuccessListener {
 
             setup(it.get("name") as String)
@@ -60,7 +59,8 @@ class AnswerScreenActivity : AppCompatActivity() {
             val urlImg = result!!.get("imgProfile").toString()
 
             try {
-                Picasso.get().load(urlImg).into(image)
+                if(urlImg.isNotEmpty())
+                    Picasso.get().load(urlImg).into(image)
 
             } catch (e: Exception) {
                 Picasso.get().load(R.drawable.ic_user_profile).into(image)
@@ -165,7 +165,6 @@ class AnswerScreenActivity : AppCompatActivity() {
 
                 db.collection("Users").document(Methods.getEmail(this)!!).update("answers", FieldValue.increment(1))
                 db.collection("Questions").document(question).update("answers", FieldValue.increment(1))
-
 
                 if(author != email){
 

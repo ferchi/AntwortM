@@ -31,7 +31,6 @@ class HomeActivity : AppCompatActivity() {
         val bundle=intent.extras
         val email=bundle?.getString("email")
 
-        //ToolbarSearchAdapter().show(this,"",true)
         val layoutManager = LinearLayoutManager(this)
 
         layoutManager.stackFromEnd = true
@@ -78,7 +77,7 @@ class HomeActivity : AppCompatActivity() {
                         .replace(R.id.frameLayout, notificationFragment)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .commit()
-                }//searchButton
+                }//notificationButton
 
                 R.id.profileButton ->{
                     profileFragment = ProfileFragment()
@@ -87,7 +86,7 @@ class HomeActivity : AppCompatActivity() {
                         .replace(R.id.frameLayout, profileFragment)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .commit()
-                }//searchButton
+                }//profileButton
 
             }//when
 

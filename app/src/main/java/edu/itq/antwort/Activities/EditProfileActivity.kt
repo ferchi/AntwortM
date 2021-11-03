@@ -52,6 +52,8 @@ class EditProfileActivity : AppCompatActivity() {
 
         binding.btnEditUsername.setOnClickListener {
             db.collection("Users").document(Methods.getEmail(this)!!).update("name", binding.etEditUsername.text.toString())
+            updateAnswers(Methods.getEmail(this)!!, binding.etEditUsername.text.toString())
+            updateQuestions(Methods.getEmail(this)!!, binding.etEditUsername.text.toString())
             Methods.customToast(this,"Actualizado")
             onBackPressed()
         }
@@ -59,15 +61,46 @@ class EditProfileActivity : AppCompatActivity() {
 
     }
 
-    private fun getName(){
-        val queryRol = db.collection("Users").document(Methods.getEmail(this)!!)
-        queryRol.get().addOnCompleteListener(
-            OnCompleteListener<DocumentSnapshot>() {
-                val name = it.result!!.toObject(Users::class.java)!!.name
+    private fun updateAnswers(email:String, name: String){
 
-                binding.etEditUsername.hint = name
-            }
-        )
+        db.collection("Answers").whereEqualTo("author", email).get().addOnSuccessListener {
+
+            it.documents.forEach { i->
+
+                val id = i.get("id") as String
+
+                db.collection("Answers").document(id).update("nameAuthor", name)
+
+            }//for each
+
+        }//obtenemos el id de las perguntas hechas por el usuario
+
+    }//updateAnswers
+
+    private fun updateQuestions(email:String, name: String){
+
+        db.collection("Questions").whereEqualTo("author", email).get().addOnSuccessListener {
+
+            it.documents.forEach { i->
+
+                val id = i.get("id") as String
+
+                db.collection("Questions").document(id).update("name", name)
+
+            }//for each
+
+        }//obtenemos el id de las perguntas hechas por el usuario
+
+    }//updateQuestions
+
+    private fun getName(){
+
+        val queryRol = db.collection("Users").document(Methods.getEmail(this)!!)
+        queryRol.get().addOnCompleteListener {
+            val name = it.result!!.toObject(Users::class.java)!!.name
+
+            binding.etEditUsername.hint = name
+        }
     }
     private fun changeImg(): Boolean {
 
@@ -152,7 +185,8 @@ class EditProfileActivity : AppCompatActivity() {
             val urlImg = result!!.get("imgProfile").toString()
 
             try {
-                Picasso.get().load(urlImg).into(binding.civEditPhoto)
+                if(urlImg.isNotEmpty())
+                    Picasso.get().load(urlImg).into(binding.civEditPhoto)
 
             } catch (e: Exception) {
                 Picasso.get().load(R.drawable.ic_user_profile).into(binding.civEditPhoto)
