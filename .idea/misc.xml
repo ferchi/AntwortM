@@ -12,6 +12,7 @@
         <entry key="..\:/AndroidProject/AntwortM/app/src/main/res/drawable/ic_baseline_dehaze_24.xml" value="0.15885416666666666" />
         <entry key="..\:/AndroidProject/AntwortM/app/src/main/res/drawable/user_type_bg.xml" value="0.37864583333333335" />
         <entry key="..\:/AndroidProject/AntwortM/app/src/main/res/layout/activity_edit_profile.xml" value="0.3625" />
+        <entry key="..\:/AndroidProject/AntwortM/app/src/main/res/layout/activity_forgot_password.xml" value="0.20260416666666667" />
         <entry key="..\:/AndroidProject/AntwortM/app/src/main/res/layout/activity_login.xml" value="0.3625" />
         <entry key="..\:/AndroidProject/AntwortM/app/src/main/res/layout/activity_profile.xml" value="0.3625" />
         <entry key="..\:/AndroidProject/AntwortM/app/src/main/res/layout/activity_signup.xml" value="0.3625" />
@@ -24,7 +25,11 @@
         <entry key="..\:/AndroidProject/AntwortM/app/src/main/res/layout/item_answer_view.xml" value="0.30833333333333335" />
         <entry key="..\:/AndroidProject/AntwortM/app/src/main/res/layout/item_question.xml" value="0.2861111111111111" />
         <entry key="..\:/AndroidProject/AntwortM/app/src/main/res/layout/item_question_view.xml" value="0.30833333333333335" />
+        <entry key="..\:/AndroidProject/AntwortM/app/src/main/res/layout/splash_screen.xml" value="0.20260416666666667" />
         <entry key="..\:/AndroidProject/AntwortM/app/src/main/res/layout/toolbar.xml" value="0.1" />
+        <entry key="..\:/AndroidProject/AntwortM/app/src/main/res/layout/toolbar_notifications.xml" value="0.20260416666666667" />
+        <entry key="..\:/AndroidProject/AntwortM/app/src/main/res/layout/toolbar_profile.xml" value="0.20260416666666667" />
+        <entry key="..\:/AndroidProject/AntwortM/app/src/main/res/layout/toolbar_search.xml" value="0.20260416666666667" />
         <entry key="..\:/Users/guill/AndroidStudioProjects/Antwort/app/src/main/res/drawable/bottomnav_bg.xml" value="0.22763157894736843" />
         <entry key="..\:/Users/guill/AndroidStudioProjects/Antwort/app/src/main/res/drawable/btn_edt_profile.xml" value="0.22412280701754386" />
         <entry key="..\:/Users/guill/AndroidStudioProjects/Antwort/app/src/main/res/drawable/button_bg.xml" value="0.24027777777777778" />

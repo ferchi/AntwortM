@@ -19,7 +19,7 @@
             android:layout_centerInParent="true"
             android:layout_gravity="center"
             android:foregroundTint="#00BCD4"
-            android:src="@drawable/logo" />
+            android:src="@mipmap/logo" />
 
         <ImageView
             android:id="@+id/imgSettingsTB"

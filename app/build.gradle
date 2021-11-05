@@ -77,6 +77,4 @@ dependencies {
     //Libreria para los PopUp
     implementation "com.github.skydoves:powermenu:2.2.0"
 
-
-
 }

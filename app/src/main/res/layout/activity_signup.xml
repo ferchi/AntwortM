@@ -24,7 +24,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/view"
-        app:srcCompat="@drawable/logo" />
+        app:srcCompat="@mipmap/logo" />
 
     <TextView
         android:id="@+id/textView"
@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="24dp"
-        android:text="FERCHO"
+        android:text="ANTWORT"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"

@@ -30,7 +30,7 @@
                 android:textColorHint="@color/gray"
                 android:drawableTint="@color/gray"
                 android:singleLine="true"
-                android:src="@drawable/logo"
+                android:src="@mipmap/logo"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/imgBackTBS"
