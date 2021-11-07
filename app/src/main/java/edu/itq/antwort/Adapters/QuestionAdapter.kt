@@ -1,5 +1,6 @@
 package edu.itq.antwort.Adapters
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -14,10 +15,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
-import edu.itq.antwort.Activities.AnswerScreenActivity
-import edu.itq.antwort.Activities.ProfileActivity
-import edu.itq.antwort.Activities.QuestionDetails
-import edu.itq.antwort.Activities.TAG
 import edu.itq.antwort.Classes.NotificationData
 import edu.itq.antwort.Classes.PushNotification
 import edu.itq.antwort.Classes.Questions
@@ -33,8 +30,9 @@ import com.skydoves.powermenu.MenuAnimation
 import com.skydoves.powermenu.PowerMenuItem
 import com.skydoves.powermenu.PowerMenu
 import android.widget.Toast
+import com.google.firebase.firestore.FieldValue
 import com.skydoves.powermenu.OnMenuItemClickListener
-
+import edu.itq.antwort.Activities.*
 
 class QuestionAdapter (private val fragment: Fragment, private val dataset: List<Questions>):
     RecyclerView.Adapter<QuestionAdapter.ViewHolder>() {
@@ -43,6 +41,8 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: List
 
     private val db = FirebaseFirestore.getInstance()
     private var popUpMenu = PowerMenu.Builder(fragment.requireContext())
+    private var q: String = ""
+    private var a: String = ""
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(ItemQuestionBinding.inflate(LayoutInflater.from(parent.context),parent,false))
@@ -52,16 +52,32 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: List
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        Log.d("Tamaño", dataset.size.toString())
         val question = dataset[position]
 
         holder.binding.questionOptions.setOnClickListener {
+
             popUpMenu.build().clearPreference()
-            createPopUp()
+
+            if(getEmail() == question.author){
+
+                createPopUpOwner()
+
+            }//es su pregunta
+
+            else{
+
+                createPopUp()
+
+            }//no es su pregunta
+
             popUpMenu.build().showAsDropDown(it)
+            q = question.id
+            a = question.author
+
         }
 
         holder.binding.imgAuthorAI.setOnClickListener {
+
             val homeIntent = Intent(fragment.requireContext(), ProfileActivity::class.java).apply {
 
                 putExtra("id", question.id)
@@ -108,7 +124,7 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: List
     private fun loadImg(image : CircleImageView, author: String) {
 
         db.collection("Users").document(author).addSnapshotListener{
-                result, error ->
+                result, _ ->
             val urlImg = result!!.get("imgProfile").toString()
 
             try {
@@ -253,7 +269,7 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: List
 
     private fun showNotification(message: String, question: String, email:String){
 
-        db.collection("Users").document(email).get().addOnSuccessListener {
+        db.collection("Users").document(email).get().addOnSuccessListener { it ->
 
             val recipientToken = it.get("token") as String?
 
@@ -297,14 +313,34 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: List
 
     }//createNotification
 
-    private fun createPopUp(){
+    private fun createPopUpOwner(){
+
         val context = fragment.requireContext()
         popUpMenu = PowerMenu.Builder(fragment.requireContext())
         popUpMenu
             .addItem(PowerMenuItem("Editar", false))
-            .addItem(PowerMenuItem("Reportar", false))
             .addItem(PowerMenuItem("Eliminar", false))
+            .setAnimation(MenuAnimation.FADE) // Animation start point (TOP | LEFT).
+            .setMenuRadius(10f) // sets the corner radius.
+            .setMenuShadow(10f) // sets the shadow.
+            .setTextColor(ContextCompat.getColor(context, R.color.black))
+            .setTextGravity(Gravity.CENTER)
+            //.setTextTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD))
+            .setSelectedTextColor(Color.WHITE)
+            .setMenuColor(Color.WHITE)
+            .setSelectedMenuColor(ContextCompat.getColor(context, R.color.orange))
+            .setOnMenuItemClickListener(onMenuItemClickListenerOwner)
+            .setAutoDismiss(true)
+            .build()
 
+    }//createPopUpOwner
+
+    private fun createPopUp(){
+
+        val context = fragment.requireContext()
+        popUpMenu = PowerMenu.Builder(fragment.requireContext())
+        popUpMenu
+            .addItem(PowerMenuItem("Reportar", false))
             .setAnimation(MenuAnimation.FADE) // Animation start point (TOP | LEFT).
             .setMenuRadius(10f) // sets the corner radius.
             .setMenuShadow(10f) // sets the shadow.
@@ -315,14 +351,114 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: List
             .setMenuColor(Color.WHITE)
             .setSelectedMenuColor(ContextCompat.getColor(context, R.color.orange))
             .setOnMenuItemClickListener(onMenuItemClickListener)
+            .setAutoDismiss(true)
             .build()
     }
 
-    private val onMenuItemClickListener: OnMenuItemClickListener<PowerMenuItem?> =
-        OnMenuItemClickListener<PowerMenuItem?> { position, item ->
-            Toast.makeText(fragment.requireContext(), item.title, Toast.LENGTH_SHORT).show()
-            popUpMenu.setSelected(position)
-            popUpMenu.setAutoDismiss(true)
+    private fun showAlert(){
+
+        val builder = AlertDialog.Builder(fragment.requireContext())
+        builder.setTitle("Eliminar publicación")
+        builder.setMessage("¿Esta seguro que desea elimiar la publicación?")
+        builder.setPositiveButton("Sí"
+        ) { _, _ ->
+            println("Question show alert si: $q")
+            deleteQuestion(q)
         }
+        builder.setNegativeButton("No", null)
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+
+    }//show alert
+
+    private fun deleteQuestion(question: String){
+
+        db.collection("Questions").document(question).delete()
+        db.collection("Users").document(a).update("questions", FieldValue.increment(-1))
+        deleteAnswers(question)
+        deleteNotifications(question)
+        Toast.makeText(fragment.requireContext(), "Publicación eliminada", Toast.LENGTH_SHORT).show()
+
+    }//deleteQuestion
+
+    private fun deleteAnswers(question:String){
+
+        db.collection("Answers").whereEqualTo("question", question).get().addOnSuccessListener {
+
+            it.documents.forEach { i->
+
+                val id = i.get("id") as String
+
+                db.collection("Answers").document(id).delete()
+                db.collection("Users").document(i.get("author") as String).update("answers", FieldValue.increment(-1))
+
+            }//for each
+
+        }//obtenemos el id de las perguntas hechas por el usuario
+
+    }//deleteAnswers
+
+    private fun deleteNotifications(question:String){
+
+        db.collection("Notifications").whereEqualTo("question", question).get().addOnSuccessListener {
+
+            it.documents.forEach { i->
+
+                val id = i.get("id") as String
+
+                db.collection("Notifications").document(id).delete()
+
+            }//for each
+
+        }//obtenemos el id de las perguntas hechas por el usuario
+
+    }//deleteAnswers
+
+    private fun reportQuestion() {
+
+        val intent = Intent(fragment.requireContext(), ReportQuestionActivity::class.java).apply {
+
+            putExtra("id", q)
+            putExtra("collection", "Questions")
+
+        }//homeIntent
+
+        fragment.startActivity(intent)
+
+    }//reportQuestion
+
+    private fun editQuestion() {
+
+        val intent = Intent(fragment.requireContext(), EditQuestionActivity::class.java).apply {
+
+            putExtra("id", q)
+
+        }//homeIntent
+
+        fragment.startActivity(intent)
+
+    }//editQuestion
+
+    private val onMenuItemClickListenerOwner: OnMenuItemClickListener<PowerMenuItem?> =
+        OnMenuItemClickListener<PowerMenuItem?> { _, item ->
+
+            if(item.title == "Eliminar"){
+                showAlert()
+            }//eliminar
+
+            if(item.title == "Editar"){
+                editQuestion()
+            }//editar
+
+        }//onMenuItemClickListenerOwner
+
+    private val onMenuItemClickListener: OnMenuItemClickListener<PowerMenuItem?> =
+        OnMenuItemClickListener<PowerMenuItem?> { _, item ->
+
+            if(item.title == "Reportar"){
+                reportQuestion()
+            }//eliminar
+
+        }//onMenuItemClickListener
 
 }//class home fragment

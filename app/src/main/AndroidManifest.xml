@@ -19,6 +19,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
+            android:name=".Activities.EditAnswer"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.ReportQuestionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.EditQuestionActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activities.EditProfileActivity"
             android:exported="false" />
         <activity

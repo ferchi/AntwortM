@@ -1,6 +1,7 @@
 package edu.itq.antwort.Activities
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
@@ -17,9 +18,17 @@ import edu.itq.antwort.R
 import edu.itq.antwort.databinding.ActivityQuestionViewBinding
 import android.content.Intent
 import android.util.Log
+import android.view.Gravity
 import android.view.View
+import android.widget.Toast
+import androidx.core.content.ContextCompat
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Query
 import com.google.gson.Gson
+import com.skydoves.powermenu.MenuAnimation
+import com.skydoves.powermenu.OnMenuItemClickListener
+import com.skydoves.powermenu.PowerMenu
+import com.skydoves.powermenu.PowerMenuItem
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import edu.itq.antwort.Classes.*
@@ -40,6 +49,12 @@ class QuestionDetails : AppCompatActivity() {
 
     lateinit var binding: ActivityQuestionViewBinding
     private val db = FirebaseFirestore.getInstance()
+    private lateinit var popUpMenu: PowerMenu.Builder
+    private var q: String = ""
+    private var a: String = ""
+    private var parent: String = ""
+    private var collec: String = ""
+    private var user: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -48,15 +63,15 @@ class QuestionDetails : AppCompatActivity() {
         binding = ActivityQuestionViewBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
+        popUpMenu = PowerMenu.Builder(this)
         val bundle = intent.extras
         val id = bundle?.getString("id")
 
         val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
-        val user = prefs.getString("email", null)
+        user = prefs.getString("email", null)!!
 
-        showQuestion(user?:"", id?:"")
-        showAnswers(id?:"", user?:"")
+        showQuestion(user, id?:"")
+        showAnswers(id?:"", user)
 
         setup()
 
@@ -101,6 +116,30 @@ class QuestionDetails : AppCompatActivity() {
 
             @SuppressLint("SetTextI18n")
             override fun onBindViewHolder(holder: QuestionDetailViewHolder, position: Int, model: Questions) {
+
+                holder.questionViewBinding.imgOptionQV.setOnClickListener {
+
+                    popUpMenu.build().clearPreference()
+
+                    if(user == model.author){
+
+                        createPopUpOwner()
+
+                    }//el usuario es el autor de la pregunta
+
+                    else{
+
+                        createPopUp()
+
+                    }//no es su pregunta
+
+                    popUpMenu.build().showAsDropDown(it)
+                    q = model.id
+                    a = model.author
+                    collec = "Questions"
+
+
+                }//se presiono el boton de opciones
 
                 holder.questionViewBinding.imgUserQD.setOnClickListener {
 
@@ -173,6 +212,35 @@ class QuestionDetails : AppCompatActivity() {
 
                 }//mostramos el verificado
 
+                else{
+
+                    holder.answerViewBinding.imgVerifiedUser.visibility = View.INVISIBLE
+
+                }//no esta verificado
+
+                holder.answerViewBinding.imgOptionAV.setOnClickListener {
+
+                    popUpMenu.build().clearPreference()
+
+                    if(user == model.author){
+
+                        createPopUpOwner()
+
+                    }//el usuario es el autor de la pregunta
+
+                    else{
+
+                        createPopUp()
+
+                    }//no es su pregunta
+
+                    popUpMenu.build().showAsDropDown(it)
+                    q = model.id
+                    a = model.author
+                    parent = model.question
+                    collec = "Answers"
+
+                }//se presiono el boton de opciones
 
                 holder.answerViewBinding.imgUserAV.setOnClickListener {
 
@@ -344,7 +412,6 @@ class QuestionDetails : AppCompatActivity() {
 
     private fun reactions(modelAnswers: Answers?, modelQuestions: Questions?, mainArray: ArrayList<String>, secondArray: ArrayList<String>, txtReaction: TextView, user: String, author: String, id: String, question: String, title: String, collection: String, content: String){
 
-
         if(mainArray.isNotEmpty()){
 
             txtReaction.text = mainArray.size.toString()
@@ -436,4 +503,177 @@ class QuestionDetails : AppCompatActivity() {
 
     }//reaction color
 
+    private fun createPopUpOwner(){
+
+        popUpMenu = PowerMenu.Builder(this)
+        popUpMenu
+            .addItem(PowerMenuItem("Editar", false))
+            .addItem(PowerMenuItem("Eliminar", false))
+            .setAnimation(MenuAnimation.FADE) // Animation start point (TOP | LEFT).
+            .setMenuRadius(10f) // sets the corner radius.
+            .setMenuShadow(10f) // sets the shadow.
+            .setTextColor(ContextCompat.getColor(this, R.color.black))
+            .setTextGravity(Gravity.CENTER)
+            .setSelectedTextColor(Color.WHITE)
+            .setMenuColor(Color.WHITE)
+            .setSelectedMenuColor(ContextCompat.getColor(this, R.color.orange))
+            .setOnMenuItemClickListener(onMenuItemClickListenerOwner)
+            .setAutoDismiss(true)
+            .build()
+
+    }//createPopUpOwner
+
+    private fun createPopUp(){
+
+        popUpMenu = PowerMenu.Builder(this)
+        popUpMenu
+            .addItem(PowerMenuItem("Reportar", false))
+            .setAnimation(MenuAnimation.FADE) // Animation start point (TOP | LEFT).
+            .setMenuRadius(10f) // sets the corner radius.
+            .setMenuShadow(10f) // sets the shadow.
+            .setTextColor(ContextCompat.getColor(this, R.color.black))
+            .setTextGravity(Gravity.CENTER)
+            .setSelectedTextColor(Color.WHITE)
+            .setMenuColor(Color.WHITE)
+            .setSelectedMenuColor(ContextCompat.getColor(this, R.color.orange))
+            .setOnMenuItemClickListener(onMenuItemClickListener)
+            .setAutoDismiss(true)
+            .build()
+
+    }//create PopUp
+
+    private fun showAlert(collection: String){
+
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Eliminar publicación")
+        builder.setMessage("¿Esta seguro que desea elimiar la publicación?")
+
+        builder.setPositiveButton("Sí"
+        ) { _, _ ->
+
+            deletePost(q, collection, parent)
+
+        }//boton sí
+
+        builder.setNegativeButton("No", null)
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+
+    }//show alert
+
+    private fun deletePost(question: String, collection: String, parent: String){
+
+        db.collection(collection).document(question).delete()
+        db.collection("Users").document(a).update(collection.lowercase(), FieldValue.increment(-1))
+
+        if(collection == "Questions")
+            deleteAnswers(question)
+
+        else
+            db.collection("Questions").document(parent).update("answers", FieldValue.increment(-1))
+
+        deleteNotifications(question)
+        Toast.makeText(this, "Publicación eliminada", Toast.LENGTH_SHORT).show()
+
+    }//deletePost
+
+    private fun deleteAnswers(question:String){
+
+        db.collection("Answers").whereEqualTo("question", question).get().addOnSuccessListener {
+
+            it.documents.forEach { i->
+
+                val id = i.get("id") as String
+
+                db.collection("Answers").document(id).delete()
+                db.collection("Users").document(i.get("author") as String).update("answers", FieldValue.increment(-1))
+
+            }//for each
+
+        }//obtenemos el id de las perguntas hechas por el usuario
+
+        onBackPressed()
+
+    }//deleteAnswers
+
+    private fun deleteNotifications(value:String){
+
+        db.collection("Notifications").whereEqualTo("question", value).get().addOnSuccessListener {
+
+            it.documents.forEach { i->
+
+                val id = i.get("id") as String
+
+                db.collection("Notifications").document(id).delete()
+
+            }//for each
+
+        }//obtenemos el id de las perguntas hechas por el usuario
+
+    }//deleteAnswers
+
+    private fun reportPost(collection: String) {
+
+        val intent = Intent(this, ReportQuestionActivity::class.java).apply {
+
+            putExtra("id", q)
+            putExtra("collection", collection)
+
+        }//homeIntent
+
+        startActivity(intent)
+
+    }//reportPost
+
+    private fun editPost(collection: String) {
+
+        val intent: Intent
+
+        if(collection == "Questions"){
+
+            intent = Intent(this, EditQuestionActivity::class.java).apply {
+
+                putExtra("id", q)
+
+            }//intent
+
+        }//se desea editar la pregunta
+
+        else{
+
+            intent = Intent(this, EditAnswer::class.java).apply {
+
+                putExtra("id", q)
+                putExtra("email", user)
+
+            }//intent
+
+        }//en otro caso abrimos el edit question activity
+
+        startActivity(intent)
+
+    }//editPost
+    
+    private val onMenuItemClickListenerOwner: OnMenuItemClickListener<PowerMenuItem?> =
+        OnMenuItemClickListener<PowerMenuItem?> { _, item ->
+
+            if(item.title == "Eliminar"){
+                showAlert(collec)
+            }//eliminar
+
+            if(item.title == "Editar"){
+                editPost(collec)
+            }//editar
+
+        }//onMenuItemClickListenerOwner
+
+    private val onMenuItemClickListener: OnMenuItemClickListener<PowerMenuItem?> =
+        OnMenuItemClickListener<PowerMenuItem?> { _, item ->
+
+            if(item.title == "Reportar"){
+                reportPost(collec)
+            }//eliminar
+
+        }//onMenuItemClickListener
+    
 }//class

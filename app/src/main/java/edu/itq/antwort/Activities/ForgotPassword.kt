@@ -52,6 +52,12 @@ class ForgotPassword : AppCompatActivity() {
 
     }//fun setup
 
+    override fun onBackPressed() {
+
+        startActivity(Intent(this, Login::class.java))
+
+    }//onBackPressed()
+
     private fun restorePassword(email: String){
 
         val mAuth = FirebaseAuth.getInstance()

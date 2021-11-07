@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 
 class AnswerScreenActivity : AppCompatActivity() {
 
-    val TAG = "AnswerScreenActivity"
+    private val TAG = "AnswerScreenActivity"
 
     lateinit var binding: ActivityAnswerScreenBinding
     private val db = FirebaseFirestore.getInstance()
@@ -43,10 +43,10 @@ class AnswerScreenActivity : AppCompatActivity() {
 
         loadImg(binding.imgUserAS, email!!)
 
-        db.collection("Users").document(email?:"").get().addOnSuccessListener {
+        db.collection("Users").document(email).get().addOnSuccessListener {
 
             setup(it.get("name") as String)
-            postAnswer(it.get("name") as String, it.get("rol") as String, email?:"", question?:"", author?:"")
+            postAnswer(it.get("name") as String, it.get("rol") as String, email, question?:"", author?:"")
 
         }//obtenemos el nombre del usuario
 
@@ -55,7 +55,7 @@ class AnswerScreenActivity : AppCompatActivity() {
     private fun loadImg(image : CircleImageView, author: String) {
 
         db.collection("Users").document(author).addSnapshotListener{
-                result, error ->
+                result, _ ->
             val urlImg = result!!.get("imgProfile").toString()
 
             try {
@@ -95,7 +95,7 @@ class AnswerScreenActivity : AppCompatActivity() {
 
     private fun showNotification(title: String, message: String, question: String, email:String){
 
-        db.collection("Users").document(email).get().addOnSuccessListener {
+        db.collection("Users").document(email).get().addOnSuccessListener { it ->
 
             val recipientToken = it.get("token") as String?
 
@@ -184,7 +184,7 @@ class AnswerScreenActivity : AppCompatActivity() {
 
             else{
 
-                showAlert("No deje campos vacios")
+                Toast.makeText(applicationContext, "No dejes campos vacios", Toast.LENGTH_SHORT).show()
                 binding.txtAnswerAS.requestFocus()
 
             }//el campo de respuesta esta vacio
@@ -199,13 +199,6 @@ class AnswerScreenActivity : AppCompatActivity() {
         imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
 
     }//hideKeyboard
-
-    private fun showAlert( message:String){
-
-        val toast = Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT)
-        toast.show()
-
-    }//función show alert
 
     private fun createNotification(title: String, content: String, user:String, question: String, author: String) {
 

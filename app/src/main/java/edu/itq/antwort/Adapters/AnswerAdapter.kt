@@ -1,21 +1,28 @@
 package edu.itq.antwort.Adapters
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
+import com.skydoves.powermenu.MenuAnimation
+import com.skydoves.powermenu.OnMenuItemClickListener
+import com.skydoves.powermenu.PowerMenu
+import com.skydoves.powermenu.PowerMenuItem
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
-import edu.itq.antwort.Activities.ProfileActivity
-import edu.itq.antwort.Activities.QuestionDetails
-import edu.itq.antwort.Activities.TAG
+import edu.itq.antwort.Activities.*
 import edu.itq.antwort.Classes.*
 import edu.itq.antwort.Methods
 import edu.itq.antwort.R
@@ -30,7 +37,11 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: List<A
     class ViewHolder (val binding: ItemAnswerViewBinding) : RecyclerView.ViewHolder(binding.root)
 
     private val db = FirebaseFirestore.getInstance()
-
+    private var popUpMenu = PowerMenu.Builder(fragment.requireContext())
+    private var ans: String = ""
+    private var que: String = ""
+    private var a: String = ""
+    
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(ItemAnswerViewBinding.inflate(LayoutInflater.from(parent.context),parent,false))
     }
@@ -60,14 +71,27 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: List<A
             fragment.startActivity(intent)
         }
 
-        reactions(answer,null, answer.likes, answer.dislikes, holder.binding.likesIA, "Útil", user!!, answer.author, answer.id, answer.question, "Han reaccionado a tu respuesta", "Answers", "content", position)
-        reactions(answer,null, answer.dislikes, answer.likes, holder.binding.dislikeIA, "No útil", user, answer.author, answer.id, answer.question, "Han reaccionado a tu respuesta", "Answers", "content", position)
+        reactions(answer, answer.likes, answer.dislikes, holder.binding.likesIA, "Útil", user!!, answer.author, answer.id, answer.question, position)
+        reactions(answer, answer.dislikes, answer.likes, holder.binding.dislikeIA, "No útil", user, answer.author, answer.id, answer.question, position)
 
 
         holder.binding.txtNameAV.text = answer.nameAuthor
         holder.binding.txtAnswersAV.text = answer.content
         loadImg(holder.binding.imgUserAV, answer.author)
 
+        holder.binding.imgOptionAV.setOnClickListener {
+
+            popUpMenu.build().clearPreference()
+            
+            createPopUpOwner()
+            
+            popUpMenu.build().showAsDropDown(it)
+            ans = answer.id
+            a = answer.author
+            que = answer.question
+            
+        }//se presiono opciones
+        
         holder.binding.cardItemAnswer.setOnClickListener {
 
             val homeIntent = Intent(fragment.requireContext(), QuestionDetails::class.java).apply {
@@ -84,7 +108,7 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: List<A
     private fun loadImg(image : CircleImageView, author: String) {
 
         db.collection("Users").document(author).addSnapshotListener{
-                result, error ->
+                result, _ ->
             val urlImg = result!!.get("imgProfile").toString()
 
             try {
@@ -96,7 +120,7 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: List<A
         }
     }//load image
 
-    private fun reactions(modelAnswers: Answers?, modelQuestions: Questions?, mainArray: ArrayList<String>, secondArray: ArrayList<String>, txtReaction: TextView, text: String, user: String, author: String, id: String, question: String, title: String, collection: String, content: String, position: Int){
+    private fun reactions(modelAnswers: Answers?, mainArray: ArrayList<String>, secondArray: ArrayList<String>, txtReaction: TextView, text: String, user: String, author: String, id: String, question: String, position: Int){
 
         if(mainArray.isNotEmpty()){
 
@@ -141,10 +165,10 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: List<A
 
                 if(user != author){
 
-                    db.collection(collection).document(id).get().addOnSuccessListener {
+                    db.collection("Answers").document(id).get().addOnSuccessListener {
 
-                        createNotification(title, it.get(content) as String, user, question, author)
-                        showNotification(title, it.get(content) as String, question, author)
+                        createNotification(it.get("content") as String, user, question, author)
+                        showNotification(it.get("content") as String, question, author)
 
                     }//obtenemos el contenido de la respuesta
 
@@ -159,12 +183,6 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: List<A
                 updateAnswers(modelAnswers,position)
 
             }//el modelo de respuestas no es nulo
-
-            if(modelQuestions != null){
-
-                updateQuestions(modelQuestions)
-
-            }//el modelo de preguntas no es nulo
 
         }//se le dio click al boton
 
@@ -215,17 +233,17 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: List<A
 
     }//sendNotifiaction
 
-    private fun showNotification(title: String, message: String, question: String, email:String){
+    private fun showNotification(message: String, question: String, email:String){
 
         db.collection("Users").document(email).get().addOnSuccessListener { it ->
 
             val recipientToken = it.get("token") as String?
 
-            if(title.isNotEmpty() && message.isNotEmpty()){
+            if(message.isNotEmpty()){
 
                 PushNotification(
 
-                    NotificationData(title, message, question, email),
+                    NotificationData("Han reaccionado a tu respuesta'", message, question, email),
                     recipientToken?:""
 
                 ).also {
@@ -240,7 +258,7 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: List<A
 
     }//show Notification
 
-    private fun createNotification(title: String, content: String, user:String, question: String, author: String) {
+    private fun createNotification(content: String, user:String, question: String, author: String) {
 
         val id: String = db.collection("Notifications").document().id
 
@@ -249,7 +267,7 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: List<A
             hashMapOf(
 
                 "id" to id,
-                "title" to title,
+                "title" to "Han reaccionado a tu respuesta'",
                 "author" to user,
                 "content" to content,
                 "question" to question,
@@ -262,6 +280,7 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: List<A
     }//createNotification
 
     private fun updateAnswers(model: Answers, position: Int){
+
         db.collection("Answers").document(model.id).set(
 
             hashMapOf(
@@ -278,27 +297,81 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: List<A
             )//hashMapOf con los nuevos datos
 
         )//actualizamos el numero de likes
+
         this.notifyItemChanged(position)
+
     }//update answers
 
-    private fun updateQuestions(model: Questions){
+    private fun createPopUpOwner(){
 
-        db.collection("Questions").document(model.id).set(
+        val context = fragment.requireContext()
+        
+        popUpMenu = PowerMenu.Builder(context)
+        popUpMenu
+            .addItem(PowerMenuItem("Editar", false))
+            .addItem(PowerMenuItem("Eliminar", false))
+            .setAnimation(MenuAnimation.FADE) // Animation start point (TOP | LEFT).
+            .setMenuRadius(10f) // sets the corner radius.
+            .setMenuShadow(10f) // sets the shadow.
+            .setTextColor(ContextCompat.getColor(context, R.color.black))
+            .setTextGravity(Gravity.CENTER)
+            .setSelectedTextColor(Color.WHITE)
+            .setMenuColor(Color.WHITE)
+            .setSelectedMenuColor(ContextCompat.getColor(context, R.color.orange))
+            .setOnMenuItemClickListener(onMenuItemClickListenerOwner)
+            .setAutoDismiss(true)
+            .build()
 
-            hashMapOf(
+    }//createPopUpOwner
 
-                "id" to model.id,
-                "name" to model.name,
-                "author" to model.author,
-                "date" to model.date,
-                "title" to model.title,
-                "description" to model.description,
-                "likes" to model.likes,
-                "dislikes" to model.dislikes
+    private fun showAlert(){
 
-            )//hashMapOf con los nuevos datos
+        val builder = AlertDialog.Builder(fragment.requireContext())
+        builder.setTitle("Eliminar publicación")
+        builder.setMessage("¿Esta seguro que desea elimiar la publicación?")
+        builder.setPositiveButton("Sí"
+        ) { _, _ ->
+            deleteAnswer(ans)
+        }
+        builder.setNegativeButton("No", null)
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
 
-        )//actualizamos el numero de likes
+    }//show alert
 
-    }//update questions
-}
+    private fun deleteAnswer(answer: String){
+
+        db.collection("Answers").document(answer).delete()
+        db.collection("Users").document(a).update("answers", FieldValue.increment(-1))
+        db.collection("Questions").document(que).update("answers", FieldValue.increment(-1))
+        Toast.makeText(fragment.requireContext(), "Publicación eliminada", Toast.LENGTH_SHORT).show()
+
+    }//deleteAnswer
+
+    private fun editAnswer() {
+
+        val intent = Intent(fragment.requireContext(), EditAnswer::class.java).apply {
+
+            putExtra("id", ans)
+            putExtra("email", Methods.getEmail(fragment.requireActivity()))
+
+        }//homeIntent
+
+        fragment.startActivity(intent)
+
+    }//editAnswer
+    
+    private val onMenuItemClickListenerOwner: OnMenuItemClickListener<PowerMenuItem?> =
+        OnMenuItemClickListener<PowerMenuItem?> { _, item ->
+
+            if(item.title == "Eliminar"){
+                showAlert()
+            }//eliminar
+
+            if(item.title == "Editar"){
+                editAnswer()
+            }//editar
+
+        }//onMenuItemClickListenerOwner
+    
+}//class
