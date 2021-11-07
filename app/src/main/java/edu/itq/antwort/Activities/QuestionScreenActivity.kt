@@ -1,6 +1,8 @@
 package edu.itq.antwort.Activities
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextWatcher
@@ -42,7 +44,7 @@ class QuestionScreenActivity : AppCompatActivity() {
         // setup
         setup(email!!)
 
-        db.collection("Users").document(email?:"").get().addOnSuccessListener {
+        db.collection("Users").document(email).get().addOnSuccessListener {
 
             postQuestion(email, it.get("name") as String)
 
@@ -86,6 +88,7 @@ class QuestionScreenActivity : AppCompatActivity() {
 
     }//on onCreate
 
+    @SuppressLint("InflateParams")
     private fun addTag(s: CharSequence) {
         val tagText = s.toString().lowercase().filter { !it.isWhitespace() }
         val layoutInflater = LayoutInflater.from(baseContext)
@@ -172,7 +175,13 @@ class QuestionScreenActivity : AppCompatActivity() {
                 db.collection("Users").document(Methods.getEmail(this)!!).update("questions", FieldValue.increment(1))
 
                 hideKeyboard()
-                onBackPressed()
+                val intent = Intent(this, HomeActivity::class.java).apply {
+
+                    putExtra("email", email)
+
+                }//intent
+
+                startActivity(intent)
 
             }//los campos requeridos no estan vacios
 
