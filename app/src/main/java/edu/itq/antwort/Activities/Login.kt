@@ -114,6 +114,10 @@ class Login : AppCompatActivity() {
 
     }//fun Setup
 
+    override fun onBackPressed() {
+        this.moveTaskToBack(true);
+    }//onBackPressed()
+
     private fun login(token: String){
 
         title = "Authentication"

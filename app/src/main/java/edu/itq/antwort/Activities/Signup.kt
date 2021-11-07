@@ -145,6 +145,12 @@ class Signup : AppCompatActivity() {
 
     }//función register
 
+    override fun onBackPressed() {
+
+        startActivity(Intent(this, Login::class.java))
+
+    }//onBackPressed()
+
     private fun login(email: String, password: String){
 
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener {
