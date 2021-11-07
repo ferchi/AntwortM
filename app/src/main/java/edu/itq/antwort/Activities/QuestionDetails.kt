@@ -416,7 +416,8 @@ class QuestionDetails : AppCompatActivity() {
                 "title" to model.title,
                 "description" to model.description,
                 "likes" to model.likes,
-                "dislikes" to model.dislikes
+                "dislikes" to model.dislikes,
+                "topics" to model.topics
 
             )//hashMapOf con los nuevos datos
 
