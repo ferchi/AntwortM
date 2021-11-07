@@ -102,6 +102,24 @@
                 app:layout_constraintStart_toEndOf="@+id/imgAuthorAI"
                 app:layout_constraintTop_toBottomOf="@+id/txtItemDescription"
                 app:layout_constraintVertical_bias="0" />
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtAuthor">
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chip_group_item_question"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </HorizontalScrollView>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

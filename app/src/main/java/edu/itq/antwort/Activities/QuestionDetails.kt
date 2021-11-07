@@ -22,6 +22,7 @@ import android.view.Gravity
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import com.google.android.material.chip.Chip
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Query
 import com.google.gson.Gson
@@ -181,6 +182,12 @@ class QuestionDetails : AppCompatActivity() {
                 txtTitleQD.text = model.title
                 txtDescriptionQD.text = model.description
 
+                if ((holder.questionViewBinding.chipGroupItemQuestion.childCount) == 0){
+                    model.topics.forEach {
+                        addTag(it, holder)
+                    }
+                }
+
             }//onBindViewHolder
 
         }//adapter question
@@ -189,6 +196,13 @@ class QuestionDetails : AppCompatActivity() {
         binding.rvQD.layoutManager = LinearLayoutManager(this)
 
     }//showQuestion
+
+    private fun addTag(s: CharSequence, holder: QuestionDetailViewHolder) {
+        val layoutInflater = LayoutInflater.from(this)
+        val tag = layoutInflater.inflate(R.layout.item_topic_show, null, false) as Chip
+        tag.text = s
+        holder.questionViewBinding.chipGroupItemQuestion.addView(tag)
+    }
 
     private fun showAnswers(id: String, user: String){
 

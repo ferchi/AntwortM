@@ -12,6 +12,7 @@ data class Questions(
     val answers: Int = 0,
     val date: com.google.firebase.Timestamp = com.google.firebase.Timestamp.now(),
     val likes: ArrayList<String> = ArrayList(),
-    val dislikes: ArrayList<String> = ArrayList()
+    val dislikes: ArrayList<String> = ArrayList(),
+    val topics: ArrayList<String> = ArrayList()
 
     )//class

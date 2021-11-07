@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.QuestionScreenActivity">
+    tools:context=".Activities.QuestionScreenActivity"
+    >
 
     <Button
         android:id="@+id/btnPostQuestion"
@@ -50,8 +52,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imgQuestionProfile"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         app:layout_constraintVertical_bias=".07"
         app:layout_constraintHorizontal_bias=".05"
         android:src="@drawable/ic_user_profile"
@@ -67,36 +69,63 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/edt_question"
         android:hint="Título de la pregunta"
+        android:importantForAutofill="no"
+        android:singleLine="true"
         android:textColor="@color/black"
         android:textSize="20sp"
-        android:singleLine="true"
-        android:background="@drawable/edt_question"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imgQuestionProfile"
         app:layout_constraintTop_toBottomOf="@+id/btnPostQuestion"
         app:layout_constraintVertical_bias=".08"
-        app:layout_constraintWidth_percent=".7"
-        android:importantForAutofill="no" />
+        app:layout_constraintWidth_percent=".7" />
+
+    <EditText
+        android:id="@+id/et_new_question_topics"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:hint="Ingresa un tópico"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgQuestionProfile"
+        android:inputType="text"/>
+
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chip_group_new_question"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_new_question_topics">
+
+    </com.google.android.material.chip.ChipGroup>
 
     <EditText
         android:id="@+id/edtDescription"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        app:flow_maxElementsWrap="10"
         android:background="@drawable/edt_question"
         android:ems="10"
         android:hint="¿Cuál es tu duda?"
         android:inputType="textMultiLine"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:flow_maxElementsWrap="10"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtTitle"
-        app:layout_constraintVertical_bias=".1"
+        app:layout_constraintTop_toBottomOf="@+id/chip_group_new_question"
         app:layout_constraintWidth_percent=".9" />
 
 
