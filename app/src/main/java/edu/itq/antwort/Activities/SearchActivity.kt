@@ -102,9 +102,9 @@ class SearchActivity : AppCompatActivity() {
 
                     val modelQuestion = Questions(question.author, question.name, question.description, question.title, question.id, question.answers, question.date, question.likes, question.dislikes, question.topics)
 
-
                     if(modelQuestion.title.lowercase().contains(search.lowercase())
-                        || modelQuestion.description.lowercase().contains(search.lowercase()) || modelQuestion.topics.contains(search.lowercase())){
+                        || modelQuestion.description.lowercase().contains(search.lowercase())
+                        || modelQuestion.topics.contains(search.lowercase())){
 
                         questionsAux.add(modelQuestion)
 
