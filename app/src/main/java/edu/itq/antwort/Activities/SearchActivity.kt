@@ -100,11 +100,11 @@ class SearchActivity : AppCompatActivity() {
 
                     question.id = value.documents[index].id
 
-                    val modelQuestion = Questions(question.author, question.name, question.description, question.title, question.id, question.answers, question.date, question.likes, question.dislikes)
+                    val modelQuestion = Questions(question.author, question.name, question.description, question.title, question.id, question.answers, question.date, question.likes, question.dislikes, question.topics)
 
 
                     if(modelQuestion.title.lowercase().contains(search.lowercase())
-                        || modelQuestion.description.lowercase().contains(search.lowercase())){
+                        || modelQuestion.description.lowercase().contains(search.lowercase()) || modelQuestion.topics.contains(search.lowercase())){
 
                         questionsAux.add(modelQuestion)
 
