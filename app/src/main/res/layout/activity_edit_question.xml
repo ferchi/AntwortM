@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.QuestionScreenActivity">
+
+    <Button
+        android:id="@+id/btnUpdateQuestion"
+        android:layout_width="0dp"
+        android:layout_height="35dp"
+        android:text="Actualizar"
+        app:layout_constraintWidth_percent=".30"
+        app:layout_constraintVertical_bias=".03"
+        app:layout_constraintHorizontal_bias=".95"
+        android:background="@drawable/button_bg"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintVertical_bias=".23"
+        app:layout_constraintHorizontal_bias=".1"
+        android:text="Editar pregunta"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/edtTitleEQ"
+        app:layout_constraintEnd_toStartOf="@+id/btnUpdateQuestion"
+        app:layout_constraintStart_toEndOf="@+id/imgQuestionBackEQ"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imgQuestionBackEQ"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintVertical_bias=".03"
+        app:layout_constraintHorizontal_bias=".1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnUpdateQuestion"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_cancel" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imgQuestionProfileEQ"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintVertical_bias=".07"
+        app:layout_constraintHorizontal_bias=".05"
+        android:src="@drawable/ic_user_profile"
+        app:civ_border_color="#FF000000"
+        app:civ_border_width="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgQuestionBackEQ" />
+
+    <EditText
+        android:id="@+id/edtTitleEQ"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:hint="Título de la pregunta"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:singleLine="true"
+        android:background="@drawable/edt_question"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imgQuestionProfileEQ"
+        app:layout_constraintTop_toBottomOf="@+id/btnUpdateQuestion"
+        app:layout_constraintVertical_bias=".08"
+        app:layout_constraintWidth_percent=".7"
+        android:importantForAutofill="no" />
+
+    <EditText
+        android:id="@+id/edtDescriptionEQ"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:flow_maxElementsWrap="10"
+        android:background="@drawable/edt_question"
+        android:ems="10"
+        android:hint="¿Cuál es tu duda?"
+        android:inputType="textMultiLine"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtTitleEQ"
+        app:layout_constraintVertical_bias=".1"
+        app:layout_constraintWidth_percent=".9" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
