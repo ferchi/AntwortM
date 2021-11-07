@@ -30,6 +30,8 @@ import com.skydoves.powermenu.MenuAnimation
 import com.skydoves.powermenu.PowerMenuItem
 import com.skydoves.powermenu.PowerMenu
 import android.widget.Toast
+import androidx.core.view.children
+import com.google.android.material.chip.Chip
 import com.google.firebase.firestore.FieldValue
 import com.skydoves.powermenu.OnMenuItemClickListener
 import edu.itq.antwort.Activities.*
@@ -40,7 +42,7 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: List
     class ViewHolder (val binding: ItemQuestionBinding) : RecyclerView.ViewHolder(binding.root)
 
     private val db = FirebaseFirestore.getInstance()
-    private var popUpMenu = PowerMenu.Builder(fragment.requireContext())
+    private lateinit var popUpMenu :  PowerMenu.Builder
     private var q: String = ""
     private var a: String = ""
 
@@ -53,7 +55,7 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: List
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         val question = dataset[position]
-
+        popUpMenu = PowerMenu.Builder(fragment.requireContext())
         holder.binding.questionOptions.setOnClickListener {
 
             popUpMenu.build().clearPreference()
@@ -119,6 +121,12 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: List
         holder.binding.txtAuthor.text = question.name
         loadImg(holder.binding.imgAuthorAI, question.author)
 
+        if ((holder.binding.chipGroupItemQuestion.childCount) == 0){
+            question.topics.forEach {
+                addTag(it, holder)
+            }
+        }
+
     }
 
     private fun loadImg(image : CircleImageView, author: String) {
@@ -136,6 +144,15 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: List
             }
         }
     }//load image
+
+    private fun addTag(s: CharSequence, holder: ViewHolder) {
+        val layoutInflater = LayoutInflater.from(fragment.requireContext())
+        val tag = layoutInflater.inflate(R.layout.item_topic_show, null, false) as Chip
+        tag.text = s
+
+        holder.binding.chipGroupItemQuestion.addView(tag)
+
+    }
 
     private fun reactions(model: Questions, mainArray: ArrayList<String>, secondArray: ArrayList<String>, txtReaction: TextView, text: String, author: String, title: String, id:String, position: Int){
 
@@ -212,7 +229,8 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: List
                 "title" to model.title,
                 "description" to model.description,
                 "likes" to model.likes,
-                "dislikes" to model.dislikes
+                "dislikes" to model.dislikes,
+                "topics" to model.topics
 
             )//hashMapOf con los nuevos datos
 

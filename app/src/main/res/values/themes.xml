@@ -15,10 +15,8 @@
     </style>
 
     <style name="customToolbarTheme" parent="Theme.AppCompat.Light.NoActionBar">
-
-
-
     </style>
+
 
     <style name="RoundCorner" parent="">
         <item name="cornerFamily">rounded</item>

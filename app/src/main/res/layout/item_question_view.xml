@@ -93,6 +93,26 @@
             app:layout_constraintTop_toBottomOf="@+id/txtTitleQD"
             app:layout_constraintVertical_bias="0" />
 
+
+        <HorizontalScrollView
+            android:id="@+id/hsv_chip_group_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtDescriptionQD">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_group_item_question"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </HorizontalScrollView>
+
         <TextView
             android:id="@+id/txtLikeQD"
             android:layout_width="wrap_content"
@@ -107,7 +127,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtDescriptionQD"
+            app:layout_constraintTop_toBottomOf="@+id/hsv_chip_group_container"
             app:layout_constraintVertical_bias="0" />
 
         <TextView
@@ -123,7 +143,7 @@
             app:layout_constraintEnd_toStartOf="@+id/txtAnswersQD"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/txtLikeQD"
-            app:layout_constraintTop_toBottomOf="@+id/txtDescriptionQD"
+            app:layout_constraintTop_toBottomOf="@+id/hsv_chip_group_container"
             app:layout_constraintVertical_bias="1.0" />
 
         <TextView
@@ -139,7 +159,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtDescriptionQD"
+            app:layout_constraintTop_toBottomOf="@+id/hsv_chip_group_container"
             app:layout_constraintVertical_bias="0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
