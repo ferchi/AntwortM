@@ -296,19 +296,27 @@ class QuestionDetails : AppCompatActivity() {
 
     private fun loadImg(image : CircleImageView, author: String) {
 
-        db.collection("Users").document(author).addSnapshotListener{
-                result, error ->
-            val urlImg = result!!.get("imgProfile").toString()
+        db.collection("Users").document(author).get().addOnSuccessListener {
 
-            try {
-                if(urlImg.isNotEmpty())
-                    Picasso.get().load(urlImg).into(image)
+            val img = it.get("imgProfile") as String?
 
-            } catch (e: Exception) {
+            try{
+
+                if(img!!.isNotEmpty()){
+
+                    Picasso.get().load(img).into(image)
+
+                }//la imagen no esta vacia
+
+            }catch (e: Exception) {
+
                 Picasso.get().load(R.drawable.ic_user_profile).into(image)
-            }
-        }
-    }
+
+            }//try-catch
+
+        }//obtenemos la foto del perfil
+
+    }//loadImage
 
     private fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
 
@@ -384,45 +392,16 @@ class QuestionDetails : AppCompatActivity() {
 
     private fun updateAnswers(model: Answers){
 
-        db.collection("Answers").document(model.id).set(
+        db.collection("Answers").document(model.id).update("likes", model.likes)
+        db.collection("Answers").document(model.id).update("dislikes", model.dislikes)
 
-            hashMapOf(
-
-                "id" to model.id,
-                "nameAuthor" to model.nameAuthor,
-                "author" to model.author,
-                "date" to model.date,
-                "verified" to model.verified,
-                "content" to model.content,
-                "question" to model.question,
-                "likes" to model.likes,
-                "dislikes" to model.dislikes
-
-            )//hashMapOf con los nuevos datos
-
-        )//actualizamos el numero de likes
 
     }//update answers
 
     private fun updateQuestions(model: Questions){
 
-        db.collection("Questions").document(model.id).set(
-
-            hashMapOf(
-
-                "id" to model.id,
-                "name" to model.name,
-                "author" to model.author,
-                "date" to model.date,
-                "title" to model.title,
-                "description" to model.description,
-                "likes" to model.likes,
-                "dislikes" to model.dislikes,
-                "topics" to model.topics
-
-            )//hashMapOf con los nuevos datos
-
-        )//actualizamos el numero de likes
+        db.collection("Questions").document(model.id).update("likes", model.likes)
+        db.collection("Questions").document(model.id).update("dislikes", model.dislikes)
 
     }//update questions
 
