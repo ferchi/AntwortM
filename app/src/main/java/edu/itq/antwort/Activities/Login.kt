@@ -1,6 +1,7 @@
 package edu.itq.antwort.Activities
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -11,6 +12,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
 import edu.itq.antwort.Classes.FirebaseService
@@ -132,13 +134,32 @@ class Login : AppCompatActivity() {
 
             if(txtEmail.text.isNotEmpty() && txtPassword.text.isNotEmpty()){
 
-                FirebaseAuth.getInstance().signInWithEmailAndPassword(txtEmail.text.toString(), txtPassword.text.toString()).addOnCompleteListener {
+                val mAuth = FirebaseAuth.getInstance()
+                mAuth.setLanguageCode("es")
+
+                mAuth.signInWithEmailAndPassword(txtEmail.text.toString(), txtPassword.text.toString()).addOnCompleteListener {
 
                     if(it.isSuccessful){
 
                         updateToken(txtEmail.text.toString(), token)
                         showHome(it.result?.user?.email ?:"")
 
+/*
+                        val user : FirebaseUser = mAuth.currentUser!!
+
+                        if(user.isEmailVerified){
+
+                            updateToken(txtEmail.text.toString(), token)
+                            showHome(it.result?.user?.email ?:"")
+
+                        }//el usuario esta verificado
+
+                        else{
+
+                            showAlert()
+
+                        }//else el usuario no ha validado su email
+*/
                     }//registro exitoso
 
                     else{
@@ -154,11 +175,11 @@ class Login : AppCompatActivity() {
             else{
 
                 if(txtEmail.text.isEmpty()){
-                    
+
                     showAlert("No olvide rellenar el campo de correo electrónico")
-                    
+
                 }//el campo de email está vacío
-                
+
                 else{
 
                     showAlert("No olvide rellenar el campo de contraseña")
@@ -170,6 +191,37 @@ class Login : AppCompatActivity() {
         }//setOnClick btnLogin
 
     }//fun Login
+
+    private fun showAlert(){
+
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Parece que su cuenta no ha sido verificada aun")
+        builder.setMessage("¿Desea reenviar el correo de verificación?")
+
+        builder.setPositiveButton("Sí"
+        ) { _, _ ->
+
+            val mAuth = FirebaseAuth.getInstance()
+            mAuth.setLanguageCode("es")
+
+            val user : FirebaseUser = mAuth.currentUser!!
+            user.sendEmailVerification().addOnSuccessListener {
+
+                Toast.makeText(this, "Hemos reenviado el correo de verificación a su correo", Toast.LENGTH_SHORT).show()
+
+            }.addOnFailureListener{
+
+                Log.d(ContentValues.TAG, "Correo no enviado ${it.message}")
+
+            }//fallo al enviar correo
+
+        }//boton sí
+
+        builder.setNegativeButton("No", null)
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+
+    }//show alert
 
     private fun showHome(email: String){
 

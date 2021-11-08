@@ -197,6 +197,7 @@ class QuestionDetails : AppCompatActivity() {
 
     }//showQuestion
 
+    @SuppressLint("InflateParams")
     private fun addTag(s: CharSequence, holder: QuestionDetailViewHolder) {
         val layoutInflater = LayoutInflater.from(this)
         val tag = layoutInflater.inflate(R.layout.item_topic_show, null, false) as Chip

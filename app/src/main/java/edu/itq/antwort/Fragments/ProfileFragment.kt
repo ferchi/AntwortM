@@ -22,7 +22,7 @@ import edu.itq.antwort.Activities.EditProfileActivity
 import edu.itq.antwort.Classes.Users
 import edu.itq.antwort.Methods
 
-class ProfileFragment() : Fragment() {
+class ProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentProfileBinding
     private lateinit var db : FirebaseFirestore
@@ -108,7 +108,7 @@ class ProfileFragment() : Fragment() {
 
         val query = db.collection("Users").whereEqualTo("email", current)
 
-        query.addSnapshotListener{   value, error ->
+        query.addSnapshotListener{   value, _ ->
             val userInfo = value!!.documents[0]
             binding.tvProfileUsername.text = userInfo.get("name").toString()
             binding.tvProfileCountAnswer.text = userInfo.get("answers").toString()
@@ -119,7 +119,7 @@ class ProfileFragment() : Fragment() {
     private fun loadImg() {
 
         db.collection("Users").document(Methods.getEmail(requireActivity()).toString()).addSnapshotListener{
-                result, error ->
+                result, _ ->
 
             val urlImg = result!!.get("imgProfile").toString()
 
