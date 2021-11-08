@@ -48,6 +48,7 @@
         app:layout_constraintVertical_bias=".1"
         app:layout_constraintHorizontal_bias=".5"
         android:background="@drawable/login_etd"
+        android:inputType="text"
         android:hint="Nombre completo"
         android:drawableLeft="@drawable/ic_baseline_person_24"
         android:drawablePadding="10dp"

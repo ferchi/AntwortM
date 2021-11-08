@@ -49,25 +49,30 @@ class Login : AppCompatActivity() {
     private fun session() {
 
         val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
-        val email= prefs.getString("email", null)
+        //val email = prefs.getString("email", null)
 
-        if(email != null){
+        val currentUser = FirebaseAuth.getInstance().currentUser
 
-            db.collection("Users").document(email).get().addOnSuccessListener {
+        Log.d("current", currentUser.toString())
+        if(currentUser != null){
+
+            val email = currentUser.email
+
+            db.collection("Users").document(email.toString()).get().addOnSuccessListener {
 
                 val updated = it.get("updated") as Boolean
                 val verified = it.get("rol") as String == "facilitador"
 
                 if(!updated && verified){
 
-                    updateAnswersVerified(email)
-                    db.collection("Users").document(email).update("updated", true)
+                    updateAnswersVerified(email.toString())
+                    db.collection("Users").document(email.toString()).update("updated", true)
 
                 }//actualizamos las respuestas anteriores dadas por el usuario
 
             }//obtenemos el campo updated
 
-            showHome(email)
+            showHome(email.toString())
 
         }//email
 

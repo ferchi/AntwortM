@@ -1,26 +1,34 @@
 package edu.itq.antwort.Fragments
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FieldValue
 import edu.itq.antwort.R
 import edu.itq.antwort.Adapters.ViewPagerAdapter
 import edu.itq.antwort.databinding.FragmentProfileBinding
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import com.skydoves.powermenu.MenuAnimation
 import com.skydoves.powermenu.OnMenuItemClickListener
 import com.skydoves.powermenu.PowerMenu
 import com.skydoves.powermenu.PowerMenuItem
 import com.squareup.picasso.Picasso
 import edu.itq.antwort.Activities.EditProfileActivity
+import edu.itq.antwort.Activities.Login
 import edu.itq.antwort.Classes.Users
 import edu.itq.antwort.Methods
+import edu.itq.antwort.Methods.sendEmail
 
 class ProfileFragment : Fragment() {
 
@@ -105,15 +113,30 @@ class ProfileFragment : Fragment() {
     }
 
     private fun updateInfo(){
-
         val query = db.collection("Users").whereEqualTo("email", current)
 
-        query.addSnapshotListener{   value, _ ->
-            val userInfo = value!!.documents[0]
-            binding.tvProfileUsername.text = userInfo.get("name").toString()
-            binding.tvProfileCountAnswer.text = userInfo.get("answers").toString()
-            binding.tvProfileCountQuestion.text = userInfo.get("questions").toString()
+        query.addSnapshotListener { value, _ ->
+            try {
+                val userInfo = value!!.documents[0]
+                binding.tvProfileUsername.text = userInfo.get("name").toString()
+                binding.tvProfileCountAnswer.text = userInfo.get("answers").toString()
+                binding.tvProfileCountQuestion.text = userInfo.get("questions").toString()
+            } catch (e: Exception) {
+
+                val user = Firebase.auth.currentUser!!
+                user.delete()
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Firebase.auth.signOut()
+                            Toast.makeText(requireContext(), "Cuenta eliminada, nos vemos pronto.", Toast.LENGTH_SHORT).show()
+
+                            val intent = Intent(requireContext(),Login::class.java)
+                            startActivity(intent)
+                            requireActivity().finish()
+                        }}
+            }
         }
+
     }
 
     private fun loadImg() {
@@ -166,18 +189,67 @@ class ProfileFragment : Fragment() {
                     requestRol(current)
                 }
                 "Cerrar sesión" -> {
-
+                    closeSession()
                 }
 
                 "Eliminar cuenta" -> {
-
+                    deleteUser()
                 }
             }
         }//onMenuItemClickListener
 
     private fun requestRol(user:String){
+        val body = "¡Hola administrador! \n " +
+                "Un usuario solicita obtener el rol de facilitador, tu decides si se lo otorgas. ;) \n" +
+                "Saludos.\n\n" +
+                "Usuario que realizó la solicitud: $user"
 
+
+        sendEmail("fsalinas628@gmail.com", "Solicitud de rol",body, requireActivity())
     }
 
+    private fun closeSession(){
+        Firebase.auth.signOut()
+        val preferences = requireActivity().getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
+        val prefs = requireActivity().getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
+
+        preferences.edit().clear().apply()
+        prefs.edit().clear().apply()
+
+        val intent = Intent(requireContext(),Login::class.java)
+        startActivity(intent)
+        requireActivity().finish()
+    }
+
+    private fun deleteUser(){
+        db.collection("Questions").whereEqualTo("author",current).get().addOnCompleteListener {
+            it.result!!.documents.forEach { document ->
+                db.collection("Answers").whereEqualTo("question", document.id).get()
+                    .addOnCompleteListener {
+                        it.result!!.documents.forEach { document ->
+                            db.collection("Answers").document(document.id).delete()
+                        }
+                    }
+                db.collection("Questions").document(document.id).delete()
+            }
+        }
+
+            Log.d("current", current)
+
+        db.collection("Answers").whereEqualTo("author",current).get().addOnCompleteListener {
+            it.result!!.documents.forEach { document ->
+                db.collection("Questions").document(document.get("question").toString()).update("anwers", FieldValue.increment(-1))
+                db.collection("Answers").document(document.id).delete()
+            }
+        }
+
+        db.collection("Notifications").whereEqualTo("user",current).get().addOnCompleteListener {
+            it.result!!.documents.forEach { document ->
+                db.collection("Notifications").document(document.id).delete()
+            }
+
+            db.collection("Users").document(current).delete().addOnCompleteListener {  }
+        }
+    }
 
 }//class
