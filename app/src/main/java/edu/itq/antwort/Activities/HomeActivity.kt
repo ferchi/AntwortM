@@ -115,6 +115,7 @@ class HomeActivity : AppCompatActivity() {
     }//fun newQuestion
 
     override fun onBackPressed() {
-        this.moveTaskToBack(true);
+        this.moveTaskToBack(true)
     }//onBackPressed()
+
 }//class

@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.*
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
 import edu.itq.antwort.Classes.FirebaseService
@@ -80,6 +81,8 @@ class Signup : AppCompatActivity() {
 
                                 if (it.isSuccessful) {
 
+
+
                                     db.collection("Users").document(binding.txtEmailSignup.text.toString()).set(
 
                                         hashMapOf(
@@ -97,7 +100,7 @@ class Signup : AppCompatActivity() {
 
                                     )//set
 
-                                    login(it.result?.user?.email ?:"", binding.txtPasswordSignup.text.toString())
+                                    validateEmail()
 
                                 }//if
 
@@ -151,22 +154,9 @@ class Signup : AppCompatActivity() {
 
     }//onBackPressed()
 
-    private fun login(email: String, password: String){
-
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener {
-
-            if(it.isSuccessful)
-                showHome(it.result?.user?.email ?:"")
-            else
-                showAlert("Correo o contraseña incorrectos")
-
-        }//add on complete listener
-
-    }//fun login
-
     private fun validateText(text: String, regex: String) : Boolean{
 
-        val condition =regex.toRegex()
+        val condition = regex.toRegex()
         val matchResult = condition.matchEntire(text)
 
         return matchResult != null
@@ -180,16 +170,24 @@ class Signup : AppCompatActivity() {
 
     }//función show alert
 
-    private fun showHome(email: String){
+    private fun validateEmail(){
 
-        val homeIntent = Intent(this, HomeActivity::class.java).apply {
+        val mAuth = FirebaseAuth.getInstance()
+        mAuth.setLanguageCode("es")
 
-            putExtra("email", email)
+        val user : FirebaseUser = mAuth.currentUser!!
+        user.sendEmailVerification().addOnSuccessListener {
 
-        }//home intent
+            Toast.makeText(this, "Hemos enviado un correo de verificación a su correo", Toast.LENGTH_SHORT).show()
+            onBackPressed()
 
-        startActivity(homeIntent)
+        }.addOnFailureListener{
 
-    }//función showHome
+            Log.d(TAG, "Correo no enviado ${it.message}")
+
+        }//fallo el envio
+
+    } //validar Email
 
 }//class signup
+
