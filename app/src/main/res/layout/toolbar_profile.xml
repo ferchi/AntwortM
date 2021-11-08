@@ -28,7 +28,7 @@
             android:layout_alignParentEnd="true"
             android:layout_gravity="end"
             android:layout_marginRight="15dp"
-            app:srcCompat="@drawable/ic_baseline_dehaze_24"
+            app:srcCompat="@drawable/ic_baseline_more_vert_24"
             app:tint="@color/gray" />
 
     </androidx.appcompat.widget.Toolbar>

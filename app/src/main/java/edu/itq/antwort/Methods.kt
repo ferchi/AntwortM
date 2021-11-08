@@ -2,6 +2,7 @@ package edu.itq.antwort
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
+import co.nedim.maildroidx.MaildroidX
+import co.nedim.maildroidx.MaildroidXType
 
 
 object Methods {
@@ -35,5 +38,28 @@ object Methods {
         toast.duration = Toast.LENGTH_LONG
         toast.setView(layout)
         toast.show()
+    }
+
+    fun sendEmail(destino:String, subject:String, body:String, context: FragmentActivity){
+        MaildroidX.Builder()
+            .smtp("smtp.gmail.com")
+            .smtpUsername("antwort.notifications@gmail.com")
+            .smtpPassword("memomemo")
+            .port("465")
+            .type(MaildroidXType.HTML)
+            .to(destino)
+            .from("antwort.notifications@gmail.com")
+            .subject(subject)
+            .body(body)
+            .onCompleteCallback(object : MaildroidX.onCompleteCallback{
+                override val timeout: Long = 3000
+                override fun onSuccess() {
+                    customToast(context,"Solicitado con éxito")
+                }
+                override fun onFail(errorMessage: String) {
+                    customToast(context,"Revisa tu conexión a internet")
+                }
+            })
+            .mail()
     }
 }
