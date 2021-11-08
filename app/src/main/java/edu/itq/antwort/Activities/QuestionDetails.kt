@@ -175,8 +175,11 @@ class QuestionDetails : AppCompatActivity() {
 
                 loadImg(imgUserQD, model.author)
 
-                if(model.answers >0)
+                if(model.answers > 0)
                     txtAnswersQD.text = model.answers.toString()
+
+                else
+                    txtAnswersQD.text = ""
 
                 txtNameQD.text = model.name
                 txtTitleQD.text = model.title
@@ -273,7 +276,6 @@ class QuestionDetails : AppCompatActivity() {
 
                 reactions(model,null, model.likes, model.dislikes, holder.answerViewBinding.likesIA, user, model.author, model.id, model.question, "Han reaccionado a tu respuesta", "Answers", "content")
                 reactions(model,null, model.dislikes, model.likes, holder.answerViewBinding.dislikeIA, user, model.author, model.id, model.question, "Han reaccionado a tu respuesta", "Answers", "content")
-
 
                 //Mostramos los datos obtenidos
 
