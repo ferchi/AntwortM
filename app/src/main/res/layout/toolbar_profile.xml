@@ -22,7 +22,7 @@
             android:src="@mipmap/logo" />
 
         <ImageView
-            android:id="@+id/imgSearchTB"
+            android:id="@+id/imgProfileTB"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentEnd="true"

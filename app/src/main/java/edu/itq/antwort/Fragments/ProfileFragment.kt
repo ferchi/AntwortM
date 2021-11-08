@@ -1,15 +1,22 @@
 package edu.itq.antwort.Fragments
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import edu.itq.antwort.R
 import edu.itq.antwort.Adapters.ViewPagerAdapter
 import edu.itq.antwort.databinding.FragmentProfileBinding
 import com.google.firebase.firestore.FirebaseFirestore
+import com.skydoves.powermenu.MenuAnimation
+import com.skydoves.powermenu.OnMenuItemClickListener
+import com.skydoves.powermenu.PowerMenu
+import com.skydoves.powermenu.PowerMenuItem
 import com.squareup.picasso.Picasso
 import edu.itq.antwort.Activities.EditProfileActivity
 import edu.itq.antwort.Classes.Users
@@ -20,6 +27,7 @@ class ProfileFragment() : Fragment() {
     private lateinit var binding: FragmentProfileBinding
     private lateinit var db : FirebaseFirestore
     private lateinit var current : String
+    private lateinit var popUpMenu :  PowerMenu.Builder
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,6 +50,9 @@ class ProfileFragment() : Fragment() {
 
         getRol()
         loadImg()
+
+        popUpMenu = PowerMenu.Builder(requireContext())
+
         binding.btnProfileEdit.setOnClickListener {
             val editIntent = Intent(context, EditProfileActivity::class.java).apply {
 
@@ -50,6 +61,11 @@ class ProfileFragment() : Fragment() {
             }//homeIntent
 
             startActivity(editIntent)
+        }
+
+        binding.includeToolbar.imgProfileTB.setOnClickListener {
+            createPopUp()
+            popUpMenu.build().showAsDropDown(it)
         }
 
     }//onViewCreated
@@ -117,5 +133,51 @@ class ProfileFragment() : Fragment() {
             }
         }
     }
+
+    private fun createPopUp(){
+
+        val context = requireContext()
+        popUpMenu = PowerMenu.Builder(requireContext())
+        popUpMenu
+            .addItem(PowerMenuItem("Quiero ser Facilitador", false))
+            .addItem(PowerMenuItem("Cerrar sesión", false))
+            .addItem(PowerMenuItem("Eliminar cuenta", false))
+
+            .setAnimation(MenuAnimation.FADE) // Animation start point (TOP | LEFT).
+            .setMenuRadius(10f) // sets the corner radius.
+            .setMenuShadow(10f) // sets the shadow.
+            .setTextColor(ContextCompat.getColor(context, R.color.black))
+            .setTextGravity(Gravity.CENTER)
+            //.setTextTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD))
+            .setSelectedTextColor(Color.WHITE)
+            .setMenuColor(Color.WHITE)
+            .setSelectedMenuColor(ContextCompat.getColor(context, R.color.orange))
+            .setOnMenuItemClickListener(onMenuItemClickListener)
+            .setAutoDismiss(true)
+            .build()
+    }
+
+    private val onMenuItemClickListener: OnMenuItemClickListener<PowerMenuItem?> =
+        OnMenuItemClickListener<PowerMenuItem?> { _, item ->
+
+            when(item.title)
+            {
+                "Quiero ser Facilitador" -> {
+                    requestRol(current)
+                }
+                "Cerrar sesión" -> {
+
+                }
+
+                "Eliminar cuenta" -> {
+
+                }
+            }
+        }//onMenuItemClickListener
+
+    private fun requestRol(user:String){
+
+    }
+
 
 }//class

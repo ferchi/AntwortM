@@ -31,12 +31,13 @@ import com.skydoves.powermenu.PowerMenuItem
 import com.skydoves.powermenu.PowerMenu
 import android.widget.Toast
 import androidx.core.view.children
+import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.chip.Chip
 import com.google.firebase.firestore.FieldValue
 import com.skydoves.powermenu.OnMenuItemClickListener
 import edu.itq.antwort.Activities.*
 
-class QuestionAdapter (private val fragment: Fragment, private val dataset: List<Questions>):
+class QuestionAdapter (private val fragment: Fragment, private val dataset: MutableList<Questions>):
     RecyclerView.Adapter<QuestionAdapter.ViewHolder>() {
 
     class ViewHolder (val binding: ItemQuestionBinding) : RecyclerView.ViewHolder(binding.root)
@@ -45,6 +46,7 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: List
     private lateinit var popUpMenu :  PowerMenu.Builder
     private var q: String = ""
     private var a: String = ""
+    private var questionPosition:Int = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(ItemQuestionBinding.inflate(LayoutInflater.from(parent.context),parent,false))
@@ -53,7 +55,7 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: List
     override fun getItemCount() = dataset.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
+        questionPosition = holder.bindingAdapterPosition
         val question = dataset[position]
         popUpMenu = PowerMenu.Builder(fragment.requireContext())
         holder.binding.questionOptions.setOnClickListener {
@@ -151,7 +153,6 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: List
         tag.text = s
 
         holder.binding.chipGroupItemQuestion.addView(tag)
-
     }
 
     private fun reactions(model: Questions, mainArray: ArrayList<String>, secondArray: ArrayList<String>, txtReaction: TextView, text: String, author: String, title: String, id:String, position: Int){
@@ -236,7 +237,7 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: List
 
         )//actualizamos el numero de likes
 
-        this.notifyItemChanged(position )
+        this.notifyDataSetChanged()
 
     }//update question
 
@@ -396,6 +397,10 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: List
         deleteAnswers(question)
         deleteNotifications(question)
         Toast.makeText(fragment.requireContext(), "Publicación eliminada", Toast.LENGTH_SHORT).show()
+
+        dataset.removeAt(questionPosition)
+        this.notifyItemRemoved(questionPosition)
+
 
     }//deleteQuestion
 
