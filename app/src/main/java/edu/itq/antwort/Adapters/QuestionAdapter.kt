@@ -117,6 +117,8 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
 
         if(question.answers >0)
             holder.binding.answersIQ.text = question.answers.toString()
+        else
+            holder.binding.answersIQ.text = ""
 
         holder.binding.txtTitleText.text = question.title
         holder.binding.txtItemDescription.text = question.description
