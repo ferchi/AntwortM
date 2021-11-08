@@ -94,7 +94,7 @@ class Signup : AppCompatActivity() {
                                             "updated" to false,
                                             "answers" to 0,
                                             "questions" to 0,
-                                            "imgProfile" to ""
+                                            "imgProfile" to "https://firebasestorage.googleapis.com/v0/b/antwort-872bd.appspot.com/o/profileImages%2Fic_action_profile.png?alt=media&token=0df24c61-cf48-4a74-bbe6-e1bee33361c2"
 
                                         )//hashMap
 

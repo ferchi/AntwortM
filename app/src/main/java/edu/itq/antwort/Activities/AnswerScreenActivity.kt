@@ -1,10 +1,8 @@
 package edu.itq.antwort.Activities
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -123,18 +121,16 @@ class AnswerScreenActivity : AppCompatActivity() {
         binding.txtAnswerAS.requestFocus()
         binding.txtNameAS.text = name
         binding.txtAnswerAS.hint = "Agrega tu respuesta"
+
         binding.imgBackAS.setOnClickListener {
 
             onBackPressed()
-            hideKeyboard()
 
         }//setOnClickListener
 
     }//setup
 
     private fun postAnswer(name: String, rol: String , email: String, question: String, author: String){
-
-        hideKeyboard()
 
         binding.btnPostAnswer.setOnClickListener {
 
@@ -177,7 +173,6 @@ class AnswerScreenActivity : AppCompatActivity() {
 
                 }//if solo creamos notificacion si nosostros no interactuamos con nuestro post
 
-                hideKeyboard()
                 onBackPressed()
 
             }//el campo de respuesta no esta vacio
@@ -192,13 +187,6 @@ class AnswerScreenActivity : AppCompatActivity() {
         }//setOnClickListener btnPostAnswer
 
     }//postAnswer
-
-    private fun hideKeyboard(){
-
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
-
-    }//hideKeyboard
 
     private fun createNotification(title: String, content: String, user:String, question: String, author: String) {
 

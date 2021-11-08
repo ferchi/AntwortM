@@ -1,5 +1,6 @@
 package edu.itq.antwort.Adapters
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -30,8 +31,6 @@ import com.skydoves.powermenu.MenuAnimation
 import com.skydoves.powermenu.PowerMenuItem
 import com.skydoves.powermenu.PowerMenu
 import android.widget.Toast
-import androidx.core.view.children
-import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.chip.Chip
 import com.google.firebase.firestore.FieldValue
 import com.skydoves.powermenu.OnMenuItemClickListener
@@ -65,7 +64,7 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
             if(getEmail() == question.author){
 
                 createPopUpOwner()
-                questionPosition = holder.adapterPosition
+                questionPosition = holder.layoutPosition
 
             }//es su pregunta
 
@@ -101,8 +100,8 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
             fragment.startActivity(homeIntent)
         }
 
-        reactions(question, question.likes, question.dislikes, holder.binding.likesIA, "Útil", question.author, question.title, question.id, position)
-        reactions(question, question.dislikes, question.likes, holder.binding.dislikesIQ, "No útil", question.author, question.title, question.id, position)
+        reactions(question, question.likes, question.dislikes, holder.binding.likesIA, "Útil", question.author, question.title, question.id)
+        reactions(question, question.dislikes, question.likes, holder.binding.dislikesIQ, "No útil", question.author, question.title, question.id)
 
         holder.binding.answersIQ.setOnClickListener {
             val answerIntent = Intent(fragment.requireContext(), AnswerScreenActivity::class.java).apply {
@@ -148,6 +147,7 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
         }
     }//load image
 
+    @SuppressLint("InflateParams")
     private fun addTag(s: CharSequence, holder: ViewHolder) {
         val layoutInflater = LayoutInflater.from(fragment.requireContext())
         val tag = layoutInflater.inflate(R.layout.item_topic_show, null, false) as Chip
@@ -156,7 +156,7 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
         holder.binding.chipGroupItemQuestion.addView(tag)
     }
 
-    private fun reactions(model: Questions, mainArray: ArrayList<String>, secondArray: ArrayList<String>, txtReaction: TextView, text: String, author: String, title: String, id:String, position: Int){
+    private fun reactions(model: Questions, mainArray: ArrayList<String>, secondArray: ArrayList<String>, txtReaction: TextView, text: String, author: String, title: String, id:String){
 
         if(mainArray.isNotEmpty()){
 
@@ -212,31 +212,17 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
 
             }// mi correo no esta en la lista de likes
 
-            updateQuestion(model, position)
+            updateQuestion(model)
 
         }//setOnClickListener
 
     }//reactions
 
-    private fun updateQuestion(model: Questions, position: Int){
+    @SuppressLint("NotifyDataSetChanged")
+    private fun updateQuestion(model: Questions){
 
-        db.collection("Questions").document(model.id).set(
-
-            hashMapOf(
-
-                "id" to model.id,
-                "author" to model.author,
-                "name" to model.name,
-                "date" to model.date,
-                "title" to model.title,
-                "description" to model.description,
-                "likes" to model.likes,
-                "dislikes" to model.dislikes,
-                "topics" to model.topics
-
-            )//hashMapOf con los nuevos datos
-
-        )//actualizamos el numero de likes
+        db.collection("Questions").document(model.id).update("likes", model.likes)
+        db.collection("Questions").document(model.id).update("dislikes", model.dislikes)
 
         this.notifyDataSetChanged()
 
