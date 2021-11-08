@@ -46,7 +46,7 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
     private lateinit var popUpMenu :  PowerMenu.Builder
     private var q: String = ""
     private var a: String = ""
-    private var questionPosition:Int = 0
+    private var questionPosition: Int = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(ItemQuestionBinding.inflate(LayoutInflater.from(parent.context),parent,false))
@@ -55,7 +55,7 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
     override fun getItemCount() = dataset.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        questionPosition = holder.bindingAdapterPosition
+
         val question = dataset[position]
         popUpMenu = PowerMenu.Builder(fragment.requireContext())
         holder.binding.questionOptions.setOnClickListener {
@@ -65,6 +65,7 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
             if(getEmail() == question.author){
 
                 createPopUpOwner()
+                questionPosition = holder.adapterPosition
 
             }//es su pregunta
 
