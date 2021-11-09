@@ -18,8 +18,18 @@ import edu.itq.antwort.Methods
 import edu.itq.antwort.R
 import edu.itq.antwort.databinding.ActivityNewQuestionBinding
 import android.text.Editable
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
+import com.google.gson.Gson
+import edu.itq.antwort.Classes.NotificationData
+import edu.itq.antwort.Classes.PushNotification
+import edu.itq.antwort.Classes.RetrofitInstance
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class QuestionScreenActivity : AppCompatActivity() {
@@ -46,10 +56,9 @@ class QuestionScreenActivity : AppCompatActivity() {
 
         db.collection("Users").document(email).get().addOnSuccessListener {
 
-            postQuestion(email, it.get("name") as String)
+            postQuestion(email, it.get("name") as String, it.get("topics") as MutableList<CharSequence>)
 
         }//obtenemos el nombre del usuario
-
 
         binding.etNewQuestionTopics.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
@@ -142,7 +151,7 @@ class QuestionScreenActivity : AppCompatActivity() {
         }
     }//load image
 
-    private fun postQuestion(email: String?, name : String){
+    private fun postQuestion(email: String?, name : String, userTopics: MutableList<CharSequence>){
 
         binding.btnPostQuestion.setOnClickListener {
 
@@ -171,7 +180,14 @@ class QuestionScreenActivity : AppCompatActivity() {
                     )//hashMap
 
                 )//set
-                
+
+                userTopics.forEach {
+
+                    Firebase.messaging.unsubscribeFromTopic("/topics/$it")
+
+                }//forEach desuscribimos de los topics
+
+                //showNotification("Nueva pregunta", "Nueva pregunta de: ", id, email!!, topicsList)
                 db.collection("Users").document(Methods.getEmail(this)!!).update("questions", FieldValue.increment(1))
 
                 hideKeyboard()
@@ -182,6 +198,12 @@ class QuestionScreenActivity : AppCompatActivity() {
                 }//intent
 
                 startActivity(intent)
+
+                userTopics.forEach {
+
+                    Firebase.messaging.subscribeToTopic("/topics/$it")
+
+                }//forEach desuscribimos de los topics
 
             }//los campos requeridos no estan vacios
 
@@ -207,4 +229,54 @@ class QuestionScreenActivity : AppCompatActivity() {
         }//setOnClickListener
 
     }//postQuestion
+
+    private fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
+
+        try {
+
+            val response = RetrofitInstance.api.postNotification(notification)
+
+            if(response.isSuccessful){
+
+                Log.d(TAG, "Response : ${Gson().toJson(response)}")
+
+            }//if isSuccessful
+
+            else{
+
+                response.errorBody()?.let { Log.e(TAG, it.toString()) }
+
+            }//else
+
+        }catch (e: Exception) {
+
+            Log.e(TAG, e.toString())
+
+        }//try-catch
+
+    }//sendNotifiaction
+
+    private fun showNotification(title: String, message: String, question: String, email:String, topics: MutableList<CharSequence>){
+
+            if(title.isNotEmpty() && message.isNotEmpty() && topics.isNotEmpty()) {
+
+                topics.forEach {item->
+
+                    PushNotification(
+
+                        NotificationData(title, message, question, email),
+                        "/topics/$item"
+
+                    ).also {
+
+                        sendNotification(it)
+
+                    }//also
+
+                }//forEach
+
+            }//if
+
+    }//show Notification
+
 }//class
