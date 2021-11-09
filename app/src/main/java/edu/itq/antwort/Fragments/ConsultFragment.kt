@@ -21,6 +21,8 @@ class ConsultFragment : Fragment() {
     private lateinit var db : FirebaseFirestore
     private lateinit var rev: RecyclerView
     private var questions : MutableList<Questions> = mutableListOf()
+    private lateinit var current : String
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,8 +43,11 @@ class ConsultFragment : Fragment() {
     }
 
     private fun getData(){
-
-        val current = Methods.getEmail(requireActivity())
+        current = try {
+            requireArguments().getString("email")!!
+        } catch (e:Exception){
+            Methods.getEmail(requireActivity()).toString()
+        }
 
         val query = db.collection("Questions").orderBy("date", Query.Direction.DESCENDING).whereEqualTo("author", current)
 

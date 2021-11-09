@@ -60,15 +60,19 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: List<A
 
         }
 
-        holder.binding.imgUserAV.setOnClickListener {
 
-            val intent = Intent(fragment.requireContext(), ProfileActivity::class.java).apply {
+        if(Methods.getEmail(fragment.requireActivity()).toString() != (answer.author)) {
+            holder.binding.imgUserAV.setOnClickListener {
 
-                putExtra("author", answer.author)
+                val homeIntent =
+                    Intent(fragment.requireContext(), ProfileActivity::class.java).apply {
 
-            }//intent
+                        putExtra("email", answer.author)
 
-            fragment.startActivity(intent)
+                    }//homeIntent
+
+                fragment.startActivity(homeIntent)
+            }
         }
 
         reactions(answer, answer.likes, answer.dislikes, holder.binding.likesIA, "Útil", user!!, answer.author, answer.id, answer.question, position)

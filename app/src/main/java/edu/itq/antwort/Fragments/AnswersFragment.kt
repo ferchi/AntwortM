@@ -35,7 +35,7 @@ class AnswersFragment() : Fragment() {
         binding = FragmentAnswersBinding.bind(view)
         db = FirebaseFirestore.getInstance()
         rev = binding.rvAnswers
-        current = Methods.getEmail(requireActivity()).toString()
+
         loadData()
     }
 
@@ -46,6 +46,13 @@ class AnswersFragment() : Fragment() {
     }
 
     private fun loadData(){
+
+        current = try {
+            requireArguments().getString("email")!!
+        } catch (e:Exception){
+            Methods.getEmail(requireActivity()).toString()
+        }
+
         val query = db.collection("Answers").orderBy("date", Query.Direction.DESCENDING).whereEqualTo("author", current)
 
         query.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot>() {
