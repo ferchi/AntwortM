@@ -26,6 +26,7 @@ class NewsFragment : Fragment() {
     private var questions : MutableList<Questions> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
 
     }//onCreate
