@@ -65,6 +65,7 @@ class AnswerScreenActivity : AppCompatActivity() {
             }
         }
     }//load image
+
     private fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
 
         try {

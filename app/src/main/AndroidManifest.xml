@@ -19,6 +19,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
+            android:name=".Activities.AlertsActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activities.EditAnswer"
             android:exported="false" />
         <activity
