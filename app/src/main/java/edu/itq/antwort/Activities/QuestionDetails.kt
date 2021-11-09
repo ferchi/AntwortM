@@ -33,6 +33,7 @@ import com.skydoves.powermenu.PowerMenuItem
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import edu.itq.antwort.Classes.*
+import edu.itq.antwort.Methods
 import edu.itq.antwort.databinding.ItemAnswerViewBinding
 import edu.itq.antwort.databinding.ItemQuestionViewBinding
 import kotlinx.coroutines.CoroutineScope
@@ -141,18 +142,15 @@ class QuestionDetails : AppCompatActivity() {
 
 
                 }//se presiono el boton de opciones
+                if(Methods.getEmail(this@QuestionDetails).toString() != (model.author)) {
 
-                holder.questionViewBinding.imgUserQD.setOnClickListener {
-
-                    val intent = Intent(this@QuestionDetails, ProfileActivity::class.java).apply {
-
-                        putExtra("author", model.author)
-
-                    }//intent
-
-                    startActivity(intent)
-
-                }//si se presiona la foto de perfil te lleva al perfil del usuario
+                    holder.questionViewBinding.imgUserQD.setOnClickListener {
+                        val intent = Intent(this@QuestionDetails, ProfileActivity::class.java).apply {
+                            putExtra("email", model.author)
+                        }//intent
+                        startActivity(intent)
+                    }//si se presiona la foto de perfil te lleva al perfil del usuario
+                }
 
                 //--------------------------------------------- Programación de las reacciones --------------------------------------------- //
 
@@ -196,7 +194,7 @@ class QuestionDetails : AppCompatActivity() {
         }//adapter question
 
         binding.rvQD.adapter = adapter
-        binding.rvQD.layoutManager = LinearLayoutManager(this)
+        binding.rvQD.layoutManager = Methods.LinearLayoutManagerWrapper(this)
 
     }//showQuestion
 
@@ -260,17 +258,19 @@ class QuestionDetails : AppCompatActivity() {
 
                 }//se presiono el boton de opciones
 
-                holder.answerViewBinding.imgUserAV.setOnClickListener {
+                if(Methods.getEmail(this@QuestionDetails).toString() != (model.author)) {
+                    holder.answerViewBinding.imgUserAV.setOnClickListener {
 
-                    val intent = Intent(this@QuestionDetails, ProfileActivity::class.java).apply {
+                        val homeIntent = Intent(this@QuestionDetails, ProfileActivity::class.java).apply {
 
-                        putExtra("author", model.author)
+                                putExtra("email", model.author)
 
-                    }//intent
+                            }//homeIntent
+                        startActivity(homeIntent)
+                    }
+                }
 
-                    startActivity(intent)
 
-                }//si se presiona la foto de perfil te lleva al perfil del usuario
 
                 //Llamamos las funciones necesarias para likes y dislikes
 
@@ -292,7 +292,7 @@ class QuestionDetails : AppCompatActivity() {
         }//answerAdapter
 
         binding.rvAD.adapter = answerAdapter
-        binding.rvAD.layoutManager = LinearLayoutManager(this)
+        binding.rvAD.layoutManager = Methods.LinearLayoutManagerWrapper(this)
 
     }//showAnswers
 

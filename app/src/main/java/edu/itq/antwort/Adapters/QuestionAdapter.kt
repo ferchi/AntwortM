@@ -35,6 +35,7 @@ import com.google.android.material.chip.Chip
 import com.google.firebase.firestore.FieldValue
 import com.skydoves.powermenu.OnMenuItemClickListener
 import edu.itq.antwort.Activities.*
+import edu.itq.antwort.Methods
 
 class QuestionAdapter (private val fragment: Fragment, private val dataset: MutableList<Questions>):
     RecyclerView.Adapter<QuestionAdapter.ViewHolder>() {
@@ -79,16 +80,18 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
             a = question.author
 
         }
+        if(Methods.getEmail(fragment.requireActivity()).toString() != (question.author)) {
+            holder.binding.imgAuthorAI.setOnClickListener {
 
-        holder.binding.imgAuthorAI.setOnClickListener {
+                val homeIntent =
+                    Intent(fragment.requireContext(), ProfileActivity::class.java).apply {
 
-            val homeIntent = Intent(fragment.requireContext(), ProfileActivity::class.java).apply {
+                        putExtra("email", question.author)
 
-                putExtra("id", question.id)
+                    }//homeIntent
 
-            }//homeIntent
-
-            fragment.startActivity(homeIntent)
+                fragment.startActivity(homeIntent)
+            }
         }
 
         holder.binding.cvSI.setOnClickListener {
@@ -99,6 +102,7 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
             }//homeIntent
             fragment.startActivity(homeIntent)
         }
+
 
         reactions(question, question.likes, question.dislikes, holder.binding.likesIA, "Útil", question.author, question.title, question.id)
         reactions(question, question.dislikes, question.likes, holder.binding.dislikesIQ, "No útil", question.author, question.title, question.id)
