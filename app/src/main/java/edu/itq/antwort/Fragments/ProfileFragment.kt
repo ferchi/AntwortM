@@ -213,6 +213,7 @@ class ProfileFragment : Fragment() {
         val preferences = requireActivity().getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
         val prefs = requireActivity().getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
 
+        db.collection("Users").document(current).update("token", "")
         preferences.edit().clear().apply()
         prefs.edit().clear().apply()
 
