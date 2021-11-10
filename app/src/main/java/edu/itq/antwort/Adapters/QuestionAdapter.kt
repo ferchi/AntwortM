@@ -143,6 +143,7 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
 
         }//if la lista no esta vacia
 
+
     }//onBindViewHolder
 
     private fun loadImg(image : CircleImageView, author: String) {
