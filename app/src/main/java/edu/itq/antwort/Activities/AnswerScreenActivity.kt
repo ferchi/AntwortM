@@ -167,7 +167,7 @@ class AnswerScreenActivity : AppCompatActivity() {
 
                     db.collection("Questions").document(question).get().addOnSuccessListener {
 
-                        createNotification("$name ha respondido tu pregunta:", it.get("title") as String, email, question, author)
+                        createNotification("$name ha respondido tu pregunta:", it.get("title") as String, email, question, author, timestamp)
                         showNotification("$name ha respondido tu pregunta:", it.get("title") as String,question,  author)
 
                     }//addOnSuccessListener
@@ -189,7 +189,7 @@ class AnswerScreenActivity : AppCompatActivity() {
 
     }//postAnswer
 
-    private fun createNotification(title: String, content: String, user:String, question: String, author: String) {
+    private fun createNotification(title: String, content: String, user:String, question: String, author: String, timestamp: com.google.firebase.Timestamp) {
 
         val id: String = db.collection("Notifications").document().id
 
@@ -202,7 +202,8 @@ class AnswerScreenActivity : AppCompatActivity() {
                 "author" to user,
                 "content" to content,
                 "question" to question,
-                "user" to author
+                "user" to author,
+                "date" to timestamp
 
             )//hashMapOf con los nuevos datos
 

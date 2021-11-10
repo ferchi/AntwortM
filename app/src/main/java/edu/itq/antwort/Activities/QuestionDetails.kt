@@ -328,19 +328,20 @@ class QuestionDetails : AppCompatActivity() {
 
             if(response.isSuccessful){
 
-                Log.d(TAG, "Response : ${Gson().toJson(response)}")
+                //Log.d(TAG, "Response : ${Gson().toJson(response)}")
 
             }//if isSuccessful
 
             else{
 
-                response.errorBody()?.let { Log.e(TAG, it.toString()) }
+                //response.errorBody()?.let { Log.e(TAG, it.toString()) }
 
             }//else
 
         }catch (e: Exception) {
 
-            Log.e(TAG, e.toString())
+            println("falle")
+            //Log.e(TAG, e.toString())
 
         }//try-catch
 
@@ -371,7 +372,7 @@ class QuestionDetails : AppCompatActivity() {
 
     }//show Notification
 
-    private fun createNotification(title: String, content: String, user:String, question: String, author: String) {
+    private fun createNotification(title: String, content: String, user:String, question: String, author: String, timestamp: com.google.firebase.Timestamp) {
 
         val id: String = db.collection("Notifications").document().id
 
@@ -384,7 +385,8 @@ class QuestionDetails : AppCompatActivity() {
                 "author" to user,
                 "content" to content,
                 "question" to question,
-                "user" to author
+                "user" to author,
+                "date" to timestamp
 
             )//hashMapOf con los nuevos datos
 
@@ -455,7 +457,8 @@ class QuestionDetails : AppCompatActivity() {
 
                     db.collection(collection).document(id).get().addOnSuccessListener {
 
-                        createNotification(title, it.get(content) as String, user, question, author)
+                        val timestamp: com.google.firebase.Timestamp = com.google.firebase.Timestamp.now()
+                        createNotification(title, it.get(content) as String, user, question, author, timestamp)
                         showNotification(title, it.get(content) as String, question, author)
 
                     }//obtenemos el contenido de la respuesta

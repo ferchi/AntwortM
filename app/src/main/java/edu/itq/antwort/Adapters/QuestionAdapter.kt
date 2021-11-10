@@ -209,7 +209,8 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
 
                 if(getEmail() != author){
 
-                    createNotification(title, id, author)
+                    val timestamp: com.google.firebase.Timestamp = com.google.firebase.Timestamp.now()
+                    createNotification(title, id, author, timestamp)
                     showNotification(title, id, author)
 
                 }//creamos notificacion solo si no estoy dandome like a mi mismo
@@ -274,7 +275,9 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
             }//else
 
         }catch (e: Exception) {
+
             Log.e(TAG, e.toString())
+
         }//try-catch
 
     }//sendNotifiaction
@@ -304,7 +307,7 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
 
     }//show Notification
 
-    private fun createNotification(content: String, question: String, author: String) {
+    private fun createNotification(content: String, question: String, author: String, timestamp: com.google.firebase.Timestamp) {
 
         val id: String = db.collection("Notifications").document().id
 
@@ -317,7 +320,8 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
                 "author" to getEmail(),
                 "content" to content,
                 "question" to question,
-                "user" to author
+                "user" to author,
+                "date" to timestamp
 
             )//hashMapOf con los nuevos datos
 
@@ -393,7 +397,6 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
 
         dataset.removeAt(questionPosition)
         this.notifyItemRemoved(questionPosition)
-
 
     }//deleteQuestion
 

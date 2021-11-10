@@ -36,8 +36,13 @@
         <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/activity_alerts.xml" value="0.1793478260869565" />
         <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/activity_new_question.xml" value="0.25" />
         <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/activity_profile.xml" value="0.25" />
+        <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/fragment_home.xml" value="0.25" />
         <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/fragment_news.xml" value="0.1793478260869565" />
+        <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/fragment_notification.xml" value="0.25" />
+        <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/item_notification.xml" value="0.42998585572843" />
         <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/item_question.xml" value="0.25" />
+        <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/toolbar.xml" value="0.25" />
+        <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/toolbar_notifications.xml" value="0.25" />
         <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/toolbar_profile.xml" value="0.25" />
         <entry key="..\:/Users/guill/AndroidStudioProjects/Antwort/app/src/main/res/drawable/bottomnav_bg.xml" value="0.22763157894736843" />
         <entry key="..\:/Users/guill/AndroidStudioProjects/Antwort/app/src/main/res/drawable/btn_edt_profile.xml" value="0.22412280701754386" />

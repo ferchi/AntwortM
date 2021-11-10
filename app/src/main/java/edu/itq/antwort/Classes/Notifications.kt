@@ -7,6 +7,7 @@ data class Notifications(
     val question: String = "",
     val author: String = "",
     val content: String = "",
-    val user: String = ""
+    val user: String = "",
+    val date: com.google.firebase.Timestamp = com.google.firebase.Timestamp.now()
 
 )//class Notifications

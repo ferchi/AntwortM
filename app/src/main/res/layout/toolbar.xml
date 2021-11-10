@@ -28,6 +28,7 @@
             android:layout_alignParentEnd="true"
             android:layout_gravity="end"
             android:layout_marginRight="15dp"
+            app:tint="@color/gray"
             app:srcCompat="@android:drawable/ic_menu_search" />
 
     </androidx.appcompat.widget.Toolbar>

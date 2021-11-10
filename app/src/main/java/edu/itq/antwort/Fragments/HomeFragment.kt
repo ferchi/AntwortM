@@ -38,6 +38,7 @@ class HomeFragment :Fragment(){
         rev = binding.rvHome
 
         search()
+        refreshRecyclerView()
         getData()
     }
 
@@ -51,6 +52,17 @@ class HomeFragment :Fragment(){
         }//setOnClickListener
 
     }//search
+
+    private fun refreshRecyclerView() {
+
+        binding.refreshHome.setOnRefreshListener {
+
+            getData()
+            binding.refreshHome.isRefreshing = false
+
+        }//setOnRefreshListener
+
+    }//refreshRecyclerView
 
     private fun getData(){
         val query = db.collection("Questions").orderBy("date", Query.Direction.DESCENDING)
