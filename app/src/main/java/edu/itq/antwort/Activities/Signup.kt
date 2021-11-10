@@ -81,7 +81,7 @@ class Signup : AppCompatActivity() {
 
                                 if (it.isSuccessful) {
 
-
+                                    val topics: ArrayList<String> = ArrayList()
 
                                     db.collection("Users").document(binding.txtEmailSignup.text.toString()).set(
 
@@ -94,6 +94,7 @@ class Signup : AppCompatActivity() {
                                             "updated" to false,
                                             "answers" to 0,
                                             "questions" to 0,
+                                            "topics" to topics,
                                             "imgProfile" to "https://firebasestorage.googleapis.com/v0/b/antwort-872bd.appspot.com/o/profileImages%2Fic_action_profile.png?alt=media&token=0df24c61-cf48-4a74-bbe6-e1bee33361c2"
 
                                         )//hashMap
@@ -179,7 +180,7 @@ class Signup : AppCompatActivity() {
         user.sendEmailVerification().addOnSuccessListener {
 
             Toast.makeText(this, "Hemos enviado un correo de verificación a su correo", Toast.LENGTH_SHORT).show()
-            onBackPressed()
+            startActivity(Intent(this, Login::class.java))
 
         }.addOnFailureListener{
 

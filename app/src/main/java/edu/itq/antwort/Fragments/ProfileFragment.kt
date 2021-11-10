@@ -1,5 +1,6 @@
 package edu.itq.antwort.Fragments
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -88,14 +89,14 @@ class ProfileFragment : Fragment() {
         //Utilizar el childFragmentManager para evitar errores dentro del tab layout
         val adapter = ViewPagerAdapter(childFragmentManager)
 
-        adapter.addFragment(NewsFragment(), "Recientes")
+        adapter.addFragment(NewsFragment(), "Topics")
         adapter.addFragment(ConsultFragment(), "Consultas")
         adapter.addFragment(AnswersFragment(), "Respuestas")
 
         binding.viewPager.adapter = adapter
         binding.tabs.setupWithViewPager(binding.viewPager)
 
-        binding.tabs.getTabAt(0)!!.setIcon(R.drawable.ic_new_24)
+        binding.tabs.getTabAt(0)!!.setIcon(R.drawable.ic_baseline_topic_24)
         binding.tabs.getTabAt(1)!!.setIcon(R.drawable.ic_hearing_24)
         binding.tabs.getTabAt(2)!!.setIcon(R.drawable.ic_question_24)
 
@@ -193,12 +194,13 @@ class ProfileFragment : Fragment() {
                 }
 
                 "Eliminar cuenta" -> {
-                    deleteUser()
+                    showAlert()
                 }
             }
         }//onMenuItemClickListener
 
     private fun requestRol(user:String){
+
         val body = "¡Hola administrador! \n " +
                 "Un usuario solicita obtener el rol de facilitador, tu decides si se lo otorgas. ;) \n" +
                 "Saludos.\n\n" +
@@ -206,7 +208,24 @@ class ProfileFragment : Fragment() {
 
 
         sendEmail("fsalinas628@gmail.com", "Solicitud de rol",body, requireActivity())
+        sendEmail("ramirezguillermo19@gmail.com", "Solicitud de rol",body, requireActivity())
     }
+
+    private fun showAlert(){
+
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Eliminar cuenta")
+        builder.setMessage("¿Esta seguro que desea elimiar su cuenta?")
+        builder.setPositiveButton("Sí"
+        ) { _, _ ->
+
+            deleteUser()
+        }
+        builder.setNegativeButton("No", null)
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+
+    }//show alert
 
     private fun closeSession(){
 
@@ -228,6 +247,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun deleteUser(){
+
         db.collection("Questions").whereEqualTo("author",current).get().addOnCompleteListener {
             it.result!!.documents.forEach { document ->
                 db.collection("Answers").whereEqualTo("question", document.id).get()
