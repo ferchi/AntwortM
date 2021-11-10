@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.firestore.FirebaseFirestore
+import edu.itq.antwort.Methods
 import edu.itq.antwort.R
 import edu.itq.antwort.databinding.ActivityReportQuestionBinding
 
@@ -100,6 +101,7 @@ class ReportQuestionActivity : AppCompatActivity() {
             ) { _, _ ->
 
                 generateReport(document, author, collection, input.text.toString())
+                sendReport(document, author, collection, input.text.toString())
 
             }//se envio el reporte
             builder.setNegativeButton("Cancelar", null)
@@ -111,9 +113,38 @@ class ReportQuestionActivity : AppCompatActivity() {
         else{
 
             generateReport(document, author, collection, reason)
-
+            sendReport(document, author, collection, reason)
         }//else
 
     }//getReason
+
+    private fun sendReport(id:String, author:String, collection: String, motivo:String){
+
+       var  tipo = if(collection=="Answers"){
+            "pregunta"
+        } else {
+            "respuesta"
+        }
+
+        val body = "¡Hola administrador! <br> " +
+                "Un usuario reportó una $tipo <br><br>" +
+                "Con el motivo de : $motivo <br><br>" +
+                "Usuario que realizó la $tipo : $author <br>" +
+                "Id de la $tipo : ($id)"
+
+
+        Methods.sendEmail(
+            "fsalinas628@gmail.com",
+            "Reporte",
+            body,
+            this
+        )
+        Methods.sendEmail(
+            "ramirezguillermo19@gmail.com",
+            "Reporte",
+            body,
+            this
+        )
+    }
 
 }//class

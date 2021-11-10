@@ -27,6 +27,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import androidx.core.content.ContextCompat
 import android.view.Gravity
+import android.view.View
 import com.skydoves.powermenu.MenuAnimation
 import com.skydoves.powermenu.PowerMenuItem
 import com.skydoves.powermenu.PowerMenu
@@ -142,6 +143,10 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
             }//forEach
 
         }//if la lista no esta vacia
+
+        if(question.edited){
+            holder.binding.tvItemQuestionEdit.visibility = View.VISIBLE
+        }
 
     }//onBindViewHolder
 
