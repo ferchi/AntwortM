@@ -209,17 +209,22 @@ class ProfileFragment : Fragment() {
     }
 
     private fun closeSession(){
-        Firebase.auth.signOut()
-        val preferences = requireActivity().getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
-        val prefs = requireActivity().getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
 
-        db.collection("Users").document(current).update("token", "")
-        preferences.edit().clear().apply()
-        prefs.edit().clear().apply()
+        db.collection("Users").document(current).update("token", "").addOnSuccessListener {
 
-        val intent = Intent(requireContext(),Login::class.java)
-        startActivity(intent)
-        requireActivity().finish()
+            Firebase.auth.signOut()
+            val preferences = requireActivity().getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
+            val prefs = requireActivity().getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
+
+            preferences.edit().clear().apply()
+            prefs.edit().clear().apply()
+
+            val intent = Intent(requireContext(),Login::class.java)
+            startActivity(intent)
+            requireActivity().finish()
+
+        }//eliminamos el token
+
     }
 
     private fun deleteUser(){

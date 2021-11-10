@@ -28,6 +28,7 @@ class NewsFragment : Fragment() {
     private lateinit var questionAdapter: QuestionAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
 
     }//onCreate
