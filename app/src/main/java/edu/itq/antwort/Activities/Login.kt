@@ -54,7 +54,7 @@ class Login : AppCompatActivity() {
         val currentUser = FirebaseAuth.getInstance().currentUser
 
         Log.d("current", currentUser.toString())
-        if(currentUser != null){
+        if(currentUser != null && currentUser.isEmailVerified){
 
             val email = currentUser.email
 
