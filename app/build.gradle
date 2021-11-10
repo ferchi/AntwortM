@@ -5,6 +5,7 @@ plugins {
 }
 
 android {
+
     compileSdk 31
 
     defaultConfig {
@@ -78,5 +79,6 @@ dependencies {
     implementation "com.github.skydoves:powermenu:2.2.0"
 
     //Send Email
-    implementation 'com.github.nedimf:maildroid:v0.0.8-release'
+    implementation 'com.github.nedimf:maildroid:v0.0.7-release'
+
 }

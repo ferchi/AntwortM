@@ -20,7 +20,6 @@ import edu.itq.antwort.Methods
 import edu.itq.antwort.R
 import edu.itq.antwort.databinding.FragmentNotificationBinding
 
-
 class NotificationFragment : Fragment() {
 
     private lateinit var binding: FragmentNotificationBinding
