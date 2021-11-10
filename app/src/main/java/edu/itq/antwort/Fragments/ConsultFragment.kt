@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
@@ -15,14 +16,19 @@ import edu.itq.antwort.Classes.Questions
 import edu.itq.antwort.R
 import edu.itq.antwort.Methods
 import edu.itq.antwort.databinding.FragmentConsultBinding
+import android.os.Build
+
+
+
 
 class ConsultFragment : Fragment() {
+
     private lateinit var binding: FragmentConsultBinding
     private lateinit var db : FirebaseFirestore
     private lateinit var rev: RecyclerView
     private var questions : MutableList<Questions> = mutableListOf()
     private lateinit var current : String
-
+    private lateinit var questionAdapter: QuestionAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +46,11 @@ class ConsultFragment : Fragment() {
         rev = binding.rvConsult
 
         getData()
+
+        binding.swLayoutContainer.setOnRefreshListener {
+            getData()
+            binding.swLayoutContainer.isRefreshing = false
+        }
     }
 
     private fun getData(){
@@ -54,10 +65,12 @@ class ConsultFragment : Fragment() {
         query.get().addOnCompleteListener {
             questions.clear()
             questions.addAll(it.result!!.toObjects(Questions::class.java))
+            questionAdapter = QuestionAdapter(this@ConsultFragment, questions)
+
             rev.apply {
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(context)
-                adapter = QuestionAdapter(this@ConsultFragment, questions)
+                adapter = questionAdapter
             }
         }
     }
