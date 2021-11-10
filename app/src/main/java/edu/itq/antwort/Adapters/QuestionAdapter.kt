@@ -58,6 +58,7 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
 
         val question = dataset[position]
         popUpMenu = PowerMenu.Builder(fragment.requireContext())
+
         holder.binding.questionOptions.setOnClickListener {
 
             popUpMenu.build().clearPreference()
@@ -79,7 +80,8 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
             q = question.id
             a = question.author
 
-        }
+        }//holder.binding.questionOptions.setOnClickListener
+
         if(Methods.getEmail(fragment.requireActivity()).toString() != (question.author)) {
             holder.binding.imgAuthorAI.setOnClickListener {
 
@@ -102,7 +104,6 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
             }//homeIntent
             fragment.startActivity(homeIntent)
         }
-
 
         reactions(question, question.likes, question.dislikes, holder.binding.likesIA, "Útil", question.author, question.title, question.id)
         reactions(question, question.dislikes, question.likes, holder.binding.dislikesIQ, "No útil", question.author, question.title, question.id)
@@ -129,13 +130,20 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
         holder.binding.txtAuthor.text = question.name
         loadImg(holder.binding.imgAuthorAI, question.author)
 
-        if ((holder.binding.chipGroupItemQuestion.childCount) == 0){
-            question.topics.forEach {
-                addTag(it, holder)
-            }
-        }
+        holder.binding.chipGroupItemQuestion.removeAllViews()
 
-    }
+        if (question.topics.isNotEmpty()){
+
+            question.topics.forEach {topic ->
+
+                Log.d("topics", "A la pregunta ${question.id} se le asigna el topico $topic")
+                addTag(topic, holder.binding.chipGroupItemQuestion)
+
+            }//forEach
+
+        }//if la lista no esta vacia
+
+    }//onBindViewHolder
 
     private fun loadImg(image : CircleImageView, author: String) {
 
@@ -154,13 +162,15 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
     }//load image
 
     @SuppressLint("InflateParams")
-    private fun addTag(s: CharSequence, holder: ViewHolder) {
+    private fun addTag(s: CharSequence, holder: com.google.android.material.chip.ChipGroup) {
+
         val layoutInflater = LayoutInflater.from(fragment.requireContext())
         val tag = layoutInflater.inflate(R.layout.item_topic_show, null, false) as Chip
         tag.text = s
 
-        holder.binding.chipGroupItemQuestion.addView(tag)
-    }
+        holder.addView(tag)
+
+    }//agregamos las tags a las preguntas
 
     private fun reactions(model: Questions, mainArray: ArrayList<String>, secondArray: ArrayList<String>, txtReaction: TextView, text: String, author: String, title: String, id:String){
 
