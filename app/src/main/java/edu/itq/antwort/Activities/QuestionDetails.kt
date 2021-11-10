@@ -183,6 +183,10 @@ class QuestionDetails : AppCompatActivity() {
                 txtTitleQD.text = model.title
                 txtDescriptionQD.text = model.description
 
+                if(model.edited){
+                    holder.questionViewBinding.tvItemQuestionEdit.visibility = View.VISIBLE
+                }
+
                 if ((holder.questionViewBinding.chipGroupItemQuestion.childCount) == 0){
                     model.topics.forEach {
                         addTag(it, holder)
@@ -270,7 +274,9 @@ class QuestionDetails : AppCompatActivity() {
                     }
                 }
 
-
+                if(model.edited){
+                    holder.answerViewBinding.ivItemAnswerEdit.visibility = View.VISIBLE
+                }
 
                 //Llamamos las funciones necesarias para likes y dislikes
 

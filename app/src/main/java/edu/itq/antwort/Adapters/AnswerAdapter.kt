@@ -60,6 +60,10 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: List<A
 
         }
 
+        if(answer.edited){
+            holder.binding.ivItemAnswerEdit.visibility = View.VISIBLE
+        }
+
 
         if(Methods.getEmail(fragment.requireActivity()).toString() != (answer.author)) {
             holder.binding.imgUserAV.setOnClickListener {

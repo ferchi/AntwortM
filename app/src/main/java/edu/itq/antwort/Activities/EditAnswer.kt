@@ -53,6 +53,8 @@ class EditAnswer : AppCompatActivity() {
             if(binding.txtAnswerEA.text.isNotEmpty()){
 
                 db.collection("Answers").document(id).update("content", binding.txtAnswerEA.text.toString())
+                db.collection("Answers").document(id).update("edited", true)
+
                 Toast.makeText(this, "Respuesta actualizada con éxito", Toast.LENGTH_SHORT).show()
                 onBackPressed()
 

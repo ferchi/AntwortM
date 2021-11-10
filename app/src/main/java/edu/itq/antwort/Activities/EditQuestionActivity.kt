@@ -131,6 +131,7 @@ class EditQuestionActivity : AppCompatActivity() {
             db.collection("Questions").document(id).update("title", title)
             db.collection("Questions").document(id).update("description", description)
             db.collection("Questions").document(id).update("topics", topics)
+            db.collection("Questions").document(id).update("edited",true)
 
             Toast.makeText(this, "Publicación actualizada con éxito", Toast.LENGTH_SHORT).show()
 

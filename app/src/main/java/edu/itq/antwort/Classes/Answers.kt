@@ -10,6 +10,7 @@ data class Answers(
     val question: String = "",
     val verified: Boolean = false,
     val likes: ArrayList<String> = ArrayList(),
-    val dislikes: ArrayList<String> = ArrayList()
+    val dislikes: ArrayList<String> = ArrayList(),
+    val edited: Boolean = false
 
 )
