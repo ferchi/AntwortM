@@ -72,7 +72,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage-ktx'
 
     //Corregir error de firestore en android 11
-    implementation "io.grpc:grpc-okhttp:1.32.2"
+    implementation "io.grpc:grpc-okhttp:1.41.0"
 
     //Libreria para los PopUp
     implementation "com.github.skydoves:powermenu:2.2.0"

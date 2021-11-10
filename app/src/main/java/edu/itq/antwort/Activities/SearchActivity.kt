@@ -11,6 +11,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import edu.itq.antwort.Classes.Questions
 import edu.itq.antwort.Classes.SearchAdapter
 import edu.itq.antwort.databinding.ActivitySearchBinding
+import java.text.Normalizer
+import java.util.Collections.replaceAll
 
 class SearchActivity : AppCompatActivity() {
 
@@ -102,9 +104,9 @@ class SearchActivity : AppCompatActivity() {
 
                     val modelQuestion = Questions(question.author, question.name, question.description, question.title, question.id, question.answers, question.date, question.likes, question.dislikes, question.topics)
 
-                    if(modelQuestion.title.lowercase().contains(search.lowercase())
-                        || modelQuestion.description.lowercase().contains(search.lowercase())
-                        || modelQuestion.topics.contains(search.lowercase())){
+                    if(normalizeText(modelQuestion.title.lowercase()).contains(normalizeText(search.lowercase()))
+                        || normalizeText(modelQuestion.description.lowercase()).contains(normalizeText(search.lowercase()))
+                        || modelQuestion.topics.contains(normalizeText(search.lowercase()))){
 
                         questionsAux.add(modelQuestion)
 
@@ -132,5 +134,16 @@ class SearchActivity : AppCompatActivity() {
         }//else
 
     }//searchQuestions
+
+    private fun normalizeText(text: String):String{
+
+        var normalizedText = ""
+
+        normalizedText = Normalizer.normalize(text, Normalizer.Form.NFD)
+        normalizedText = normalizedText.replace("[\\p{InCombiningDiacriticalMarks}]", "")
+
+        return normalizedText
+
+    }//normalizaText
 
 }//class
