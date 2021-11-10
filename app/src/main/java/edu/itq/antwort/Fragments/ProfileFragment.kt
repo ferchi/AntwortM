@@ -201,9 +201,9 @@ class ProfileFragment : Fragment() {
 
     private fun requestRol(user:String){
 
-        val body = "¡Hola administrador! \n " +
-                "Un usuario solicita obtener el rol de facilitador, tu decides si se lo otorgas. ;) \n" +
-                "Saludos.\n\n" +
+        val body = "¡Hola administrador! <br> " +
+                "Un usuario solicita obtener el rol de facilitador, tu decides si se lo otorgas. ;) <br><br>" +
+                "Saludos.<br><br>" +
                 "Usuario que realizó la solicitud: $user"
 
 
