@@ -1,6 +1,7 @@
 package edu.itq.antwort.Fragments
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -24,6 +25,7 @@ class NewsFragment : Fragment() {
     private lateinit var rev: RecyclerView
     private val currentUser = FirebaseAuth.getInstance().currentUser?.email
     private var questions : MutableList<Questions> = mutableListOf()
+    private lateinit var questionAdapter: QuestionAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,14 +41,16 @@ class NewsFragment : Fragment() {
 
         setup()
 
-        db.collection("Users").document(currentUser!!).get().addOnSuccessListener {
-
-            getData(it.get("topics") as ArrayList<String>)
-
-        }//obtener los topicos a los que esta suscrito el usuario
-
+        binding.swLayoutContainer.setOnRefreshListener {
+            questions.clear()
+            getData()
+            binding.swLayoutContainer.isRefreshing = false
+        }
+        getData()
 
     }//onViewCreate
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,35 +71,42 @@ class NewsFragment : Fragment() {
 
     }//private fun
 
-    private fun getData(topics: ArrayList<String>){
+    private fun getData(){
 
-        topics.forEach {topic->
+        db.collection("Users").document(currentUser!!).get().addOnSuccessListener {
 
-            val query = db.collection("Questions").orderBy("date", Query.Direction.DESCENDING).whereArrayContains("topics", topic)
 
-            query.get().addOnCompleteListener {
+            val topics = (it.get("topics") as ArrayList<String>)
+            if(topics.size > 0) {
+                topics.forEach { topic ->
 
-                //questions.clear()
-                questions.addAll(it.result!!.toObjects(Questions::class.java))
+                    val query =
+                        db.collection("Questions").orderBy("date", Query.Direction.DESCENDING)
+                            .whereArrayContains("topics", topic)
+                    query.get().addOnCompleteListener {
 
-                if(topics.indexOf(topic) == topics.lastIndex){
+                        questions.addAll(it.result!!.toObjects(Questions::class.java))
 
-                    rev.apply {
+                        if (topics.indexOf(topic) == topics.lastIndex) {
+                            questionAdapter = QuestionAdapter(this@NewsFragment, questions)
 
-                        setHasFixedSize(true)
-                        layoutManager = LinearLayoutManager(context)
-                        adapter = QuestionAdapter(this@NewsFragment, questions)
-
+                            rev.apply {
+                                setHasFixedSize(true)
+                                layoutManager = LinearLayoutManager(context)
+                                adapter = questionAdapter
+                            }
+                        }//if
                     }
-
-                }//if
-
+                }//forEach
+            } else {
+                questionAdapter = QuestionAdapter(this@NewsFragment, questions)
+                rev.apply {
+                    setHasFixedSize(true)
+                    layoutManager = LinearLayoutManager(context)
+                    adapter = questionAdapter
+                }
             }
-
-        }//forEach
-
-
-
+        }//obtener los topicos a los que esta suscrito el usuario
     }//getData
 
 }//class
