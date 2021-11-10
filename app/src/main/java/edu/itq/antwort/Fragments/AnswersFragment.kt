@@ -18,11 +18,13 @@ import edu.itq.antwort.Methods
 import edu.itq.antwort.databinding.FragmentAnswersBinding
 
 class AnswersFragment() : Fragment() {
+
     private lateinit var binding: FragmentAnswersBinding
     private lateinit var db : FirebaseFirestore
     private lateinit var rev: RecyclerView
     private var answers : MutableList<Answers> = mutableListOf()
     private lateinit var current : String
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,12 +39,12 @@ class AnswersFragment() : Fragment() {
         rev = binding.rvAnswers
 
         loadData()
-    }
 
-    override fun onStart() {
-        super.onStart()
 
-        loadData()
+        binding.swLayoutContainer.setOnRefreshListener {
+            loadData()
+            binding.swLayoutContainer.isRefreshing = false
+        }
     }
 
     private fun loadData(){

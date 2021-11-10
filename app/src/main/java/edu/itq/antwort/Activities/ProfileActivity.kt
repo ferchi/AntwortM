@@ -33,6 +33,13 @@ class ProfileActivity : AppCompatActivity() {
 
         setContentView(view)
 
+        binding.includeToolbar.ivBack.visibility = View.VISIBLE
+        binding.includeToolbar.imgProfileTB.visibility = View.INVISIBLE
+
+        binding.includeToolbar.ivBack.setOnClickListener {
+            onBackPressed()
+        }
+
         val bundle = intent.extras
         email = bundle?.getString("email").toString()
 
