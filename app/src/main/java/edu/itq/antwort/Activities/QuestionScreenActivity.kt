@@ -1,8 +1,11 @@
 package edu.itq.antwort.Activities
 
 import android.annotation.SuppressLint
+import android.app.ProgressDialog
+import android.content.ClipData
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextWatcher
@@ -23,6 +26,8 @@ import android.view.KeyEvent
 import android.view.View
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.google.gson.Gson
 import edu.itq.antwort.Classes.NotificationData
 import edu.itq.antwort.Classes.PushNotification
@@ -30,6 +35,9 @@ import edu.itq.antwort.Classes.RetrofitInstance
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import androidx.recyclerview.widget.LinearLayoutManager
+import edu.itq.antwort.Adapters.FileAdapter
+import java.io.File
 
 
 class QuestionScreenActivity : AppCompatActivity() {
@@ -37,6 +45,18 @@ class QuestionScreenActivity : AppCompatActivity() {
     private lateinit var binding: ActivityNewQuestionBinding
     private val db = FirebaseFirestore.getInstance()
     private var topicsList : MutableList<CharSequence> = mutableListOf()
+    val id: String = db.collection("Questions").document().id
+
+    lateinit var storage : StorageReference
+    val fileBack = 1
+    private var fileData : Uri? = null
+    private var clipData : ClipData? = null
+    private var dataUri : ArrayList<Uri> = ArrayList()
+    private var ogFileNames : ArrayList <String> = ArrayList()
+    private var dbFileNames : ArrayList <String> = ArrayList()
+
+
+    private lateinit var fileAdapter : FileAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -48,8 +68,10 @@ class QuestionScreenActivity : AppCompatActivity() {
 
         val bundle = intent.extras
         val email = bundle?.getString("email")
+        storage = FirebaseStorage.getInstance().reference.child("Files/$id")
 
         supportActionBar?.hide()
+
 
         // setup
         setup(email!!)
@@ -95,7 +117,103 @@ class QuestionScreenActivity : AppCompatActivity() {
             }
         })
 
+        binding.ivNewQuestionUpload.setOnClickListener {
+            val intent = Intent(Intent.ACTION_GET_CONTENT)
+            intent.type = "*/*"
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            startActivityForResult(Intent.createChooser(intent, "Select File"),fileBack)
+        }
+
     }//on onCreate
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(requestCode == fileBack){
+
+            if (resultCode == RESULT_OK){
+
+                fileData = data!!.data
+                clipData = data.clipData
+
+                if(clipData != null)
+                {
+                    ogFileNames.clear()
+                    val clipCount = clipData!!.itemCount
+                    Log.d("subir", "clipCount: $clipCount")
+                    var currentFile = 0
+
+                    while(currentFile < clipCount)
+                    {
+
+                        val file = clipData!!.getItemAt(currentFile).uri
+                        val fileName = File(file.path!!).name
+
+                        dataUri.add(file)
+                        ogFileNames.add(fileName)
+                        Log.d("subir", "clipData: $fileName")
+
+                        currentFile++
+                    }
+
+                    fileAdapter = FileAdapter(this,ogFileNames)
+
+                    binding.rvFiles.apply {
+                        setHasFixedSize(true)
+                        layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
+                        adapter = fileAdapter
+                    }
+                }
+                else if(fileData!=null)
+                {
+                    ogFileNames.clear()
+
+                    Log.d("subir", "fileData: ${File(fileData!!.path!!).name}")
+                    ogFileNames.add(File(fileData!!.path!!).name)
+                    fileAdapter = FileAdapter(this,ogFileNames)
+
+                    binding.rvFiles.apply {
+                        setHasFixedSize(true)
+                        layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
+                        adapter = fileAdapter
+                    }
+                }
+            }
+        }
+    }
+
+    private fun uploadFile(){
+
+        val progressDialog = ProgressDialog(this)
+        progressDialog.setMessage("Subiendo archivos")
+        progressDialog.setCancelable(false)
+        progressDialog.show()
+
+
+        var fileName : StorageReference
+        Log.d("subir", "clipData: $clipData")
+
+        if(clipData != null) {
+            var currentFile = 0
+            dataUri.forEach { file ->
+                fileName= storage.child(File(file.path!!).name)
+                fileName.putFile(file)
+                dbFileNames.add("${id}_${currentFile}")
+                currentFile ++
+            }
+            db.collection("Questions").document(id).update("files",ogFileNames)
+        }
+
+        else if(fileData!=null)
+        {
+            fileName = storage.child(File(fileData!!.path!!).name)
+            fileName.putFile(fileData!!)
+            db.collection("Questions").document(id).update("files",ogFileNames)
+        }
+    }
+
 
     @SuppressLint("InflateParams")
     private fun addTag(s: CharSequence) {
@@ -157,7 +275,7 @@ class QuestionScreenActivity : AppCompatActivity() {
 
             if(binding.edtTitle.text.toString().isNotEmpty() && binding.edtDescription.text.toString().isNotEmpty()){
 
-                val id: String = db.collection("Questions").document().id
+
                 val timestamp: com.google.firebase.Timestamp = com.google.firebase.Timestamp.now()
                 val likes: ArrayList<String> = ArrayList()
                 val dislikes: ArrayList<String> = ArrayList()
@@ -205,6 +323,7 @@ class QuestionScreenActivity : AppCompatActivity() {
 
                 }//forEach desuscribimos de los topics
 
+                uploadFile()
             }//los campos requeridos no estan vacios
 
             else{
@@ -278,5 +397,6 @@ class QuestionScreenActivity : AppCompatActivity() {
             }//if
 
     }//show Notification
+
 
 }//class

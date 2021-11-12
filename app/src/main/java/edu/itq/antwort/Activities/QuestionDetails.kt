@@ -25,6 +25,8 @@ import androidx.core.content.ContextCompat
 import com.google.android.material.chip.Chip
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Query
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.google.gson.Gson
 import com.skydoves.powermenu.MenuAnimation
 import com.skydoves.powermenu.OnMenuItemClickListener
@@ -32,6 +34,7 @@ import com.skydoves.powermenu.PowerMenu
 import com.skydoves.powermenu.PowerMenuItem
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
+import edu.itq.antwort.Adapters.FileAdapter
 import edu.itq.antwort.Classes.*
 import edu.itq.antwort.Methods
 import edu.itq.antwort.databinding.ItemAnswerViewBinding
@@ -57,6 +60,10 @@ class QuestionDetails : AppCompatActivity() {
     private var parent: String = ""
     private var collec: String = ""
     private var user: String = ""
+
+
+    private lateinit var filesFolder : StorageReference
+    private  var fileNames : ArrayList<String> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -119,6 +126,8 @@ class QuestionDetails : AppCompatActivity() {
             @SuppressLint("SetTextI18n")
             override fun onBindViewHolder(holder: QuestionDetailViewHolder, position: Int, model: Questions) {
 
+
+
                 holder.questionViewBinding.imgOptionQV.setOnClickListener {
 
                     popUpMenu.build().clearPreference()
@@ -140,6 +149,18 @@ class QuestionDetails : AppCompatActivity() {
                     a = model.author
                     collec = "Questions"
 
+                    filesFolder = FirebaseStorage.getInstance().reference.child("Files/${model.id}")
+                    filesFolder.listAll().result!!.items.forEach { file ->
+                        fileNames.add(file.name)
+                    }
+
+                    val fileAdapter = FileAdapter(this@QuestionDetails,fileNames)
+
+                    holder.questionViewBinding.rvFiles.apply {
+                        setHasFixedSize(true)
+                        layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
+                        adapter = fileAdapter
+                    }
 
                 }//se presiono el boton de opciones
                 if(Methods.getEmail(this@QuestionDetails).toString() != (model.author)) {

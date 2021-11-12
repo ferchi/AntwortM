@@ -14,6 +14,7 @@ data class Questions(
     val likes: ArrayList<String> = ArrayList(),
     val dislikes: ArrayList<String> = ArrayList(),
     val topics: ArrayList<String> = ArrayList(),
-    val edited: Boolean = false
+    val edited: Boolean = false,
+    val files: ArrayList<String> = ArrayList()
 
     )//class
