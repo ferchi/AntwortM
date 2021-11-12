@@ -50,12 +50,30 @@ class EditProfileActivity : AppCompatActivity() {
             changeImg()
         }
 
-        binding.btnEditUsername.setOnClickListener {
-            db.collection("Users").document(Methods.getEmail(this)!!).update("name", binding.etEditUsername.text.toString())
-            updateAnswers(Methods.getEmail(this)!!, binding.etEditUsername.text.toString())
-            updateQuestions(Methods.getEmail(this)!!, binding.etEditUsername.text.toString())
-            Methods.customToast(this,"Actualizado")
+        binding.imgBackEditProfile.setOnClickListener {
+
             onBackPressed()
+
+        }//se presiono regresar
+
+        binding.btnEditUsername.setOnClickListener {
+
+            if(binding.etEditUsername.text.toString().isNotEmpty()){
+
+                db.collection("Users").document(Methods.getEmail(this)!!).update("name", binding.etEditUsername.text.toString())
+                updateAnswers(Methods.getEmail(this)!!, binding.etEditUsername.text.toString())
+                updateQuestions(Methods.getEmail(this)!!, binding.etEditUsername.text.toString())
+                Methods.customToast(this,"Actualizado")
+                onBackPressed()
+
+            }//el nuevo nombre no esta vacio
+
+            else{
+
+                Methods.customToast(this, "No deje el nombre vacio")
+
+            }//el nuevo nombre esta vacio
+
         }
         loadImg()
 
@@ -99,7 +117,7 @@ class EditProfileActivity : AppCompatActivity() {
         queryRol.get().addOnCompleteListener {
             val name = it.result!!.toObject(Users::class.java)!!.name
 
-            binding.etEditUsername.hint = name
+            binding.etEditUsername.setText(name)
         }
     }
     private fun changeImg(): Boolean {
