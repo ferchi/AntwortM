@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
@@ -45,6 +46,20 @@ class ProfileActivity : AppCompatActivity() {
 
         setUpTabs()
         db = FirebaseFirestore.getInstance()
+
+        binding.btnNewQuestion.setOnClickListener {
+
+            val currentUser = FirebaseAuth.getInstance().currentUser?.email
+
+            val questionIntent = Intent(this, QuestionScreenActivity::class.java).apply {
+
+                putExtra("email", currentUser)
+
+            }//home intent
+
+            startActivity(questionIntent)
+
+        }//new Question
 
         getRol()
         loadImg()

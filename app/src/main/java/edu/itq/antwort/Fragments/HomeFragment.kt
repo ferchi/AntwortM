@@ -8,11 +8,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import edu.itq.antwort.Activities.EditProfileActivity
 import edu.itq.antwort.Activities.SearchActivity
 import edu.itq.antwort.Adapters.QuestionAdapter
 import edu.itq.antwort.Classes.Questions
+import edu.itq.antwort.Methods
 import edu.itq.antwort.R
 import edu.itq.antwort.databinding.FragmentHomeBinding
 
@@ -20,6 +23,7 @@ class HomeFragment :Fragment(){
     private lateinit var binding: FragmentHomeBinding
     private lateinit var db : FirebaseFirestore
     private lateinit var rev: RecyclerView
+    private val currentUser = FirebaseAuth.getInstance().currentUser?.email
     private var questions : MutableList<Questions> = mutableListOf()
 
     override fun onCreateView(
@@ -37,10 +41,41 @@ class HomeFragment :Fragment(){
         db = FirebaseFirestore.getInstance()
         rev = binding.rvHome
 
+        db.collection("Users").document(currentUser!!).get().addOnSuccessListener {
+
+            val show = (it.get("specialty") as String).isEmpty()
+
+            setup(show)
+
+        }//obtenemos el rol del usuario
+
+
         search()
         refreshRecyclerView()
         getData()
     }
+
+    private fun setup(show: Boolean){
+
+        if(show){
+
+            binding.completeProfile.visibility = View.VISIBLE
+
+        }//si los dato no estan actualizados mostramos el mensaje
+
+        binding.completeProfile.setOnClickListener {
+
+            val intent = Intent(context, EditProfileActivity::class.java).apply {
+
+                putExtra("current", currentUser)
+
+            }//apply
+
+            startActivity(intent)
+
+        }//setOnClickListener
+
+    }//setup
 
     private fun search(){
 

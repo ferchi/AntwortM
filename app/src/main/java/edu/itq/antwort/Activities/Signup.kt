@@ -31,7 +31,7 @@ class Signup : AppCompatActivity() {
 
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (!task.isSuccessful) {
-                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                Log.w(TAG, "Error al guardar el token de FCM", task.exception)
             }//if isSuccessful
 
             val token = task.result
@@ -43,7 +43,6 @@ class Signup : AppCompatActivity() {
         // Setup
 
         setup()
-
 
     }//fun onCreate
 
@@ -60,7 +59,6 @@ class Signup : AppCompatActivity() {
     }//fun setup
 
     @SuppressLint("UseSwitchCompatOrMaterialCode")
-
     private fun register(recipientToken: String){
 
         title = "SignUp"
@@ -73,8 +71,16 @@ class Signup : AppCompatActivity() {
 
                     if(binding.txtPasswordSignup.text.toString() == binding.txtConfirmPasswordSignup.text.toString()){
 
-                        if(validateText(binding.txtEmailSignup.text.toString(), "[\\w-\\.]+\\@((queretaro.tecnm.mx)|(mail.itq.edu.mx))")){
+                        if(validateText(binding.txtEmailSignup.text.toString(), "[\\w-\\.]+\\@((queretaro.tecnm.mx))")){
 
+                            val isStudent = validateText(binding.txtEmailSignup.text.toString(), "[lL][cC]?[0-9]{8}@(queretaro.tecnm.mx)")
+                            val rol = if(isStudent) "estudiante" else "docente"
+/*
+                            if(isStudent)
+                                Toast.makeText(this, "Correo de alumno", Toast.LENGTH_SHORT).show()
+                            else
+                                Toast.makeText(this, "Correo de docente", Toast.LENGTH_SHORT).show()
+*/
                             val mAuth = FirebaseAuth.getInstance()
 
                             mAuth.createUserWithEmailAndPassword(binding.txtEmailSignup.text.toString(), binding.txtPasswordSignup.text.toString()).addOnCompleteListener {
@@ -89,7 +95,8 @@ class Signup : AppCompatActivity() {
 
                                             "email" to binding.txtEmailSignup.text.toString(),
                                             "name" to binding.txtNameSignup.text.toString(),
-                                            "rol" to "estudiante",
+                                            "rol" to rol,
+                                            "specialty" to "",
                                             "token" to recipientToken,
                                             "updated" to false,
                                             "answers" to 0,

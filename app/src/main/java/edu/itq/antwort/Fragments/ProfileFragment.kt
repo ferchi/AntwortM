@@ -206,8 +206,6 @@ class ProfileFragment : Fragment() {
                 "Saludos.<br><br>" +
                 "Usuario que realizó la solicitud: $user"
 
-
-        sendEmail("fsalinas628@gmail.com", "Solicitud de rol",body, requireActivity())
         sendEmail("ramirezguillermo19@gmail.com", "Solicitud de rol",body, requireActivity())
     }
 
