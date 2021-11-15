@@ -102,11 +102,6 @@ class Signup : AppCompatActivity() {
                                             "answers" to 0,
                                             "questions" to 0,
                                             "topics" to topics,
-                                            "qlikes" to 0,
-                                            "qdislikes" to 0,
-                                            "alikes" to 0,
-                                            "adislikes" to 0,
-                                            "otherAnswered" to 0,
                                             "imgProfile" to "https://firebasestorage.googleapis.com/v0/b/antwort-872bd.appspot.com/o/profileImages%2Fic_action_profile.png?alt=media&token=0df24c61-cf48-4a74-bbe6-e1bee33361c2"
 
                                         )//hashMap
