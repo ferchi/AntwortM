@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
@@ -42,6 +43,7 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: Mutabl
     private var que: String = ""
     private var a: String = ""
     private var answerPosition: Int = 0
+    private val currentUser = FirebaseAuth.getInstance().currentUser?.email
     
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(ItemAnswerViewBinding.inflate(LayoutInflater.from(parent.context),parent,false))
@@ -91,10 +93,20 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: Mutabl
         holder.binding.imgOptionAV.setOnClickListener {
 
             popUpMenu.build().clearPreference()
-            
-            createPopUpOwner()
-            answerPosition = holder.layoutPosition
-            
+
+            if(currentUser == answer.author){
+
+                createPopUpOwner()
+                answerPosition = holder.layoutPosition
+
+            }//la respuesta es del mismo usuario
+
+            else{
+
+                createPopUp()
+
+            }//la respuesta no es del usuario actual
+
             popUpMenu.build().showAsDropDown(it)
             ans = answer.id
             a = answer.author
@@ -292,22 +304,8 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: Mutabl
 
     private fun updateAnswers(model: Answers, position: Int){
 
-        db.collection("Answers").document(model.id).set(
-
-            hashMapOf(
-
-                "id" to model.id,
-                "nameAuthor" to model.nameAuthor,
-                "author" to model.author,
-                "date" to model.date,
-                "content" to model.content,
-                "question" to model.question,
-                "likes" to model.likes,
-                "dislikes" to model.dislikes
-
-            )//hashMapOf con los nuevos datos
-
-        )//actualizamos el numero de likes
+        db.collection("Answers").document(model.id).update("likes", model.likes)
+        db.collection("Answers").document(model.id).update("dislikes", model.dislikes)
 
         this.notifyItemChanged(position)
 
@@ -334,6 +332,26 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: Mutabl
             .build()
 
     }//createPopUpOwner
+
+    private fun createPopUp(){
+
+        val context = fragment.requireContext()
+        popUpMenu = PowerMenu.Builder(fragment.requireContext())
+        popUpMenu
+            .addItem(PowerMenuItem("Reportar", false))
+            .setAnimation(MenuAnimation.FADE) // Animation start point (TOP | LEFT).
+            .setMenuRadius(10f) // sets the corner radius.
+            .setMenuShadow(10f) // sets the shadow.
+            .setTextColor(ContextCompat.getColor(context, R.color.black))
+            .setTextGravity(Gravity.CENTER)
+            //.setTextTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD))
+            .setSelectedTextColor(Color.WHITE)
+            .setMenuColor(Color.WHITE)
+            .setSelectedMenuColor(ContextCompat.getColor(context, R.color.orange))
+            .setOnMenuItemClickListener(onMenuItemClickListener)
+            .setAutoDismiss(true)
+            .build()
+    }
 
     private fun showAlert(){
 
@@ -374,7 +392,20 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: Mutabl
         fragment.startActivity(intent)
 
     }//editAnswer
-    
+
+    private fun reportQuestion() {
+
+        val intent = Intent(fragment.requireContext(), ReportQuestionActivity::class.java).apply {
+
+            putExtra("id", ans)
+            putExtra("collection", "Answers")
+
+        }//homeIntent
+
+        fragment.startActivity(intent)
+
+    }//reportQuestion
+
     private val onMenuItemClickListenerOwner: OnMenuItemClickListener<PowerMenuItem?> =
         OnMenuItemClickListener<PowerMenuItem?> { _, item ->
 
@@ -387,5 +418,14 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: Mutabl
             }//editar
 
         }//onMenuItemClickListenerOwner
-    
+
+    private val onMenuItemClickListener: OnMenuItemClickListener<PowerMenuItem?> =
+        OnMenuItemClickListener<PowerMenuItem?> { _, item ->
+
+            if(item.title == "Reportar"){
+                reportQuestion()
+            }//eliminar
+
+        }//onMenuItemClickListener
+
 }//class
