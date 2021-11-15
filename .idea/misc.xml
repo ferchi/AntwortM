@@ -39,8 +39,11 @@
         <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/drawable-xhdpi/ic_hearing_24.xml" value="0.26614583333333336" />
         <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/drawable/ic_baseline_topic_24.xml" value="0.26614583333333336" />
         <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/activity_alerts.xml" value="0.1793478260869565" />
+        <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/activity_analytics.xml" value="0.264" />
+        <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/activity_answer_screen.xml" value="0.25" />
         <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/activity_edit_profile.xml" value="0.24320652173913043" />
         <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/activity_home.xml" value="0.25" />
+        <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/activity_new_question.xml" value="0.25" />
         <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/activity_profile.xml" value="0.25" />
         <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/activity_report_question.xml" value="0.24320652173913043" />
@@ -112,6 +115,7 @@
         <entry key="..\:/Users/guill/AndroidStudioProjects/Antwort/app/src/main/res/menu/search_menu.xml" value="0.21052631578947367" />
         <entry key="..\:/Users/guill/AndroidStudioProjects/Antwort/app/src/main/res/menu/toolbar_menu.xml" value="0.30526315789473685" />
         <entry key="..\:/Users/guill/AppData/Local/Android/Sdk/platforms/android-31/data/res/layout/simple_list_item_1.xml" value="0.25" />
+        <entry key="..\:/Users/guill/AppData/Local/Android/Sdk/platforms/android-31/data/res/layout/simple_list_item_2.xml" value="0.25" />
         <entry key="..\:/Users/guill/AppData/Local/Android/Sdk/platforms/android-31/data/res/layout/simple_selectable_list_item.xml" value="0.25" />
       </map>
     </option>

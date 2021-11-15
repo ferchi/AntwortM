@@ -11,7 +11,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 import edu.itq.antwort.Adapters.ViewPagerAdapter
-import edu.itq.antwort.Classes.Users
 import edu.itq.antwort.Fragments.AnswersFragment
 import edu.itq.antwort.Fragments.ConsultFragment
 import edu.itq.antwort.Fragments.NewsFragment
@@ -70,7 +69,6 @@ class ProfileActivity : AppCompatActivity() {
         updateInfo()
     }
 
-
     private fun setUpTabs() {
 
         val bundle = Bundle()
@@ -93,8 +91,8 @@ class ProfileActivity : AppCompatActivity() {
     private fun getRol(){
 
         val queryRol = db.collection("Users").document(email)
-        queryRol.get().addOnCompleteListener {
-            val rol = it.result!!.toObject(Users::class.java)!!.rol
+        queryRol.get().addOnSuccessListener {
+            val rol = it.get("rol") as String
             if (rol == "facilitador") {
                 binding.ivProfileVerification.visibility = View.VISIBLE
             }

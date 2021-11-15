@@ -16,28 +16,27 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
-import edu.itq.antwort.Classes.Users
 import edu.itq.antwort.Methods
 import edu.itq.antwort.R
 import edu.itq.antwort.databinding.ActivityEditProfileBinding
-import okhttp3.internal.Util
 import java.io.ByteArrayOutputStream
 
 class EditProfileActivity : AppCompatActivity() {
+
     private var db = FirebaseFirestore.getInstance()
     lateinit var binding: ActivityEditProfileBinding
+    private val currentUser = FirebaseAuth.getInstance().currentUser?.email
 
     // Variables para obtener y cambiar de las imagenes de perfil
     val TAKE_IMG_CODE = 1046
     lateinit var vista: View
     lateinit var storageChild: String
     lateinit var databaseChild: String
-    private val currentUser = FirebaseAuth.getInstance().currentUser?.email
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -148,10 +147,9 @@ class EditProfileActivity : AppCompatActivity() {
     private fun getName(){
 
         val queryRol = db.collection("Users").document(Methods.getEmail(this)!!)
-        queryRol.get().addOnCompleteListener {
-            val name = it.result!!.toObject(Users::class.java)!!.name
+        queryRol.get().addOnSuccessListener {
 
-            binding.etEditUsername.setText(name)
+            binding.etEditUsername.setText(it.get("name") as String)
         }
     }
     private fun changeImg(): Boolean {

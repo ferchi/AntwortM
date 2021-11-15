@@ -55,7 +55,8 @@ class Login : AppCompatActivity() {
 
         Log.d("current", currentUser.toString())
 
-        if(currentUser != null && currentUser.isEmailVerified ){
+        // && currentUser.isEmailVerified
+        if(currentUser != null ){
 
             val email = currentUser.email
 

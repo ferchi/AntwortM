@@ -60,7 +60,7 @@ class QuestionDetails : AppCompatActivity() {
     private var parent: String = ""
     private var collec: String = ""
     private var user: String = ""
-
+    private var questionAuthor: String = ""
 
     private lateinit var filesFolder : StorageReference
     private  var fileNames : ArrayList<String> = arrayListOf()
@@ -126,7 +126,7 @@ class QuestionDetails : AppCompatActivity() {
             @SuppressLint("SetTextI18n")
             override fun onBindViewHolder(holder: QuestionDetailViewHolder, position: Int, model: Questions) {
 
-
+                questionAuthor = model.author
 
                 holder.questionViewBinding.imgOptionQV.setOnClickListener {
 
@@ -590,15 +590,21 @@ class QuestionDetails : AppCompatActivity() {
 
     private fun deletePost(question: String, collection: String, parent: String){
 
-        db.collection(collection).document(question).delete()
         db.collection("Users").document(a).update(collection.lowercase(), FieldValue.increment(-1))
 
-        if(collection == "Questions")
+        if(collection == "Questions"){
+
             deleteAnswers(question)
 
-        else
+        }//if
+
+        else {
+
             db.collection("Questions").document(parent).update("answers", FieldValue.increment(-1))
 
+        }//else
+
+        db.collection(collection).document(question).delete()
         deleteNotifications(question)
         Toast.makeText(this, "Publicación eliminada", Toast.LENGTH_SHORT).show()
 
