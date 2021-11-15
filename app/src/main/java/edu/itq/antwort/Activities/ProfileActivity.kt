@@ -24,7 +24,6 @@ class ProfileActivity : AppCompatActivity() {
     lateinit var email: String
     private lateinit var db : FirebaseFirestore
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -62,7 +61,25 @@ class ProfileActivity : AppCompatActivity() {
 
         getRol()
         loadImg()
+        showAnalytics()
+
     }//onCreate
+
+    private fun showAnalytics(){
+
+        binding.btnStatistics.setOnClickListener {
+
+            val intent = Intent(this, AnalyticsActivity::class.java).apply {
+
+                putExtra("user", email)
+
+            }//le pasamos el correo
+
+            startActivity(intent)
+
+        }//se presiono el boton de estadisticas
+
+    }//showAnalytics
 
     override fun onStart() {
         super.onStart()

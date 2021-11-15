@@ -76,7 +76,13 @@ class ProfileFragment : Fragment() {
 
         binding.btnStatistics.setOnClickListener {
 
-            startActivity(Intent(context, AnalyticsActivity::class.java))
+            val intent = Intent(context, AnalyticsActivity::class.java).apply {
+
+                putExtra("user", current)
+
+            }//le pasamos el correo
+
+            startActivity(intent)
 
         }//abrir estadisticas
 
