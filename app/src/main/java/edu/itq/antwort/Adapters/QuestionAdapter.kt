@@ -406,9 +406,9 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
 
         db.collection("Questions").document(question).delete()
         db.collection("Users").document(a).update("questions", FieldValue.increment(-1))
+        Toast.makeText(fragment.requireContext(), "Publicación eliminada", Toast.LENGTH_SHORT).show()
         deleteAnswers(question)
         deleteNotifications(question)
-        Toast.makeText(fragment.requireContext(), "Publicación eliminada", Toast.LENGTH_SHORT).show()
 
         dataset.removeAt(questionPosition)
         this.notifyItemRemoved(questionPosition)

@@ -55,7 +55,7 @@ class Login : AppCompatActivity() {
 
         Log.d("current", currentUser.toString())
 
-        //val userVerifed = currentUser!!.isEmailVerified
+        // && currentUser.isEmailVerified
         if(currentUser != null ){
 
             val email = currentUser.email
@@ -148,10 +148,9 @@ class Login : AppCompatActivity() {
 
                     if(it.isSuccessful){
 
-                        updateToken(txtEmail.text.toString(), token)
-                        showHome(it.result?.user?.email ?:"")
+                        //updateToken(txtEmail.text.toString(), token)
+                        //showHome(it.result?.user?.email ?:"")
 
-/*
                         val user : FirebaseUser = mAuth.currentUser!!
 
                         if(user.isEmailVerified){
@@ -166,7 +165,7 @@ class Login : AppCompatActivity() {
                             showAlert()
 
                         }//else el usuario no ha validado su email
-*/
+
                     }//registro exitoso
 
                     else{

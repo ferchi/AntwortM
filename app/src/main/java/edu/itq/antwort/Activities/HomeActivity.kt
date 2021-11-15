@@ -98,9 +98,7 @@ class HomeActivity : AppCompatActivity() {
 
     private fun newQuestion(email: String?){
 
-        val btnNewQuestion: FloatingActionButton = findViewById(R.id.btnNewQuestion)
-
-        btnNewQuestion.setOnClickListener {
+        binding.btnNewQuestion.setOnClickListener {
 
             val questionIntent = Intent(this, QuestionScreenActivity::class.java).apply {
 

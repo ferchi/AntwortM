@@ -31,7 +31,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class AnswerAdapter (private val fragment: Fragment, private val dataset: List<Answers>):
+class AnswerAdapter (private val fragment: Fragment, private val dataset: MutableList<Answers>):
     RecyclerView.Adapter<AnswerAdapter.ViewHolder>() {
 
     class ViewHolder (val binding: ItemAnswerViewBinding) : RecyclerView.ViewHolder(binding.root)
@@ -41,6 +41,7 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: List<A
     private var ans: String = ""
     private var que: String = ""
     private var a: String = ""
+    private var answerPosition: Int = 0
     
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(ItemAnswerViewBinding.inflate(LayoutInflater.from(parent.context),parent,false))
@@ -92,6 +93,7 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: List<A
             popUpMenu.build().clearPreference()
             
             createPopUpOwner()
+            answerPosition = holder.layoutPosition
             
             popUpMenu.build().showAsDropDown(it)
             ans = answer.id
@@ -355,6 +357,9 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: List<A
         db.collection("Questions").document(que).update("answers", FieldValue.increment(-1))
         Toast.makeText(fragment.requireContext(), "Publicación eliminada", Toast.LENGTH_SHORT).show()
 
+        dataset.removeAt(answerPosition)
+        this.notifyItemRemoved(answerPosition)
+        
     }//deleteAnswer
 
     private fun editAnswer() {

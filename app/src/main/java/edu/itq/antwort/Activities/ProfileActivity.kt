@@ -5,12 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 import edu.itq.antwort.Adapters.ViewPagerAdapter
-import edu.itq.antwort.Classes.Users
 import edu.itq.antwort.Fragments.AnswersFragment
 import edu.itq.antwort.Fragments.ConsultFragment
 import edu.itq.antwort.Fragments.NewsFragment
@@ -46,6 +46,20 @@ class ProfileActivity : AppCompatActivity() {
         setUpTabs()
         db = FirebaseFirestore.getInstance()
 
+        binding.btnNewQuestion.setOnClickListener {
+
+            val currentUser = FirebaseAuth.getInstance().currentUser?.email
+
+            val questionIntent = Intent(this, QuestionScreenActivity::class.java).apply {
+
+                putExtra("email", currentUser)
+
+            }//home intent
+
+            startActivity(questionIntent)
+
+        }//new Question
+
         getRol()
         loadImg()
     }//onCreate
@@ -54,7 +68,6 @@ class ProfileActivity : AppCompatActivity() {
         super.onStart()
         updateInfo()
     }
-
 
     private fun setUpTabs() {
 
@@ -78,8 +91,8 @@ class ProfileActivity : AppCompatActivity() {
     private fun getRol(){
 
         val queryRol = db.collection("Users").document(email)
-        queryRol.get().addOnCompleteListener {
-            val rol = it.result!!.toObject(Users::class.java)!!.rol
+        queryRol.get().addOnSuccessListener {
+            val rol = it.get("rol") as String
             if (rol == "facilitador") {
                 binding.ivProfileVerification.visibility = View.VISIBLE
             }

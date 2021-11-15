@@ -114,6 +114,7 @@ class ReportQuestionActivity : AppCompatActivity() {
 
             generateReport(document, author, collection, reason)
             sendReport(document, author, collection, reason)
+
         }//else
 
     }//getReason

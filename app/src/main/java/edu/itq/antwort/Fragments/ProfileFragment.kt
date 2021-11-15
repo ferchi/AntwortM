@@ -25,9 +25,9 @@ import com.skydoves.powermenu.OnMenuItemClickListener
 import com.skydoves.powermenu.PowerMenu
 import com.skydoves.powermenu.PowerMenuItem
 import com.squareup.picasso.Picasso
+import edu.itq.antwort.Activities.AnalyticsActivity
 import edu.itq.antwort.Activities.EditProfileActivity
 import edu.itq.antwort.Activities.Login
-import edu.itq.antwort.Classes.Users
 import edu.itq.antwort.Methods
 import edu.itq.antwort.Methods.sendEmail
 
@@ -63,6 +63,7 @@ class ProfileFragment : Fragment() {
         popUpMenu = PowerMenu.Builder(requireContext())
 
         binding.btnProfileEdit.setOnClickListener {
+
             val editIntent = Intent(context, EditProfileActivity::class.java).apply {
 
                 putExtra("current", current)
@@ -70,7 +71,14 @@ class ProfileFragment : Fragment() {
             }//homeIntent
 
             startActivity(editIntent)
-        }
+
+        }//abrir edit profile
+
+        binding.btnStatistics.setOnClickListener {
+
+            startActivity(Intent(context, AnalyticsActivity::class.java))
+
+        }//abrir estadisticas
 
         binding.includeToolbar.imgProfileTB.setOnClickListener {
             createPopUp()
@@ -89,7 +97,7 @@ class ProfileFragment : Fragment() {
         //Utilizar el childFragmentManager para evitar errores dentro del tab layout
         val adapter = ViewPagerAdapter(childFragmentManager)
 
-        adapter.addFragment(NewsFragment(), "Topics")
+        adapter.addFragment(NewsFragment(), "Topicos")
         adapter.addFragment(ConsultFragment(), "Consultas")
         adapter.addFragment(AnswersFragment(), "Respuestas")
 
@@ -104,13 +112,17 @@ class ProfileFragment : Fragment() {
 
     private fun getRol(){
 
-        val queryRol = db.collection("Users").document(current)
-        queryRol.get().addOnCompleteListener {
-            val rol = it.result!!.toObject(Users::class.java)!!.rol
+        db.collection("Users").document(current).get().addOnSuccessListener {
+
+            val rol = it.get("rol") as? String
             if (rol == "facilitador") {
+
                 binding.ivProfileVerification.visibility = View.VISIBLE
-            }
-        }
+
+            }//si es failitado le asignamos la insignia de facilitador
+
+        }//obtenemos el rol del usuario
+
     }
 
     private fun updateInfo(){
@@ -206,8 +218,6 @@ class ProfileFragment : Fragment() {
                 "Saludos.<br><br>" +
                 "Usuario que realizó la solicitud: $user"
 
-
-        sendEmail("fsalinas628@gmail.com", "Solicitud de rol",body, requireActivity())
         sendEmail("ramirezguillermo19@gmail.com", "Solicitud de rol",body, requireActivity())
     }
 
