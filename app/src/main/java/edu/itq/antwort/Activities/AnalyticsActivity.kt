@@ -16,7 +16,7 @@ class AnalyticsActivity : AppCompatActivity() {
 
     private val db = FirebaseFirestore.getInstance()
     lateinit var binding: ActivityAnalyticsBinding
-    private val currentUser = FirebaseAuth.getInstance().currentUser?.email
+    lateinit var currentUser: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -24,6 +24,9 @@ class AnalyticsActivity : AppCompatActivity() {
         binding = ActivityAnalyticsBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        val bundle = intent.extras
+        currentUser = bundle?.getString("user").toString()
 
         setup()
 
