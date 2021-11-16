@@ -27,6 +27,7 @@ import com.skydoves.powermenu.PowerMenuItem
 import com.squareup.picasso.Picasso
 import edu.itq.antwort.Activities.AnalyticsActivity
 import edu.itq.antwort.Activities.EditProfileActivity
+import edu.itq.antwort.Activities.FacilitatorActivity
 import edu.itq.antwort.Activities.Login
 import edu.itq.antwort.Methods
 import edu.itq.antwort.Methods.sendEmail
@@ -205,7 +206,7 @@ class ProfileFragment : Fragment() {
             when(item.title)
             {
                 "Quiero ser Facilitador" -> {
-                    requestRol(current)
+                    requestRol()
                 }
                 "Cerrar sesión" -> {
                     closeSession()
@@ -217,14 +218,11 @@ class ProfileFragment : Fragment() {
             }
         }//onMenuItemClickListener
 
-    private fun requestRol(user:String){
+    private fun requestRol(){
 
-        val body = "¡Hola administrador! <br> " +
-                "Un usuario solicita obtener el rol de facilitador, tu decides si se lo otorgas. ;) <br><br>" +
-                "Saludos.<br><br>" +
-                "Usuario que realizó la solicitud: $user"
+        startActivity(Intent(requireContext(), FacilitatorActivity::class.java))
 
-        sendEmail("ramirezguillermo19@gmail.com", "Solicitud de rol",body, requireActivity())
+
     }
 
     private fun showAlert(){
