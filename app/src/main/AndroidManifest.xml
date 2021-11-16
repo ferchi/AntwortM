@@ -21,6 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
+            android:name=".Activities.FacilitatorActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activities.AnalyticsActivity"
             android:exported="false" />
         <activity

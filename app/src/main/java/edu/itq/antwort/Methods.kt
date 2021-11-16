@@ -55,7 +55,7 @@ object Methods {
             .onCompleteCallback(object : MaildroidX.onCompleteCallback{
                 override val timeout: Long = 3000
                 override fun onSuccess() {
-                    customToast(context,"Solicitado con éxito")
+                    customToast(context,"Atenderemos tu solicitud lo más pronto posible")
                 }
                 override fun onFail(errorMessage: String) {
                     customToast(context,"Revisa tu conexión a internet")

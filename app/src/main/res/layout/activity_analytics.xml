@@ -43,7 +43,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="32dp"
                     android:gravity="center"
-                    android:text="Estadísticas"
+                    android:text="Actividad"
                     android:textColor="@color/white"
                     android:textSize="20sp"
                     android:textStyle="bold"
