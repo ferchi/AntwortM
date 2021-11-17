@@ -24,6 +24,12 @@
             android:name=".Activities.FacilitatorActivity"
             android:exported="false" />
         <activity
+            android:name=".Activities.ImageViewerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.GifViewerActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activities.AnalyticsActivity"
             android:exported="false" />
         <activity

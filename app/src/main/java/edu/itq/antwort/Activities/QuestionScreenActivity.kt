@@ -1,11 +1,14 @@
 package edu.itq.antwort.Activities
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.ClipData
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextWatcher
@@ -24,6 +27,8 @@ import android.text.Editable
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import androidx.annotation.RequiresApi
+import androidx.core.net.toFile
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
 import com.google.firebase.storage.FirebaseStorage
@@ -38,6 +43,7 @@ import kotlinx.coroutines.launch
 import androidx.recyclerview.widget.LinearLayoutManager
 import edu.itq.antwort.Adapters.FileAdapter
 import java.io.File
+import java.nio.file.Files
 
 
 class QuestionScreenActivity : AppCompatActivity() {
@@ -118,16 +124,28 @@ class QuestionScreenActivity : AppCompatActivity() {
         })
 
         binding.ivNewQuestionUpload.setOnClickListener {
-            val intent = Intent(Intent.ACTION_GET_CONTENT)
-            intent.type = "*/*"
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            startActivityForResult(Intent.createChooser(intent, "Select File"),fileBack)
-        }
 
+            val builder: AlertDialog.Builder = this.let {
+                AlertDialog.Builder(it)
+            }
+
+            builder.setMessage("Los tamaños de los archivos que se adjunten deben ser menores a 10Mb")
+                .setTitle("Limite de tamaño")
+
+            builder.setPositiveButton("ENTENDIDO") { _, _ ->
+                val intent = Intent(Intent.ACTION_GET_CONTENT)
+                intent.type = "*/*"
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                startActivityForResult(Intent.createChooser(intent, "Select File"),fileBack)
+            }
+            val dialog: AlertDialog = builder.create()
+            dialog.show()
+        }
     }//on onCreate
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -140,6 +158,7 @@ class QuestionScreenActivity : AppCompatActivity() {
 
                 if(clipData != null)
                 {
+
                     ogFileNames.clear()
                     val clipCount = clipData!!.itemCount
                     Log.d("subir", "clipCount: $clipCount")
@@ -168,17 +187,20 @@ class QuestionScreenActivity : AppCompatActivity() {
                 }
                 else if(fileData!=null)
                 {
-                    ogFileNames.clear()
 
-                    Log.d("subir", "fileData: ${File(fileData!!.path!!).name}")
-                    ogFileNames.add(File(fileData!!.path!!).name)
-                    fileAdapter = FileAdapter(this,ogFileNames)
 
-                    binding.rvFiles.apply {
-                        setHasFixedSize(true)
-                        layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
-                        adapter = fileAdapter
-                    }
+                        ogFileNames.clear()
+
+                        Log.d("subir", "fileData: ${File(fileData!!.path!!).name}")
+                        ogFileNames.add(File(fileData!!.path!!).name)
+                        fileAdapter = FileAdapter(this, ogFileNames)
+
+                        binding.rvFiles.apply {
+                            setHasFixedSize(true)
+                            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                            adapter = fileAdapter
+                        }
+
                 }
             }
         }
@@ -206,11 +228,10 @@ class QuestionScreenActivity : AppCompatActivity() {
             db.collection("Questions").document(id).update("files",ogFileNames)
         }
 
-        else if(fileData!=null)
-        {
+        else if(fileData!=null) {
             fileName = storage.child(File(fileData!!.path!!).name)
             fileName.putFile(fileData!!)
-            db.collection("Questions").document(id).update("files",ogFileNames)
+            db.collection("Questions").document(id).update("files", ogFileNames)
         }
     }
 

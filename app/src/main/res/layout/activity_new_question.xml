@@ -24,15 +24,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/iv_new_question_upload"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="8dp"
-        android:src="@drawable/ic_baseline_file_upload_24"
-        app:layout_constraintEnd_toStartOf="@+id/btnPostQuestion"
-        app:layout_constraintTop_toTopOf="parent" />
+
 
     <TextView
         android:id="@+id/textView7"
@@ -142,31 +134,42 @@
 
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/hsv_chip_group_container"
-        app:layout_constraintWidth_percent=".9"
-        android:layout_marginStart="16dp"
+        app:layout_constraintWidth_percent=".9">
+
+        <EditText
+            android:id="@+id/edtDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/edt_question"
+            android:ems="10"
+            android:hint="¿Cuál es tu duda?"
+            android:inputType="textMultiLine"
+            app:flow_maxElementsWrap="10" />
+
+    </ScrollView>
+
+    <ImageView
+        android:id="@+id/iv_new_question_upload"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        >
+        android:src="@drawable/ic_baseline_attach_file_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
 
-    <EditText
-        android:id="@+id/edtDescription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/edt_question"
-        android:ems="10"
-        android:hint="¿Cuál es tu duda?"
-        android:inputType="textMultiLine"
-        app:flow_maxElementsWrap="10"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
-         />
-    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
