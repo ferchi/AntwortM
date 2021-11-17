@@ -86,4 +86,14 @@ dependencies {
     //Send Email
     implementation 'com.github.nedimf:maildroid:v0.0.7-release'
 
+    //Show Images
+    implementation 'com.github.stfalcon-studio:StfalconImageViewer:v1.0.1'
+
+    //Gif View
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.23'
+
+    //Cargar imagenes y Gifs
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+
 }

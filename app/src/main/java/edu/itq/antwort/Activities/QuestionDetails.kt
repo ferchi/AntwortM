@@ -64,6 +64,8 @@ class QuestionDetails : AppCompatActivity() {
 
     private lateinit var filesFolder : StorageReference
     private  var fileNames : ArrayList<String> = arrayListOf()
+    private  var references : MutableList<StorageReference> = mutableListOf()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -149,20 +151,28 @@ class QuestionDetails : AppCompatActivity() {
                     a = model.author
                     collec = "Questions"
 
-                    filesFolder = FirebaseStorage.getInstance().reference.child("Files/${model.id}")
-                    filesFolder.listAll().result!!.items.forEach { file ->
+                }//se presiono el boton de opciones
+
+
+                fileNames.clear()
+                references.clear()
+
+                filesFolder = FirebaseStorage.getInstance().reference.child("Files/${model.id}")
+                filesFolder.listAll().addOnCompleteListener {
+                    it.result!!.items.forEach { file ->
                         fileNames.add(file.name)
+                        references.add(file)
                     }
 
-                    val fileAdapter = FileAdapter(this@QuestionDetails,fileNames)
+                    val fileAdapter = FileAdapter(this@QuestionDetails, fileNames, references)
 
                     holder.questionViewBinding.rvFiles.apply {
                         setHasFixedSize(true)
                         layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
                         adapter = fileAdapter
                     }
+                }
 
-                }//se presiono el boton de opciones
                 if(Methods.getEmail(this@QuestionDetails).toString() != (model.author)) {
 
                     holder.questionViewBinding.imgUserQD.setOnClickListener {

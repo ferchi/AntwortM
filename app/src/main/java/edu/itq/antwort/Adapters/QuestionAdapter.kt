@@ -34,6 +34,8 @@ import com.skydoves.powermenu.PowerMenu
 import android.widget.Toast
 import com.google.android.material.chip.Chip
 import com.google.firebase.firestore.FieldValue
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.skydoves.powermenu.OnMenuItemClickListener
 import edu.itq.antwort.Activities.*
 import edu.itq.antwort.Methods
@@ -49,6 +51,7 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
     private var a: String = ""
     private var questionPosition: Int = 0
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(ItemQuestionBinding.inflate(LayoutInflater.from(parent.context),parent,false))
     }
@@ -57,7 +60,9 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
+
         val question = dataset[position]
+
         popUpMenu = PowerMenu.Builder(fragment.requireContext())
 
         holder.binding.questionOptions.setOnClickListener {
