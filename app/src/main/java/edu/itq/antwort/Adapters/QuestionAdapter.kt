@@ -32,6 +32,7 @@ import com.skydoves.powermenu.MenuAnimation
 import com.skydoves.powermenu.PowerMenuItem
 import com.skydoves.powermenu.PowerMenu
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.storage.FirebaseStorage
@@ -50,6 +51,9 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
     private var q: String = ""
     private var a: String = ""
     private var questionPosition: Int = 0
+
+    private lateinit var filesFolder : StorageReference
+
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -414,6 +418,13 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
         Toast.makeText(fragment.requireContext(), "Publicación eliminada", Toast.LENGTH_SHORT).show()
         deleteAnswers(question)
         deleteNotifications(question)
+
+        filesFolder = FirebaseStorage.getInstance().reference.child("Files/${question}")
+        filesFolder.listAll().addOnCompleteListener {
+            it.result!!.items.forEach { file ->
+                file.delete()
+            }
+        }
 
         dataset.removeAt(questionPosition)
         this.notifyItemRemoved(questionPosition)

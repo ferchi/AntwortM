@@ -44,6 +44,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import edu.itq.antwort.Adapters.FileAdapter
 import java.io.File
 import java.nio.file.Files
+import android.webkit.MimeTypeMap
+
+import android.content.ContentResolver
+
+
+
 
 
 class QuestionScreenActivity : AppCompatActivity() {
@@ -59,8 +65,6 @@ class QuestionScreenActivity : AppCompatActivity() {
     private var clipData : ClipData? = null
     private var dataUri : ArrayList<Uri> = ArrayList()
     private var ogFileNames : ArrayList <String> = ArrayList()
-    private var dbFileNames : ArrayList <String> = ArrayList()
-
 
     private lateinit var fileAdapter : FileAdapter
 
@@ -168,7 +172,11 @@ class QuestionScreenActivity : AppCompatActivity() {
                     {
 
                         val file = clipData!!.getItemAt(currentFile).uri
-                        val fileName = File(file.path!!).name
+                        val cR: ContentResolver = this.contentResolver
+                        val mime = MimeTypeMap.getSingleton()
+                        val type = mime.getExtensionFromMimeType(cR.getType(file))
+
+                        val fileName = File(file.path!!).name + "." + type
 
                         dataUri.add(file)
                         ogFileNames.add(fileName)
@@ -187,13 +195,15 @@ class QuestionScreenActivity : AppCompatActivity() {
                 }
                 else if(fileData!=null)
                 {
+                    ogFileNames.clear()
+                    val cR: ContentResolver = this.contentResolver
+                    val mime = MimeTypeMap.getSingleton()
+                    val type = mime.getExtensionFromMimeType(cR.getType(fileData!!))
 
-
-                        ogFileNames.clear()
-
-                        Log.d("subir", "fileData: ${File(fileData!!.path!!).name}")
-                        ogFileNames.add(File(fileData!!.path!!).name)
-                        fileAdapter = FileAdapter(this, ogFileNames)
+                    Log.d("subir", "type: ${type}")
+                    Log.d("subir", "fileData: ${fileData}")
+                    ogFileNames.add(File(fileData!!.path!!).name+"."+type)
+                    fileAdapter = FileAdapter(this, ogFileNames)
 
                         binding.rvFiles.apply {
                             setHasFixedSize(true)
@@ -215,21 +225,28 @@ class QuestionScreenActivity : AppCompatActivity() {
 
 
         var fileName : StorageReference
-        Log.d("subir", "clipData: $clipData")
 
         if(clipData != null) {
             var currentFile = 0
             dataUri.forEach { file ->
-                fileName= storage.child(File(file.path!!).name)
+
+                val cR: ContentResolver = this.contentResolver
+                val mime = MimeTypeMap.getSingleton()
+                val type = mime.getExtensionFromMimeType(cR.getType(file))
+
+                fileName = storage.child(File(file.path!!).name+"."+type)
                 fileName.putFile(file)
-                dbFileNames.add("${id}_${currentFile}")
                 currentFile ++
             }
             db.collection("Questions").document(id).update("files",ogFileNames)
         }
 
         else if(fileData!=null) {
-            fileName = storage.child(File(fileData!!.path!!).name)
+            val cR: ContentResolver = this.contentResolver
+            val mime = MimeTypeMap.getSingleton()
+            val type = mime.getExtensionFromMimeType(cR.getType(fileData!!))
+
+            fileName = storage.child(File(fileData!!.path!!).name + "." + type)
             fileName.putFile(fileData!!)
             db.collection("Questions").document(id).update("files", ogFileNames)
         }
