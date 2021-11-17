@@ -77,7 +77,7 @@ class NewsFragment : Fragment() {
         db.collection("Users").document(currentUser!!).get().addOnSuccessListener {
 
 
-            val topics = (it.get("topics") as ArrayList<String>)
+            val topics = (it.get("topics") as ArrayList<*>)
             if(topics.size > 0) {
                 topics.forEach { topic ->
 
@@ -85,7 +85,7 @@ class NewsFragment : Fragment() {
                         db.collection("Questions").orderBy("date", Query.Direction.DESCENDING)
                             .whereArrayContains("topics", topic)
                     query.get().addOnCompleteListener {
-
+                        questions.clear()
                         questions.addAll(it.result!!.toObjects(Questions::class.java))
 
                         if (topics.indexOf(topic) == topics.lastIndex) {
