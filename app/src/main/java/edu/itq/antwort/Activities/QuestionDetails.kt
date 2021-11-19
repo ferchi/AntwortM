@@ -616,6 +616,7 @@ class QuestionDetails : AppCompatActivity() {
 
         db.collection(collection).document(question).delete()
         deleteNotifications(question)
+
         filesFolder = FirebaseStorage.getInstance().reference.child("Files/${question}")
         filesFolder.listAll().addOnCompleteListener {
             it.result!!.items.forEach { file ->
