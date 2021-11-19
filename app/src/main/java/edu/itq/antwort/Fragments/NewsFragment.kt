@@ -3,6 +3,7 @@ package edu.itq.antwort.Fragments
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -78,14 +79,16 @@ class NewsFragment : Fragment() {
 
 
             val topics = (it.get("topics") as ArrayList<*>)
+            Log.d("topics", "total: ${topics.size}")
             if(topics.size > 0) {
+                questions.clear()
                 topics.forEach { topic ->
 
                     val query =
                         db.collection("Questions").orderBy("date", Query.Direction.DESCENDING)
                             .whereArrayContains("topics", topic)
                     query.get().addOnCompleteListener {
-                        questions.clear()
+
                         questions.addAll(it.result!!.toObjects(Questions::class.java))
 
                         if (topics.indexOf(topic) == topics.lastIndex) {
