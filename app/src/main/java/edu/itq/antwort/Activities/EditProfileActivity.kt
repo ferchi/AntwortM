@@ -69,8 +69,8 @@ class EditProfileActivity : AppCompatActivity() {
         }
 
         binding.imgBackEditProfile.setOnClickListener {
-
-            onBackPressed()
+            this.finish()
+            //onBackPressed()
 
         }//se presiono regresar
 
@@ -82,7 +82,8 @@ class EditProfileActivity : AppCompatActivity() {
                 updateAnswers(Methods.getEmail(this)!!, binding.etEditUsername.text.toString())
                 updateQuestions(Methods.getEmail(this)!!, binding.etEditUsername.text.toString())
                 Methods.customToast(this,"Actualizado")
-                onBackPressed()
+                this.finish()
+                //onBackPressed()
 
             }//el nuevo nombre no esta vacio
 
