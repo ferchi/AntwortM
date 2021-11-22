@@ -133,6 +133,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun updateInfo(){
+
         val query = db.collection("Users").whereEqualTo("email", current)
 
         query.addSnapshotListener { value, _ ->
@@ -141,7 +142,8 @@ class ProfileFragment : Fragment() {
                 binding.tvProfileUsername.text = userInfo.get("name").toString()
                 binding.tvProfileCountAnswer.text = userInfo.get("answers").toString()
                 binding.tvProfileCountQuestion.text = userInfo.get("questions").toString()
-            } catch (e: Exception) {
+            } catch (e:Exception) {
+                //Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
 
                 val user = Firebase.auth.currentUser!!
                 user.delete()
@@ -152,11 +154,13 @@ class ProfileFragment : Fragment() {
                             requireActivity().finish()
                             val intent = Intent(requireContext(),Login::class.java)
                             startActivity(intent)
+                        }
+                    else{
+                            Toast.makeText(requireContext(), "Error al borrar: ${task.exception}", Toast.LENGTH_SHORT).show()
 
                         }}
             }
         }
-
     }
 
     private fun loadImg() {
@@ -221,8 +225,6 @@ class ProfileFragment : Fragment() {
     private fun requestRol(){
 
         startActivity(Intent(requireContext(), FacilitatorActivity::class.java))
-
-
     }
 
     private fun showAlert(){
@@ -232,7 +234,6 @@ class ProfileFragment : Fragment() {
         builder.setMessage("¿Esta seguro que desea elimiar su cuenta?")
         builder.setPositiveButton("Sí"
         ) { _, _ ->
-
             deleteUser()
         }
         builder.setNegativeButton("No", null)
@@ -287,8 +288,7 @@ class ProfileFragment : Fragment() {
             it.result!!.documents.forEach { document ->
                 db.collection("Notifications").document(document.id).delete()
             }
-
-            db.collection("Users").document(current).delete().addOnCompleteListener {  }
+            db.collection("Users").document(current).delete()
         }
     }
 
