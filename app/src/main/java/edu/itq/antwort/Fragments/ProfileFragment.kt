@@ -150,7 +150,7 @@ class ProfileFragment : Fragment() {
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             //Firebase.auth.signOut()
-                            Toast.makeText(requireContext(), "Cuenta eliminada, nos vemos pronto.", Toast.LENGTH_SHORT).show()
+                            //Toast.makeText(requireContext(), "Cuenta eliminada, nos vemos pronto.", Toast.LENGTH_SHORT).show()
                             requireActivity().finish()
                             val intent = Intent(requireContext(),Login::class.java)
                             startActivity(intent)

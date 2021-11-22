@@ -154,11 +154,11 @@ class QuestionDetails : AppCompatActivity() {
                 }//se presiono el boton de opciones
 
 
-                fileNames.clear()
-                references.clear()
-
                 filesFolder = FirebaseStorage.getInstance().reference.child("Files/${model.id}")
                 filesFolder.listAll().addOnCompleteListener {
+                    fileNames.clear()
+                    references.clear()
+
                     it.result!!.items.forEach { file ->
                         fileNames.add(file.name)
                         references.add(file)
