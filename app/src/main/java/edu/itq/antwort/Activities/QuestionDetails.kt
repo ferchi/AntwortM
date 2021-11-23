@@ -305,6 +305,8 @@ class QuestionDetails : AppCompatActivity() {
                     }
                 }
 
+
+
                 if(model.edited){
                     holder.answerViewBinding.ivItemAnswerEdit.visibility = View.VISIBLE
                 }
