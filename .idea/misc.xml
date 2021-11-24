@@ -40,6 +40,7 @@
         <entry key="..\:/AndroidProject/AntwortM/app/src/main/res/layout/toolbar_profile.xml" value="0.20260416666666667" />
         <entry key="..\:/AndroidProject/AntwortM/app/src/main/res/layout/toolbar_search.xml" value="0.20260416666666667" />
         <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/drawable-xhdpi/ic_hearing_24.xml" value="0.26614583333333336" />
+        <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/drawable/edt_search.xml" value="0.26614583333333336" />
         <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/drawable/ic_baseline_topic_24.xml" value="0.26614583333333336" />
         <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/activity_alerts.xml" value="0.1793478260869565" />
         <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/activity_analytics.xml" value="0.264" />
@@ -50,6 +51,7 @@
         <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/activity_new_question.xml" value="0.25" />
         <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/activity_profile.xml" value="0.4" />
+        <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/activity_question_view.xml" value="0.25" />
         <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/activity_report_question.xml" value="0.24320652173913043" />
         <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/fragment_home.xml" value="0.176" />
         <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/fragment_news.xml" value="0.1793478260869565" />
@@ -61,6 +63,7 @@
         <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/toolbar.xml" value="0.25" />
         <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/toolbar_notifications.xml" value="0.25" />
         <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/toolbar_profile.xml" value="0.25" />
+        <entry key="..\:/Codigos/android/AntwortM/app/src/main/res/layout/toolbar_question.xml" value="0.25" />
         <entry key="..\:/Users/guill/AndroidStudioProjects/Antwort/app/src/main/res/drawable/bottomnav_bg.xml" value="0.22763157894736843" />
         <entry key="..\:/Users/guill/AndroidStudioProjects/Antwort/app/src/main/res/drawable/btn_edt_profile.xml" value="0.22412280701754386" />
         <entry key="..\:/Users/guill/AndroidStudioProjects/Antwort/app/src/main/res/drawable/button_bg.xml" value="0.24027777777777778" />
