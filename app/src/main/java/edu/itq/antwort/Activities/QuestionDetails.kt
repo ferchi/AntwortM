@@ -6,8 +6,6 @@ import android.content.Context
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,8 +16,8 @@ import edu.itq.antwort.R
 import edu.itq.antwort.databinding.ActivityQuestionViewBinding
 import android.content.Intent
 import android.util.Log
-import android.view.Gravity
-import android.view.View
+import android.view.*
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.google.android.material.chip.Chip
@@ -61,11 +59,9 @@ class QuestionDetails : AppCompatActivity() {
     private var collec: String = ""
     private var user: String = ""
     private var questionAuthor: String = ""
-
     private lateinit var filesFolder : StorageReference
     private  var fileNames : ArrayList<String> = arrayListOf()
     private  var references : MutableList<StorageReference> = mutableListOf()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -85,10 +81,44 @@ class QuestionDetails : AppCompatActivity() {
         showAnswers(id?:"", user)
 
         setup()
+        db.collection("Users").document(Methods.getEmail(this)!!).get().addOnSuccessListener {
+
+            postAnswer(id!!, it.get("rol") as String, it.get("name") as String)
+
+        }//obtenemos el rol del usuario
 
     }//onCreate
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setup(){
+
+        binding.newAnswer.setOnTouchListener(object : View.OnTouchListener {
+
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+
+                binding.btnPostAnswers.visibility = View.VISIBLE
+
+                if(binding.newAnswer.hasFocus()){
+
+                    v?.parent?.requestDisallowInterceptTouchEvent(true)
+
+                    when(event?.action){
+
+                        MotionEvent.ACTION_SCROLL -> {
+                            v?.parent?.requestDisallowInterceptTouchEvent(false)
+                            return true
+
+                        }//MotionEvent.ACTION_SCROLL
+
+                    }//when
+
+                }//tiene focus
+
+                return false
+
+            }//onTouch
+
+        })//setOnTouchListener
 
         binding.includeQuestionToolbar.imgBackTBQ.setOnClickListener {
 
@@ -97,6 +127,73 @@ class QuestionDetails : AppCompatActivity() {
         }//imgBackTBQ.setOnClickListener
 
     }//setup
+
+    private fun postAnswer(question: String, rol: String, name: String){
+
+        binding.btnPostAnswers.setOnClickListener {
+
+            if(binding.newAnswer.text.isNotEmpty()){
+
+                val id: String = db.collection("Answers").document().id
+                val timestamp: com.google.firebase.Timestamp = com.google.firebase.Timestamp.now()
+                val likes: ArrayList<String> = ArrayList()
+                val dislikes: ArrayList<String> = ArrayList()
+
+                db.collection("Answers").document(id).set(
+
+                    hashMapOf(
+
+                        "id" to id,
+                        "nameAuthor" to name,
+                        "date" to timestamp,
+                        "author" to Methods.getEmail(this)!!,
+                        "likes" to likes,
+                        "dislikes" to dislikes,
+                        "verified" to (rol == "facilitador"),
+                        "content" to binding.newAnswer.text.toString(),
+                        "question" to question
+
+                    )
+
+                )//guardamos la nueva respuesta
+
+                db.collection("Users").document(Methods.getEmail(this)!!).update("answers", FieldValue.increment(1))
+                db.collection("Questions").document(question).update("answers", FieldValue.increment(1))
+                binding.newAnswer.setText("")
+                hideKeyboard(this)
+                binding.btnPostAnswers.visibility = View.GONE
+                binding.newAnswer.clearFocus()
+
+                if(questionAuthor != Methods.getEmail(this)!!){
+
+                    db.collection("Questions").document(question).get().addOnSuccessListener {
+
+                        createNotification("$name ha respondido tu pregunta:", it.get("title") as String, Methods.getEmail(this)!!, question, questionAuthor, timestamp)
+                        showNotification("$name ha respondido tu pregunta:", it.get("title") as String,question,  questionAuthor)
+
+                    }//addOnSuccessListener
+
+                }//el autor de la pregunta y la respuesta son diferentes, por lo tanto enviamos notificacion
+
+            }//la respuesta no esta vacia, posteamos la respuesta
+
+            else{
+
+                Toast.makeText(this, "Rellene el campo de respusta", Toast.LENGTH_SHORT).show()
+                binding.newAnswer.requestFocus()
+
+            }//el campo de respuesta esta vacio
+
+        }//setOnClickListener
+
+    }//post answer
+
+    private fun hideKeyboard(context: AppCompatActivity){
+
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(context.currentFocus!!.windowToken, 0)
+
+    }//hideKeyboard
 
     private fun answer(email: String, id: String, author: String){
 
