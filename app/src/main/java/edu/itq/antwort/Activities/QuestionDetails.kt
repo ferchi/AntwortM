@@ -163,6 +163,7 @@ class QuestionDetails : AppCompatActivity() {
                 hideKeyboard(this)
                 binding.btnPostAnswers.visibility = View.GONE
                 binding.newAnswer.clearFocus()
+                showAnswers(question, Methods.getEmail(this)!!)
 
                 if(questionAuthor != Methods.getEmail(this)!!){
 
@@ -179,7 +180,7 @@ class QuestionDetails : AppCompatActivity() {
 
             else{
 
-                Toast.makeText(this, "Rellene el campo de respusta", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Rellene el campo de respuesta", Toast.LENGTH_SHORT).show()
                 binding.newAnswer.requestFocus()
 
             }//el campo de respuesta esta vacio
