@@ -87,10 +87,7 @@ class ProfileFragment : Fragment() {
 
         }//abrir estadisticas
 
-        binding.includeToolbar.imgProfileTB.setOnClickListener {
-            createPopUp()
-            popUpMenu.build().showAsDropDown(it)
-        }
+
 
     }//onViewCreated
 
@@ -125,8 +122,21 @@ class ProfileFragment : Fragment() {
             if (rol == "facilitador") {
 
                 binding.ivProfileVerification.visibility = View.VISIBLE
+                binding.includeToolbar.imgProfileTB.setOnClickListener {view ->
+                    createPopUpFacilitator()
+                    popUpMenu.build().showAsDropDown(view)
+                }
 
             }//si es failitado le asignamos la insignia de facilitador
+
+            else{
+
+                binding.includeToolbar.imgProfileTB.setOnClickListener {view->
+                    createPopUp()
+                    popUpMenu.build().showAsDropDown(view)
+                }
+
+            }
 
         }//obtenemos el rol del usuario
 
@@ -204,20 +214,41 @@ class ProfileFragment : Fragment() {
             .build()
     }
 
+    private fun createPopUpFacilitator(){
+
+        val context = requireContext()
+        popUpMenu = PowerMenu.Builder(requireContext())
+        popUpMenu
+            .addItem(PowerMenuItem("Cerrar sesión", false))
+            .addItem(PowerMenuItem("Eliminar cuenta", false))
+
+            .setAnimation(MenuAnimation.FADE) // Animation start point (TOP | LEFT).
+            .setMenuRadius(10f) // sets the corner radius.
+            .setMenuShadow(10f) // sets the shadow.
+            .setTextColor(ContextCompat.getColor(context, R.color.black))
+            .setTextGravity(Gravity.CENTER)
+            //.setTextTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD))
+            .setSelectedTextColor(Color.WHITE)
+            .setMenuColor(Color.WHITE)
+            .setSelectedMenuColor(ContextCompat.getColor(context, R.color.orange))
+            .setOnMenuItemClickListener(onMenuItemClickListener)
+            .setAutoDismiss(true)
+            .build()
+    }
+
     private val onMenuItemClickListener: OnMenuItemClickListener<PowerMenuItem?> =
         OnMenuItemClickListener<PowerMenuItem?> { _, item ->
-
             when(item.title)
             {
                 "Quiero ser Facilitador" -> {
                     requestRol()
                 }
                 "Cerrar sesión" -> {
-                    closeSession()
+                    showAlert("Cerrar sesión", "¿Esta seguro que desea cerrar sesión?", false)
                 }
 
                 "Eliminar cuenta" -> {
-                    showAlert()
+                    showAlert("Eliminar cuenta", "¿Esta seguro que desea eliminar su cuenta?", true)
                 }
             }
         }//onMenuItemClickListener
@@ -225,16 +256,20 @@ class ProfileFragment : Fragment() {
     private fun requestRol(){
 
         startActivity(Intent(requireContext(), FacilitatorActivity::class.java))
+
     }
 
-    private fun showAlert(){
+    private fun showAlert(title: String, message: String, action: Boolean){
 
         val builder = AlertDialog.Builder(context)
-        builder.setTitle("Eliminar cuenta")
-        builder.setMessage("¿Esta seguro que desea elimiar su cuenta?")
+        builder.setTitle(title)
+        builder.setMessage(message)
         builder.setPositiveButton("Sí"
         ) { _, _ ->
-            deleteUser()
+            if(action)
+                deleteUser()
+            else
+                closeSession()
         }
         builder.setNegativeButton("No", null)
         val dialog: AlertDialog = builder.create()
