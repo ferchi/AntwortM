@@ -56,9 +56,9 @@ class EditProfileActivity : AppCompatActivity() {
 
             when ((it.get("rol") as String)) {
 
-                "estudiante" -> setupSpecialty(true)
-                "docente" -> setupSpecialty(false)
-                "facilitador" -> setupSpecialty(false)
+                "Estudiante" -> setupSpecialty(true)
+                "Docente" -> setupSpecialty(false)
+                "Facilitador" -> setupSpecialty(false)
 
             }//when
 
@@ -151,6 +151,7 @@ class EditProfileActivity : AppCompatActivity() {
         queryRol.get().addOnSuccessListener {
 
             binding.etEditUsername.setText(it.get("name") as String)
+
         }
     }
     private fun changeImg(): Boolean {

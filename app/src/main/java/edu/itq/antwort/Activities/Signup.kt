@@ -74,7 +74,7 @@ class Signup : AppCompatActivity() {
                         if(validateText(binding.txtEmailSignup.text.toString(), "[\\w-\\.]+\\@((queretaro.tecnm.mx))")){
 
                             val isStudent = validateText(binding.txtEmailSignup.text.toString(), "[lL][cC]?[0-9]{8}@(queretaro.tecnm.mx)")
-                            val rol = if(isStudent) "estudiante" else "docente"
+                            val rol = if(isStudent) "Estudiante" else "Docente"
 /*
                             if(isStudent)
                                 Toast.makeText(this, "Correo de alumno", Toast.LENGTH_SHORT).show()

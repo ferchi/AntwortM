@@ -20,6 +20,7 @@ import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.ConcatAdapter
 import com.google.android.material.chip.Chip
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Query
@@ -77,8 +78,7 @@ class QuestionDetails : AppCompatActivity() {
         val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
         user = prefs.getString("email", null)!!
 
-        showQuestion(user, id?:"")
-        showAnswers(id?:"", user)
+        concatAdapter(showQuestion(user, id?:""), showAnswers(id?:"", user))
 
         setup()
         db.collection("Users").document(Methods.getEmail(this)!!).get().addOnSuccessListener {
@@ -149,7 +149,7 @@ class QuestionDetails : AppCompatActivity() {
                         "author" to Methods.getEmail(this)!!,
                         "likes" to likes,
                         "dislikes" to dislikes,
-                        "verified" to (rol == "facilitador"),
+                        "verified" to (rol == "Facilitador"),
                         "content" to binding.newAnswer.text.toString(),
                         "question" to question
 
@@ -163,7 +163,6 @@ class QuestionDetails : AppCompatActivity() {
                 hideKeyboard(this)
                 binding.btnPostAnswers.visibility = View.GONE
                 binding.newAnswer.clearFocus()
-                showAnswers(question, Methods.getEmail(this)!!)
 
                 if(questionAuthor != Methods.getEmail(this)!!){
 
@@ -180,7 +179,7 @@ class QuestionDetails : AppCompatActivity() {
 
             else{
 
-                Toast.makeText(this, "Rellene el campo de respuesta", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Rellene el campo de respusta", Toast.LENGTH_SHORT).show()
                 binding.newAnswer.requestFocus()
 
             }//el campo de respuesta esta vacio
@@ -210,7 +209,7 @@ class QuestionDetails : AppCompatActivity() {
 
     }//función showHome
 
-    private fun showQuestion(user: String, id: String){
+    private fun showQuestion(user: String, id: String): FirestoreRecyclerAdapter<Questions, QuestionDetailViewHolder> {
 
         val query = db.collection("Questions").whereEqualTo("id", id)
         val options = FirestoreRecyclerOptions.Builder<Questions>().setQuery(query, Questions::class.java).setLifecycleOwner(this).build()
@@ -326,8 +325,7 @@ class QuestionDetails : AppCompatActivity() {
 
         }//adapter question
 
-        binding.rvQD.adapter = adapter
-        binding.rvQD.layoutManager = Methods.LinearLayoutManagerWrapper(this)
+        return adapter
 
     }//showQuestion
 
@@ -339,7 +337,7 @@ class QuestionDetails : AppCompatActivity() {
         holder.questionViewBinding.chipGroupItemQuestion.addView(tag)
     }
 
-    private fun showAnswers(id: String, user: String){
+    private fun showAnswers(id: String, user: String): FirestoreRecyclerAdapter<Answers, AnswerDetailViewHolder> {
 
         val queryAnswers = db.collection("Answers").whereEqualTo("question", id).orderBy("date", Query.Direction.DESCENDING)
         val answerOptions = FirestoreRecyclerOptions.Builder<Answers>().setQuery(queryAnswers, Answers::class.java).setLifecycleOwner(this).build()
@@ -403,8 +401,6 @@ class QuestionDetails : AppCompatActivity() {
                     }
                 }
 
-
-
                 if(model.edited){
                     holder.answerViewBinding.ivItemAnswerEdit.visibility = View.VISIBLE
                 }
@@ -428,10 +424,27 @@ class QuestionDetails : AppCompatActivity() {
 
         }//answerAdapter
 
-        binding.rvAD.adapter = answerAdapter
-        binding.rvAD.layoutManager = Methods.LinearLayoutManagerWrapper(this)
+        return answerAdapter
 
     }//showAnswers
+
+    private fun concatAdapter(question: FirestoreRecyclerAdapter<Questions, QuestionDetailViewHolder>, answers : FirestoreRecyclerAdapter<Answers, AnswerDetailViewHolder>){
+
+        if(answers == null){
+
+            binding.rvQD.adapter = question
+
+        }//no hay respuestas
+
+        else{
+
+            binding.rvQD.adapter = ConcatAdapter(question, answers)
+
+        }//sí hay respuestas
+
+        binding.rvQD.layoutManager = Methods.LinearLayoutManagerWrapper(this)
+
+    }//concatAdapter
 
     private fun loadImg(image : CircleImageView, author: String) {
 
@@ -477,7 +490,7 @@ class QuestionDetails : AppCompatActivity() {
 
         }catch (e: Exception) {
 
-            println("falle")
+
             //Log.e(TAG, e.toString())
 
         }//try-catch
@@ -625,6 +638,7 @@ class QuestionDetails : AppCompatActivity() {
     private fun reactionColor(txtReaction: TextView, like: Boolean){
 
         if(like){
+
             when(txtReaction.id){
 
                 R.id.txtLikeQD, R.id.likesIA -> {
@@ -645,8 +659,8 @@ class QuestionDetails : AppCompatActivity() {
                 }
             }
 
-            txtReaction.compoundDrawables[0].setTint(Color.parseColor("#FFFFFFFF"))
-            txtReaction.setTextColor(Color.parseColor("#FFFFFFFF"))
+            txtReaction.compoundDrawables[0].setTint(Color.parseColor("#FB771E"))
+            txtReaction.setTextColor(Color.parseColor("#FB771E"))
 
         }// se le dio like
 
@@ -671,8 +685,8 @@ class QuestionDetails : AppCompatActivity() {
                 }
             }
 
-            txtReaction.compoundDrawables[0].setTint(Color.parseColor("#FFFFFFFF"))
-            txtReaction.setTextColor((Color.parseColor("#FFFFFFFF")))
+            txtReaction.compoundDrawables[0].setTint(Color.parseColor("#959595"))
+            txtReaction.setTextColor((Color.parseColor("#959595")))
 
         }//else se le dio dislike
 

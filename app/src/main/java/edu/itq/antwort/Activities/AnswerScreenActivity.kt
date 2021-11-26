@@ -153,7 +153,7 @@ class AnswerScreenActivity : AppCompatActivity() {
                         "author" to email,
                         "likes" to likes,
                         "dislikes" to dislikes,
-                        "verified" to (rol == "facilitador"),
+                        "verified" to (rol == "Facilitador"),
                         "content" to binding.txtAnswerAS.text.toString(),
                         "question" to question
 

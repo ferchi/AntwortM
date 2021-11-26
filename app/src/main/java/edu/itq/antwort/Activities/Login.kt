@@ -63,7 +63,7 @@ class Login : AppCompatActivity() {
             db.collection("Users").document(email.toString()).get().addOnSuccessListener {
 
                 val updated = it.get("updated") as Boolean
-                val verified = it.get("rol") as String == "facilitador"
+                val verified = it.get("rol") as String == "Facilitador"
 
                 if(!updated && verified){
 

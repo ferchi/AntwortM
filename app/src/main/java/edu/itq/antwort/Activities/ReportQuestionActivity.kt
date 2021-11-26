@@ -80,7 +80,7 @@ class ReportQuestionActivity : AppCompatActivity() {
 
         )//creamo el nuevo reporte
 
-        Toast.makeText(this, "Atenderemos tu reporte lo más pronto posible", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this, "Atenderemos tu reporte lo más pronto posible", Toast.LENGTH_SHORT).show()
         onBackPressed()
 
     }//generate report
