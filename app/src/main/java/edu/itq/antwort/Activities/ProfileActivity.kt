@@ -110,7 +110,7 @@ class ProfileActivity : AppCompatActivity() {
         val queryRol = db.collection("Users").document(email)
         queryRol.get().addOnSuccessListener {
             val rol = it.get("rol") as String
-            if (rol == "facilitador") {
+            if (rol == "Facilitador") {
                 binding.ivProfileVerification.visibility = View.VISIBLE
             }
         }

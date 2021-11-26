@@ -43,12 +43,6 @@ class AlertsActivity : AppCompatActivity() {
 
         binding.edtNewAlert.requestFocus()
 
-        topics.forEach {
-
-            Firebase.messaging.unsubscribeFromTopic("/topics/$it")
-
-        }//forEach desuscribimos de los topics
-
         if(binding.chipGroupNewAlert.childCount == 0 && topics.isNotEmpty()){
 
             topics.forEach {
@@ -61,15 +55,6 @@ class AlertsActivity : AppCompatActivity() {
 
         binding.imgBackAlerts.setOnClickListener {
 
-            //Toast.makeText(this, "Cambios guardados", Toast.LENGTH_SHORT).show()
-            db.collection("Users").document(currentUser!!).update("topics", topicsList)
-
-            topicsList.forEach {
-
-                Firebase.messaging.subscribeToTopic("/topics/$it")
-
-            }//susbribimos a los topicos que indico el usuario
-
             onBackPressed()
 
         }//se presiono el boton de regresar
@@ -78,12 +63,6 @@ class AlertsActivity : AppCompatActivity() {
 
             Toast.makeText(this, "Cambios guardados", Toast.LENGTH_SHORT).show()
             db.collection("Users").document(currentUser!!).update("topics", topicsList)
-
-            topicsList.forEach {
-
-                Firebase.messaging.subscribeToTopic("/topics/$it")
-
-            }//susbribimos a los topicos que indico el usuario
 
             onBackPressed()
 

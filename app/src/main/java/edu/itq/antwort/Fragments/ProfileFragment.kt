@@ -119,7 +119,7 @@ class ProfileFragment : Fragment() {
         db.collection("Users").document(current).get().addOnSuccessListener {
 
             val rol = it.get("rol") as? String
-            if (rol == "facilitador") {
+            if (rol == "Facilitador") {
 
                 binding.ivProfileVerification.visibility = View.VISIBLE
                 binding.includeToolbar.imgProfileTB.setOnClickListener {view ->
@@ -166,7 +166,8 @@ class ProfileFragment : Fragment() {
                             startActivity(intent)
                         }
                     else{
-                            Toast.makeText(requireContext(), "Error al borrar: ${task.exception}", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), "Error al borrar: ${task.exception}", Toast.LENGTH_LONG).show()
+                            println("Error al borrar: ${task.exception}")
 
                         }}
             }
@@ -298,6 +299,13 @@ class ProfileFragment : Fragment() {
 
     private fun deleteUser(){
 
+        db.collection("Answers").whereEqualTo("author",current).get().addOnCompleteListener {
+            it.result!!.documents.forEach { document ->
+                db.collection("Questions").document(document.get("question").toString()).update("answers", FieldValue.increment(-1))
+                db.collection("Answers").document(document.id).delete()
+            }
+        }
+
         db.collection("Questions").whereEqualTo("author",current).get().addOnCompleteListener {
             it.result!!.documents.forEach { document ->
                 db.collection("Answers").whereEqualTo("question", document.id).get()
@@ -311,13 +319,6 @@ class ProfileFragment : Fragment() {
         }
 
             Log.d("current", current)
-
-        db.collection("Answers").whereEqualTo("author",current).get().addOnCompleteListener {
-            it.result!!.documents.forEach { document ->
-                db.collection("Questions").document(document.get("question").toString()).update("anwers", FieldValue.increment(-1))
-                db.collection("Answers").document(document.id).delete()
-            }
-        }
 
         db.collection("Notifications").whereEqualTo("user",current).get().addOnCompleteListener {
             it.result!!.documents.forEach { document ->

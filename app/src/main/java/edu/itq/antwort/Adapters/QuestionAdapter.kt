@@ -146,7 +146,6 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
 
             question.topics.forEach {topic ->
 
-                Log.d("topics", "A la pregunta ${question.id} se le asigna el topico $topic")
                 addTag(topic, holder.binding.chipGroupItemQuestion)
 
             }//forEach
@@ -402,7 +401,7 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
         builder.setMessage("¿Esta seguro que desea elimiar la publicación?")
         builder.setPositiveButton("Sí"
         ) { _, _ ->
-            println("Question show alert si: $q")
+
             deleteQuestion(q)
         }
         builder.setNegativeButton("No", null)

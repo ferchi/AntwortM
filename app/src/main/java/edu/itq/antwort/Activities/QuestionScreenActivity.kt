@@ -271,20 +271,11 @@ class QuestionScreenActivity : AppCompatActivity() {
         }
     }
 
-    private fun hideKeyboard(){
-
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
-
-    }//hideKeyboard
-
-
     private fun setup(email: String) {
         binding.edtTitle.requestFocus()
         loadImg(binding.imgQuestionProfile, email)
         binding.imgQuestionBack.setOnClickListener{
 
-            hideKeyboard()
             onBackPressed()
 
         }//regresar a la pantalla anterior
@@ -337,16 +328,10 @@ class QuestionScreenActivity : AppCompatActivity() {
 
                 )//set
 
-                userTopics.forEach {
-
-                    Firebase.messaging.unsubscribeFromTopic("/topics/$it")
-
-                }//forEach desuscribimos de los topics
-
-                //showNotification("Nueva pregunta", "Nueva pregunta de: ", id, email!!, topicsList)
                 db.collection("Users").document(Methods.getEmail(this)!!).update("questions", FieldValue.increment(1))
 
-                hideKeyboard()
+
+
                 val intent = Intent(this, HomeActivity::class.java).apply {
 
                     putExtra("email", email)
@@ -355,13 +340,10 @@ class QuestionScreenActivity : AppCompatActivity() {
 
                 startActivity(intent)
 
-                userTopics.forEach {
-
-                    Firebase.messaging.subscribeToTopic("/topics/$it")
-
-                }//forEach desuscribimos de los topics
-
                 uploadFile()
+
+                this.finish()
+
             }//los campos requeridos no estan vacios
 
             else{
@@ -386,55 +368,5 @@ class QuestionScreenActivity : AppCompatActivity() {
         }//setOnClickListener
 
     }//postQuestion
-
-    private fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
-
-        try {
-
-            val response = RetrofitInstance.api.postNotification(notification)
-
-            if(response.isSuccessful){
-
-                Log.d(TAG, "Response : ${Gson().toJson(response)}")
-
-            }//if isSuccessful
-
-            else{
-
-                response.errorBody()?.let { Log.e(TAG, it.toString()) }
-
-            }//else
-
-        }catch (e: Exception) {
-
-            Log.e(TAG, e.toString())
-
-        }//try-catch
-
-    }//sendNotifiaction
-
-    private fun showNotification(title: String, message: String, question: String, email:String, topics: MutableList<CharSequence>){
-
-            if(title.isNotEmpty() && message.isNotEmpty() && topics.isNotEmpty()) {
-
-                topics.forEach {item->
-
-                    PushNotification(
-
-                        NotificationData(title, message, question, email),
-                        "/topics/$item"
-
-                    ).also {
-
-                        sendNotification(it)
-
-                    }//also
-
-                }//forEach
-
-            }//if
-
-    }//show Notification
-
 
 }//class
