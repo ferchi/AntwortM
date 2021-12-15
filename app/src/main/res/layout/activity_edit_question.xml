@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.QuestionScreenActivity">
+    tools:context=".Activities.QuestionScreenActivity"
+    android:background="@color/white_smoke">
 
     <Button
         android:id="@+id/btnUpdateQuestion"
@@ -68,7 +69,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:hint="Título de la pregunta"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
         android:textSize="20sp"
         android:singleLine="true"
         android:background="@drawable/edt_question"
@@ -78,7 +80,8 @@
         app:layout_constraintTop_toBottomOf="@+id/btnUpdateQuestion"
         app:layout_constraintVertical_bias=".08"
         app:layout_constraintWidth_percent=".7"
-        android:importantForAutofill="no" />
+        android:importantForAutofill="no"
+        />
     <EditText
         android:id="@+id/et_edit_question_topics"
         android:layout_width="match_parent"
@@ -90,7 +93,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtTitleEQ"
-        android:inputType="text"/>
+        android:inputType="text"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"/>
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/chip_group_edit_question"
@@ -120,7 +125,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chip_group_edit_question"
         app:layout_constraintVertical_bias=".1"
-        app:layout_constraintWidth_percent=".9" />
+        app:layout_constraintWidth_percent=".9"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

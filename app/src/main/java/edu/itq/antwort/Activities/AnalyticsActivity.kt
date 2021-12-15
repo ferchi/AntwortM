@@ -50,123 +50,9 @@ class AnalyticsActivity : AppCompatActivity() {
             )
 
 
-            binding.textCareer.text = (it.get("specialty") as String)
+            binding.tvCareer.text = (it.get("specialty") as String)
+            binding.tvRole.text = (it.get("rol") as String)
 
-
-            binding.textRol.text = (it.get("rol") as String)
-
-
-            binding.showCareer.setOnClickListener {
-
-                if (binding.textCareer.visibility == View.GONE) {
-
-                    binding.textCareer.visibility = View.VISIBLE
-                    binding.showCareer.setCompoundDrawablesWithIntrinsicBounds(
-                        0,
-                        0,
-                        R.drawable.ic_baseline_expand_less_24,
-                        0
-                    )
-
-                }//if
-
-                else {
-
-                    binding.textCareer.visibility = View.GONE
-                    binding.showCareer.setCompoundDrawablesWithIntrinsicBounds(
-                        0,
-                        0,
-                        R.drawable.ic_baseline_expand_more_24,
-                        0
-                    )
-
-                }//else
-
-            }//setOnClickListener myQuestions
-
-            binding.showRol.setOnClickListener {
-
-                if (binding.textRol.visibility == View.GONE) {
-
-                    binding.textRol.visibility = View.VISIBLE
-                    binding.showRol.setCompoundDrawablesWithIntrinsicBounds(
-                        0,
-                        0,
-                        R.drawable.ic_baseline_expand_less_24,
-                        0
-                    )
-
-                }//if
-
-                else {
-
-                    binding.textRol.visibility = View.GONE
-                    binding.showRol.setCompoundDrawablesWithIntrinsicBounds(
-                        0,
-                        0,
-                        R.drawable.ic_baseline_expand_more_24,
-                        0
-                    )
-
-                }//else
-
-            }//setOnClickListener myQuestions
-
-            binding.txtTotalQuestions.setOnClickListener {
-
-                if (binding.questionsConstraintLayout.visibility == View.GONE) {
-
-                    binding.questionsConstraintLayout.visibility = View.VISIBLE
-                    binding.txtTotalQuestions.setCompoundDrawablesWithIntrinsicBounds(
-                        0,
-                        0,
-                        R.drawable.ic_baseline_expand_less_24,
-                        0
-                    )
-
-                }//if
-
-                else {
-
-                    binding.questionsConstraintLayout.visibility = View.GONE
-                    binding.txtTotalQuestions.setCompoundDrawablesWithIntrinsicBounds(
-                        0,
-                        0,
-                        R.drawable.ic_baseline_expand_more_24,
-                        0
-                    )
-
-                }//else
-
-            }//setOnClickListener myQuestions
-
-            binding.txtOtherQuestions.setOnClickListener {
-
-                if (binding.constraintAnswers.visibility == View.GONE) {
-
-                    binding.constraintAnswers.visibility = View.VISIBLE
-                    binding.txtOtherQuestions.setCompoundDrawablesWithIntrinsicBounds(
-                        0,
-                        0,
-                        R.drawable.ic_baseline_expand_less_24,
-                        0
-                    )
-
-                }//if
-
-                else {
-
-                    binding.constraintAnswers.visibility = View.GONE
-                    binding.txtOtherQuestions.setCompoundDrawablesWithIntrinsicBounds(
-                        0,
-                        0,
-                        R.drawable.ic_baseline_expand_more_24,
-                        0
-                    )
-
-                }//else
-
-            }//setOnClickListener OtherQuestions
 
         }//obtenemos los datos de la base de datos
 
@@ -202,11 +88,11 @@ class AnalyticsActivity : AppCompatActivity() {
         val percentLikes = (likes * 100) / totalVotes
         val percentDislikes =  (dislikes * 100) / totalVotes
 
-        binding.textAsked.text = "Realizadas: $questions"
-        binding.textLikesReceived.text = "Tus preguntas han recibido $likes \"útil\""
-        binding.textDislikesReceived.text = "Tus preguntas han recibido $dislikes \"poco útil\""
-        binding.textLikesPercent.text = "Un $percentLikes% de los usuarios les parecen útiles tus preguntas"
-        binding.textDislikesPercent.text = "Un $percentDislikes% de los usuarios les parecen poco útiles tus preguntas"
+        binding.tvTotalQuestions.text = questions.toString()
+        binding.tvQuestionUtil.text = likes.toString()
+        binding.tvQuestionNoutils.text = dislikes.toString()
+        binding.tvQuestionUtilPercent.text = "$percentLikes%"
+        binding.tvQuestionNoutilPercent.text = "$percentDislikes%"
 
     }//fill myQuestions
 
@@ -217,11 +103,11 @@ class AnalyticsActivity : AppCompatActivity() {
         val percentLikes = (likes * 100) / totalVotes
         val percentDislikes =  (dislikes * 100) / totalVotes
 
-        binding.textWrittenResponses.text = "Has escrito $answers respuestas"
-        binding.textLikesReceivedAnswers.text = "Tus respuestas han recibido $likes \"útil\""
-        binding.textDislikesReceivedAnswers.text = "Tus respuestas han recibido $dislikes \"poco útil\""
-        binding.textLikesPercentAnswers.text = "Un $percentLikes% de los usuarios les parecen útiles tus respuestas"
-        binding.textDislikesPercentAnswers.text = "Un $percentDislikes% de los usuarios les parecen poco útiles tus respuestas"
+        binding.tvTotalAnswers.text = answers.toString()
+        binding.tvAnswerUtil.text = likes.toString()
+        binding.tvAnswerNoutil.text = dislikes.toString()
+        binding.tvAnswerUtilPercent.text = "$percentLikes%"
+        binding.tvAnswerNoutilPercent.text = "$percentDislikes%"
 
     }//fillOtherQuestions
 

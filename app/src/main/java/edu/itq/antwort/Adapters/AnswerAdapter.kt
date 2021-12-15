@@ -215,16 +215,54 @@ class AnswerAdapter (private val fragment: Fragment, private val dataset: Mutabl
     private fun reactionColor(txtReaction: TextView, like: Boolean){
 
         if(like){
+            when(txtReaction.id){
 
-            txtReaction.compoundDrawables[0].setTint(Color.parseColor("#FB771E"))
-            txtReaction.setTextColor(Color.parseColor("#FB771E"))
+                R.id.likesIA -> {
+                    txtReaction.setCompoundDrawablesWithIntrinsicBounds(
+                        R.drawable.ic_baseline_thumb_up_24,
+                        0,
+                        0,
+                        0
+                    )
+                }
+                R.id.dislikeIA -> {
+                    txtReaction.setCompoundDrawablesWithIntrinsicBounds(
+                        R.drawable.ic_baseline_thumb_down_24,
+                        0,
+                        0,
+                        0
+                    )
+                }
+            }
+
+            txtReaction.compoundDrawables[0].setTint(Color.parseColor("#FFFFFFFF"))
+            txtReaction.setTextColor(Color.parseColor("#FFFFFFFF"))
 
         }// se le dio like
 
         else{
+            when(txtReaction.id){
 
-            txtReaction.compoundDrawables[0].setTint(-1979711488)
-            txtReaction.setTextColor(-1979711488)
+                R.id.likesIA -> {
+                    txtReaction.setCompoundDrawablesWithIntrinsicBounds(
+                        R.drawable.ic_outline_thumb_up_24,
+                        0,
+                        0,
+                        0
+                    )
+                }
+                R.id.dislikeIA -> {
+                    txtReaction.setCompoundDrawablesWithIntrinsicBounds(
+                        R.drawable.ic_outline_thumb_down_24,
+                        0,
+                        0,
+                        0
+                    )
+                }
+            }
+
+            txtReaction.compoundDrawables[0].setTint(Color.parseColor("#FFFFFFFF"))
+            txtReaction.setTextColor((Color.parseColor("#FFFFFFFF")))
 
         }//else se le dio dislike
 

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/activityHome"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     tools:context=".Activities.HomeActivity">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -15,41 +14,43 @@
         android:clickable="true"
         android:tint="@color/white"
         android:backgroundTint="@color/orange"
-        app:layout_constraintVertical_bias=".95"
-        app:layout_constraintHorizontal_bias=".9"
-        app:layout_constraintBottom_toTopOf="@+id/BottomNavBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/frameLayout"
-        app:srcCompat="@drawable/ic_baseline_create_24" />
+        app:srcCompat="@drawable/ic_baseline_create_24"
+        app:layout_anchorGravity="bottom|end"
+        app:layout_anchor="@id/frameLayout"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="70dp"
+        />
 
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/BottomNavBar"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        android:background="@color/transparent"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/BottomNavBar"
         android:layout_width="match_parent"
-        android:outlineAmbientShadowColor="@color/gray"
-        android:outlineSpotShadowColor="@color/gray"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        android:elevation="2dp"
-        app:itemIconTint="@color/gray"
-        app:itemTextColor="@color/gray"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/bottomnav_bg"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_menu">
+        android:elevation="3dp"
+        app:itemIconSize="30dp"
+        app:itemIconTint="@drawable/item_menu_selector"
+        app:itemTextColor="@color/white"
+        app:labelVisibilityMode="selected"
+        app:menu="@menu/bottom_menu"
+        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
+        app:layout_anchorGravity="bottom|end"
+        app:layout_anchor="@id/frameLayout"/>
 
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

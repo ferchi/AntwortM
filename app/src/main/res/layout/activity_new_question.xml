@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.QuestionScreenActivity"
+    android:background="@color/white_smoke"
     >
 
     <Button
@@ -33,7 +34,7 @@
         app:layout_constraintVertical_bias=".23"
         app:layout_constraintHorizontal_bias=".1"
         android:text="Crear pregunta"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/edtTitle"
         app:layout_constraintEnd_toStartOf="@+id/btnPostQuestion"
@@ -76,7 +77,8 @@
         android:hint="Título de la pregunta"
         android:importantForAutofill="no"
         android:singleLine="true"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -108,7 +110,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rv_files"
-        android:inputType="text"/>
+        android:inputType="text"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"/>
 
 
     <HorizontalScrollView
@@ -156,7 +160,9 @@
             android:ems="10"
             android:hint="¿Cuál es tu duda?"
             android:inputType="textMultiLine"
-            app:flow_maxElementsWrap="10" />
+            app:flow_maxElementsWrap="10"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"/>
 
     </ScrollView>
 

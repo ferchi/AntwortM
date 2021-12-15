@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.FacilitatorActivity">
+    tools:context=".Activities.FacilitatorActivity"
+    android:background="@color/white_smoke">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_report_question"
@@ -62,7 +63,7 @@
         android:layout_marginEnd="16dp"
         android:text="¿Qué significa ser facilitador?"
         android:textAlignment="center"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -80,7 +81,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
         android:text="El rol de facilitador puede ser solicitado por todos aquellos que posean conocimientos solidos en diversos temas.Este rol hará que las respuestas que escribas aparezcan con un icono de verificado, el cual indica que tu respuesta es más confiable y segura que la de los demás usuarios."
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -98,7 +99,7 @@
         android:layout_marginBottom="32dp"
         android:text="¿Quieres convertirte en facilitador?"
         android:textAlignment="center"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -122,7 +123,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+        app:layout_constraintTop_toBottomOf="@+id/textView9"
+        android:textColor="@color/white"
+        android:textColorHint="@color/gray"/>
 
     <Button
         android:id="@+id/request_rol"

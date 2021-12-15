@@ -4,19 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragments.AnswersFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/white_smoke">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/sw_layout_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="8dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_answers"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content"/>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
 
 </LinearLayout>

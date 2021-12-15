@@ -10,7 +10,9 @@
 
     <color name="search">#EAEAEA</color>
     <color name="orange">#FB771E</color>
-    <color name="gray">#959595</color>
+    <color name="orange_wave">#FD2B12</color>
+    <color name="gray">#373737</color>
+    <color name="white_smoke">#868484</color>
     <color name="transparent">#00959595</color>
     <color name="yellow">#FBFF84</color>
 

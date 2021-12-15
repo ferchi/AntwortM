@@ -57,14 +57,14 @@ class AnswersFragment() : Fragment() {
 
         val query = db.collection("Answers").orderBy("date", Query.Direction.DESCENDING).whereEqualTo("author", current)
 
-        query.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot>() {
+        query.get().addOnCompleteListener {
             answers.clear()
             answers.addAll(it.result!!.toObjects(Answers::class.java))
             rev.apply {
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(context)
-                adapter = AnswerAdapter(this@AnswersFragment,answers)
+                adapter = AnswerAdapter(this@AnswersFragment, answers)
             }
-        })
+        }
     }
 }

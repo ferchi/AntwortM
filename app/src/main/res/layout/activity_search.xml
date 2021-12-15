@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.SearchActivity">
+    tools:context=".Activities.SearchActivity"
+    android:background="@color/white_smoke">
 
     <include
         android:id="@+id/include_toolbar_search"

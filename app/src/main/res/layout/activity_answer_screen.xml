@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.AnswerScreenActivity">
+    tools:context=".Activities.AnswerScreenActivity"
+    android:background="@color/white_smoke">
 
     <Button
         android:id="@+id/btnPostAnswer"
@@ -60,6 +61,7 @@
         android:text="Nombre"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
@@ -77,6 +79,8 @@
         android:background="@drawable/edt_question"
         android:ems="10"
         android:hint="Escribe tu respuesta"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
         android:inputType="textMultiLine"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"

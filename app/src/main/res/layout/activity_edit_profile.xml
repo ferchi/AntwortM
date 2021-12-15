@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.EditProfileActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/white_smoke">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_report_question"
@@ -71,7 +72,8 @@
         android:layout_marginTop="8dp"
         android:text="Cambiar foto"
         android:textSize="16sp"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:textColor="@color/white"/>
 
     <LinearLayout
         android:id="@+id/linear_layout_name"
@@ -85,7 +87,8 @@
             android:layout_height="wrap_content"
             android:text="Nombre"
             android:textSize="16sp"
-            android:layout_margin="8dp"/>
+            android:layout_margin="8dp"
+            android:textColor="@color/white"/>
 
         <EditText
             android:id="@+id/et_edit_username"
@@ -94,6 +97,7 @@
             android:textSize="16sp"
             android:layout_margin="8dp"
             android:inputType="text"
+            android:textColor="@color/white"
             />
     </LinearLayout>
 

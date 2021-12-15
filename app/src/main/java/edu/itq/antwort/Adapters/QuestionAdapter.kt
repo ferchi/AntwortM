@@ -5,7 +5,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Color
+import android.graphics.*
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -32,7 +32,6 @@ import com.skydoves.powermenu.MenuAnimation
 import com.skydoves.powermenu.PowerMenuItem
 import com.skydoves.powermenu.PowerMenu
 import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.storage.FirebaseStorage
@@ -55,19 +54,18 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
     private lateinit var filesFolder : StorageReference
 
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(ItemQuestionBinding.inflate(LayoutInflater.from(parent.context),parent,false))
     }
 
     override fun getItemCount() = dataset.size
 
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
-
         val question = dataset[position]
 
         popUpMenu = PowerMenu.Builder(fragment.requireContext())
+
 
         holder.binding.questionOptions.setOnClickListener {
 
@@ -115,7 +113,7 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
             fragment.startActivity(homeIntent)
         }
 
-        reactions(question, question.likes, question.dislikes, holder.binding.likesIA, "Útil", question.author, question.title, question.id)
+        reactions(question, question.likes, question.dislikes, holder.binding.likesIQ, "Útil", question.author, question.title, question.id)
         reactions(question, question.dislikes, question.likes, holder.binding.dislikesIQ, "No útil", question.author, question.title, question.id)
 
         holder.binding.answersIQ.setOnClickListener {
@@ -155,6 +153,10 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
         if(question.edited){
             holder.binding.tvItemQuestionEdit.visibility = View.VISIBLE
         }
+
+       /* holder.binding.blurLayout.startBlur()
+        holder.binding.blurLayout.pauseBlur()
+*/
 
     }//onBindViewHolder
 
@@ -261,16 +263,54 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
     private fun reactionColor(txtReaction: TextView, like: Boolean){
 
         if(like){
+            when(txtReaction.id){
 
-            txtReaction.compoundDrawables[0].setTint(Color.parseColor("#FB771E"))
-            txtReaction.setTextColor(Color.parseColor("#FB771E"))
+                R.id.likesIQ -> {
+                    txtReaction.setCompoundDrawablesWithIntrinsicBounds(
+                        R.drawable.ic_baseline_thumb_up_24,
+                        0,
+                        0,
+                        0
+                    )
+                }
+                R.id.dislikesIQ -> {
+                    txtReaction.setCompoundDrawablesWithIntrinsicBounds(
+                        R.drawable.ic_baseline_thumb_down_24,
+                        0,
+                        0,
+                        0
+                    )
+                }
+            }
+
+            txtReaction.compoundDrawables[0].setTint(Color.parseColor("#FFFFFFFF"))
+            txtReaction.setTextColor(Color.parseColor("#FFFFFFFF"))
 
         }// se le dio like
 
         else{
+            when(txtReaction.id){
 
-            txtReaction.compoundDrawables[0].setTint(-1979711488)
-            txtReaction.setTextColor(-1979711488)
+                R.id.likesIQ -> {
+                    txtReaction.setCompoundDrawablesWithIntrinsicBounds(
+                        R.drawable.ic_outline_thumb_up_24,
+                        0,
+                        0,
+                        0
+                    )
+                }
+                R.id.dislikesIQ -> {
+                    txtReaction.setCompoundDrawablesWithIntrinsicBounds(
+                        R.drawable.ic_outline_thumb_down_24,
+                        0,
+                        0,
+                        0
+                    )
+                }
+            }
+
+            txtReaction.compoundDrawables[0].setTint(Color.parseColor("#FFFFFFFF"))
+            txtReaction.setTextColor((Color.parseColor("#FFFFFFFF")))
 
         }//else se le dio dislike
 
@@ -509,5 +549,7 @@ class QuestionAdapter (private val fragment: Fragment, private val dataset: Muta
             }//eliminar
 
         }//onMenuItemClickListener
+
+
 
 }//class home fragment

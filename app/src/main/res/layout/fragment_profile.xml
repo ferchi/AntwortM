@@ -4,12 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/white_smoke"
     tools:context=".Fragments.ProfileFragment">
 
     <include
         android:id="@+id/include_toolbar"
         layout="@layout/toolbar_profile" />
+
+    <View
+        android:id="@+id/fix_view"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:layout_constraintTop_toBottomOf="@id/include_toolbar"
+        android:background="@drawable/fix_view_wave"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="190dp"
+        android:background="@mipmap/wave3"
+        app:layout_constraintTop_toBottomOf="@id/fix_view"/>
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/civ_profile_image_profile"
@@ -30,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Name"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -66,6 +79,7 @@
             android:layout_height="wrap_content"
             android:text="00"
             android:layout_marginHorizontal="80dp"
+            android:textColor="@color/white"
             />
 
         <TextView
@@ -73,7 +87,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="00"
-            android:layout_marginHorizontal="85dp"/>
+            android:layout_marginHorizontal="85dp"
+            android:textColor="@color/white"
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -89,7 +105,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Preguntas"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="16sp"
             android:layout_marginHorizontal="50dp"/>
 
@@ -98,7 +114,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Respuestas"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="16sp"
             android:layout_marginHorizontal="50dp"/>
 
@@ -125,7 +141,9 @@
             android:layout_height="30dp"
             android:layout_margin="5dp"
             android:background="@drawable/btn_edt_profile"
-            android:text="Editar perfil"/>
+            android:text="Editar perfil"
+            android:textColor="@color/white"
+            />
 
 
         <ImageView
@@ -163,7 +181,8 @@
                 app:layout_constraintBottom_toBottomOf="@+id/viewPager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                android:background="@color/black">
 
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tabs"
@@ -172,6 +191,7 @@
                     app:tabGravity="fill"
                     app:tabInlineLabel="true"
                     app:tabMode="fixed"
+                    app:tabTextColor="@color/white"
                     app:tabSelectedTextColor="@color/orange"
                     app:tabTextAppearance="@style/CustomTabstyle" />
 

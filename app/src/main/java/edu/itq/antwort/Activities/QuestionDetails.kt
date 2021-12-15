@@ -659,8 +659,8 @@ class QuestionDetails : AppCompatActivity() {
                 }
             }
 
-            txtReaction.compoundDrawables[0].setTint(Color.parseColor("#FB771E"))
-            txtReaction.setTextColor(Color.parseColor("#FB771E"))
+            txtReaction.compoundDrawables[0].setTint(Color.parseColor("#FFFFFFFF"))
+            txtReaction.setTextColor(Color.parseColor("#FFFFFFFF"))
 
         }// se le dio like
 
@@ -685,8 +685,8 @@ class QuestionDetails : AppCompatActivity() {
                 }
             }
 
-            txtReaction.compoundDrawables[0].setTint(Color.parseColor("#959595"))
-            txtReaction.setTextColor((Color.parseColor("#959595")))
+            txtReaction.compoundDrawables[0].setTint(Color.parseColor("#FFFFFFFF"))
+            txtReaction.setTextColor((Color.parseColor("#FFFFFFFF")))
 
         }//else se le dio dislike
 

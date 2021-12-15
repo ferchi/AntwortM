@@ -19,6 +19,7 @@ import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import edu.itq.antwort.Activities.QuestionDetails
 import edu.itq.antwort.R
+import edu.itq.antwort.glass.GlassView
 
 class SearchAdapter(private val activity: AppCompatActivity, private val newList: ArrayList<Questions>) :
     RecyclerView.Adapter<SearchAdapter.SearchAdapterHolder>() {
@@ -78,7 +79,7 @@ class SearchAdapter(private val activity: AppCompatActivity, private val newList
         val descriptionSA : TextView = itemView.findViewById(R.id.txtItemDescription)
         val authorSA : TextView = itemView.findViewById(R.id.txtAuthor)
         val interactions : ConstraintLayout = itemView.findViewById(R.id.interactions)
-        val card : CardView = itemView.findViewById(R.id.item_question_card)
+        val card : GlassView = itemView.findViewById(R.id.item_question_card)
         val imgAuthorAI : CircleImageView = itemView.findViewById(R.id.imgAuthorAI)
         val questionOptions : ImageView = itemView.findViewById(R.id.questionOptions)
         val chipGroup : com.google.android.material.chip.ChipGroup = itemView.findViewById(R.id.chip_group_item_question)

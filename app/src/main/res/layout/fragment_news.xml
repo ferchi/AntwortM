@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragments.NewsFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/white_smoke">
 
     <TextView
         android:id="@+id/btnOptionsNews"
@@ -13,10 +14,9 @@
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:text="Administrar tópicos"
-        android:drawableEnd="@drawable/ic_baseline_settings_24"
         android:gravity="top|end"
         android:layout_margin="8dp"
-        />
+        app:drawableEndCompat="@drawable/ic_baseline_settings_24" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/sw_layout_container"

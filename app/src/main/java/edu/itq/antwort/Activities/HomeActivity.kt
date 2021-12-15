@@ -6,12 +6,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import edu.itq.antwort.Fragments.HomeFragment
 import edu.itq.antwort.Fragments.NotificationFragment
 import edu.itq.antwort.Fragments.ProfileFragment
 import edu.itq.antwort.R
 import edu.itq.antwort.databinding.ActivityHomeBinding
+import edu.itq.antwort.Classes.BottomNavigationViewBehavior
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 
 class HomeActivity : AppCompatActivity() {
 
@@ -56,6 +57,9 @@ class HomeActivity : AppCompatActivity() {
             .replace(R.id.frameLayout, homeFragment)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             .commit()
+
+        val layoutParams = binding.BottomNavBar.layoutParams as CoordinatorLayout.LayoutParams
+        layoutParams.behavior = BottomNavigationViewBehavior()
 
         binding.BottomNavBar.setOnItemSelectedListener { item->
 

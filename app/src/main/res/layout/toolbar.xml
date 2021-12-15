@@ -29,7 +29,7 @@
             android:layout_gravity="end"
             android:layout_marginRight="15dp"
             app:srcCompat="@android:drawable/ic_menu_search"
-            app:tint="@color/gray" />
+            app:tint="@color/white_smoke" />
 
     </androidx.appcompat.widget.Toolbar>
 

@@ -3,9 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:elevation="6dp"
+    android:elevation="8dp"
+    app:cardCornerRadius="6dp"
     app:cardUseCompatPadding="true"
+    android:layout_margin="4dp"
     >
+    <io.alterac.blurkit.BlurLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:blk_blurRadius="25"
+        app:blk_downscaleFactor="0.03">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -144,7 +152,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:drawableLeft="@drawable/ic_baseline_thumb_up_24"
+            android:drawableLeft="@drawable/ic_outline_thumb_up_24"
             android:drawablePadding="10dp"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -160,7 +168,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:drawableLeft="@drawable/ic_baseline_thumb_down_24"
+            android:drawableLeft="@drawable/ic_outline_thumb_down_24"
             android:drawablePadding="10dp"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -178,6 +186,7 @@
             android:layout_marginEnd="16dp"
             android:drawableLeft="@drawable/ic_baseline_comment_24"
             android:drawablePadding="10dp"
+            android:textColor="@color/white"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -187,5 +196,6 @@
             app:layout_constraintVertical_bias="0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+    </io.alterac.blurkit.BlurLayout>
 
 </androidx.cardview.widget.CardView>
